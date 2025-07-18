@@ -47,7 +47,7 @@ export default function ContactPage() {
       <Navbar color="dark" />
       <section className="w-full flex flex-col items-center mt-10 px-4">
         <img src="/Octopus_icon_3.png" alt="Octopus" className="mx-auto mb-4 w-20 md:w-28" />
-        <h1 className="text-3xl md:text-5xl font-extrabold text-center mb-2" style={{ color: '#213359' }}>
+        <h1 className="text-2xl md:text-5xl font-extrabold text-center mb-2" style={{ color: '#213359' }}>
           We’d love to hear from you!
         </h1>
         <div className="w-full  bg-[#213359] rounded-2xl mt-8 p-8 md:p-12 flex flex-col md:flex-row gap-8 justify-center">

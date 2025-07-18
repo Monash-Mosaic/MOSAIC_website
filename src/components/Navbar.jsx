@@ -39,7 +39,7 @@ export default function Navbar({ color = 'light' }) {
           <img src={logoSource} alt="MOSAIC logo" className="h-35 cursor-pointer" />
         </Link>
       </div>
-      <nav className={`space-x-8 ${textColor} text-xl`}>
+      <nav className={`space-x-8 ${textColor} text-lg`}>
         <Link href="#team" className={borderStyle}>Our team</Link>
         <Link href="#projects" className={borderStyle}>Projects</Link>
         <Link href="/contact" className={borderStyle + `${pathname === '/contact' ? underlineStyle : ''}`}>Contact us</Link>
