@@ -28,10 +28,10 @@ export default function Navbar({ color = 'light' }) {
         </Link>
       </div>
       <nav className={`space-x-8 ${textColor} text-sm`}>
-        <Link href="#team" className="hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200 font-roboto">Our team</Link>
-        <Link href="#projects" className="hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200 font-roboto">Projects</Link>
-        <Link href="/contact" className={`hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200 font-roboto ${pathname === '/contact' ? 'font-bold underline underline-offset-8 decoration-lime-400' : ''}`}>Contact us</Link>
-        <Link href="#join" className="hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200 font-roboto">Join us</Link>
+        <Link href="#team" className="hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200 ">Our team</Link>
+        <Link href="#projects" className="hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200 ">Projects</Link>
+        <Link href="/contact" className={`hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200  ${pathname === '/contact' ? 'font-bold underline underline-offset-8 decoration-lime-400' : ''}`}>Contact us</Link>
+        <Link href="#join" className="hover:border-white hover:border-2 px-4 py-4 rounded-full transition-all duration-200">Join us</Link>
       </nav>
     </header>
   );
