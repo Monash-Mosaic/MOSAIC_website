@@ -13,6 +13,8 @@ export default function ContactPage() {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const suffixPath = 'contact_us_form'
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -22,7 +24,7 @@ export default function ContactPage() {
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch('https://1g4z1k0g3j.execute-api.ap-southeast-2.amazonaws.com/contact_us_form', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_S3_BASE_URL}/${suffixPath}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -44,7 +46,7 @@ export default function ContactPage() {
     <main className="min-h-screen bg-white text-[#213359] relative flex flex-col items-center">
       <Navbar color="dark" />
       <section className="w-full flex flex-col items-center mt-10 px-4">
-        <img src="/Octopus_icon_green_1.png" alt="Octopus" className="mx-auto mb-4 w-20 md:w-28" />
+        <img src="/Octopus_icon_3.png" alt="Octopus" className="mx-auto mb-4 w-20 md:w-28" />
         <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-2" style={{ color: '#213359' }}>
           We’d love to hear from you!
         </h1>
@@ -78,4 +80,4 @@ export default function ContactPage() {
       </section>
     </main>
   );
-} 
+}
