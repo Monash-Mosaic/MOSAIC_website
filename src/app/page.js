@@ -5,7 +5,7 @@ import OctopusDecoration from '../components/OctopusDecoration';
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#213359] text-white relative flex flex-col items-center">
-      <Navbar />
+      <Navbar color="light" />
       <Hero />
       <OctopusDecoration />
     </main>
