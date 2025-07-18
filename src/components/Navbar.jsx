@@ -34,12 +34,12 @@ export default function Navbar({ color = 'light' }) {
   const borderStyle = borderHoverStyle[pathname] + commonBorderStyle
   return (
     <header className="w-full flex justify-between items-center py-6 max-w-7xl mx-auto px-6">
-      <div className={`text-2xl font-roboto ${textColor}`}>
+      <div className={`text-2xl ${textColor}`}>
         <Link href="/">
-          <img src={logoSource} alt="MOSAIC logo" className="h-25 cursor-pointer" />
+          <img src={logoSource} alt="MOSAIC logo" className="h-35 cursor-pointer" />
         </Link>
       </div>
-      <nav className={`space-x-8 ${textColor} text-sm`}>
+      <nav className={`space-x-8 ${textColor} text-xl`}>
         <Link href="#team" className={borderStyle}>Our team</Link>
         <Link href="#projects" className={borderStyle}>Projects</Link>
         <Link href="/contact" className={borderStyle + `${pathname === '/contact' ? underlineStyle : ''}`}>Contact us</Link>
