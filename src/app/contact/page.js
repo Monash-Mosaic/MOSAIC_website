@@ -52,7 +52,7 @@ export default function ContactPage() {
         </h1>
         <div className="w-full  bg-[#213359] rounded-2xl mt-8 p-8 md:p-12 flex flex-col md:flex-row gap-8 justify-center">
           <form className="flex-1 flex flex-col gap-8 max-w-6xl" onSubmit={handleSubmit}>
-            <div className="flex gap-20">
+            <div className="flex gap-26">
               <div className="w-1/3 flex flex-col gap-y-14">
                 <div className='flex flex-col gap-y-2'>
                   <label className="block text-lime-400 text-2xl font-semibold mb-1">Name <span className="text-base text-lime-400">(Required)</span></label>
