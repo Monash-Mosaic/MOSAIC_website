@@ -64,7 +64,7 @@ export default function Navbar({ color = 'light' }) {
           <Link href="#team" className={borderStyle}>Our team</Link>
           <Link href="#projects" className={borderStyle}>Projects</Link>
           <Link href="/contact" className={borderStyle + `${pathname === '/contact' ? underlineStyle : ''}`}>Contact us</Link>
-          <Link href="#join" className={borderStyle}>Join us</Link>
+          <Link href="/join" className={borderStyle + `${pathname === '/join' ? underlineStyle : ''}`}>Join us</Link>
         </nav>
       </motion.div>
 
