@@ -1,31 +1,6 @@
 'use client'
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-const variants = {
-  // Step 1: Initial state (hidden)
-  hidden: {
-    opacity: 0,
-    y: 60,
-  },
-  // Step 2: First animation (float up)
-  floatUp: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: "easeOut" },
-  },
-  // Step 3: Second animation (wobble)
-  wobble: {
-    y: [0, -10, 5, 0],  // Keyframes for wobble effect
-    rotate: [0, -3, 2, 0],
-    transition: {
-      type: "smooth",
-      repeatType: "mirror",
-      duration: 3,
-      repeat: Infinity
-    },
-  },
-};
-
 
 export default function OctopusDecoration() {
   const [isFirstIcon, setIsFirstIcon] = useState(true);
@@ -35,7 +10,7 @@ export default function OctopusDecoration() {
     const interval = setInterval(() => {
       setIsFirstIcon(prev => !prev);
       setAnimationKey(prev => prev + 1); // Force re-render for smooth transition
-    }, 4000); // Change every 2 seconds
+    }, 5000); // Change every 2 seconds
 
     return () => clearInterval(interval);
   }, []);
@@ -57,35 +32,48 @@ export default function OctopusDecoration() {
           className="w-20 md:w-32"
         />
       </motion.div> */}
-      <motion.div
-        initial={{ y: 60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="absolute bottom-10 left-10"
-        transition={{
-          type: "smooth",
-          duration: 0.5,
-        }}>
-        <motion.img
-          initial={{ y: -10, x: 10 }}
-          animate={{ y: 10, x: -10 }}
-          transition={{
-            type: "smooth",
-            repeatType: "mirror",
-            duration: 3,
-            repeat: Infinity,
-          }} src="/Octopus_icon_green_1.png" alt="Octopus left" className="w-20 md:w-32" />
-      </motion.div>
+      <div className="absolute bottom-20 left-10">
+        <AnimatePresence>
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            initial={{ y: 30 }}
+            animate={{
+              y: 0,
+              transition: {
+                duration: 0.5,
+                ease: "easeInOut"
+              }
+            }}
+            className="w-20 md:w-32"
+            transition={{
+              type: "smooth",
+              duration: 1.5,
+            }}>
+            <motion.img
+              initial={{ y: -10, x: 10 }}
+              animate={{ y: 10, x: -10 }}
+              transition={{
+                type: "smooth",
+                repeatType: "mirror",
+                duration: 3,
+                repeat: Infinity,
+              }} src="/Octopus_icon_green_1.png" alt="Octopus left" />
+          </motion.div>
+        </AnimatePresence>
+
+      </div>
       <div className="absolute top-50 right-50">
         <AnimatePresence mode="wait">
           {isFirstIcon ? (
             <motion.div
               key={`icon1-${animationKey}`}
+              whileHover={{ scale: 1.1 }}
               initial={{ x: -30, y: -30 }}
               animate={{
                 x: 30,
                 y: 30,
                 transition: {
-                  duration: 1,
+                  duration: 2,
                   ease: "easeInOut"
                 }
               }}
@@ -104,12 +92,13 @@ export default function OctopusDecoration() {
           ) : (
             <motion.div
               key={`icon1-flipped-${animationKey}`}
+              whileHover={{ scale: 1.1 }}
               initial={{ x: 30, y: 30 }}
               animate={{
                 x: -30,
                 y: -30,
                 transition: {
-                  duration: 1,
+                  duration: 2,
                   ease: "easeInOut"
                 }
               }}
