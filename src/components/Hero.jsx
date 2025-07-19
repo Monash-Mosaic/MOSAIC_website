@@ -42,6 +42,7 @@ export default function Hero() {
       </motion.div>
       <motion.button
         initial={{ opacity: 0, y: 30 }}  // Start above and invisible
+        whileHover={{ scale: 1.1, duration: 0.05 }}
         animate={{ opacity: 1, y: 0 }}    // Slide down and fade in
         transition={{
           type: "spring",  // Bouncy spring animation

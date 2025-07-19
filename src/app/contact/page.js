@@ -14,8 +14,6 @@ export default function ContactPage() {
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const suffixPath = 'contact_us_form'
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -25,7 +23,7 @@ export default function ContactPage() {
     setLoading(true);
     setStatus(null);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_S3_BASE_URL}/${suffixPath}`, {
+      const res = await fetch('/api/proxy-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
