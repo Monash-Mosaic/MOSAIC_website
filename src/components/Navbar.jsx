@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { motion } from 'framer-motion'
 
 
 
@@ -34,17 +35,39 @@ export default function Navbar({ color = 'light' }) {
   const borderStyle = borderHoverStyle[pathname] + commonBorderStyle
   return (
     <header className="w-full flex justify-between items-center py-6 max-w-7xl mx-auto px-6">
-      <div className={`text-2xl ${textColor}`}>
-        <Link href="/">
-          <img src={logoSource} alt="MOSAIC logo" className="h-25 cursor-pointer" />
-        </Link>
-      </div>
-      <nav className={`space-x-8 ${textColor} text-lg`}>
-        <Link href="#team" className={borderStyle}>Our team</Link>
-        <Link href="#projects" className={borderStyle}>Projects</Link>
-        <Link href="/contact" className={borderStyle + `${pathname === '/contact' ? underlineStyle : ''}`}>Contact us</Link>
-        <Link href="#join" className={borderStyle}>Join us</Link>
-      </nav>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}  // Start above and invisible
+        animate={{ opacity: 1, y: 0 }}    // Slide down and fade in
+        transition={{
+          type: "spring",  // Bouncy spring animation
+          damping: 8,     // Less bounciness
+          stiffness: 100   // Snappier motion
+        }}
+      >
+        <div className={`text-2xl ${textColor}`}>
+          <Link href="/">
+            <img src={logoSource} alt="MOSAIC logo" className="h-25 cursor-pointer" />
+          </Link>
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}  // Start above and invisible
+        animate={{ opacity: 1, y: 0 }}    // Slide down and fade in
+        transition={{
+          type: "spring",  // Bouncy spring animation
+          damping: 8,     // Less bounciness
+          stiffness: 50   // Snappier motion
+        }}
+      >
+        <nav className={`space-x-8 ${textColor} text-lg`}>
+          <Link href="#team" className={borderStyle}>Our team</Link>
+          <Link href="#projects" className={borderStyle}>Projects</Link>
+          <Link href="/contact" className={borderStyle + `${pathname === '/contact' ? underlineStyle : ''}`}>Contact us</Link>
+          <Link href="#join" className={borderStyle}>Join us</Link>
+        </nav>
+      </motion.div>
+
     </header>
   );
 }
