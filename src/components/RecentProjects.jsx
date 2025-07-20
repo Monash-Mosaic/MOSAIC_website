@@ -8,7 +8,7 @@ export default function RecentProjects() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="pt-24 min-h-screen bg-[#E4E4FB] py-20 px-6 text-center snap-start"
+      className="pt-40 min-h-screen bg-[#E4E4FB] py-30 px-6 text-center snap-start"
     >
 
       <h2 className="text-3xl md:text-4xl font-bold text-[#4953A1] mb-12">Recent projects</h2>
