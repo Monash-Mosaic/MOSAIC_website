@@ -9,12 +9,6 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
 })
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'], // Use the weights you need
-  variable: '--font-space-grotesk',
-});
-
 export const metadata = {
   title: "MOSAIC",
   description: "Monash Students for AI with Communities",
