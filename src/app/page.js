@@ -6,8 +6,9 @@ import RecentProjects from '../components/RecentProjects';
 
 export default function Home() {
   return (
-    <main className="text-white bg-[#213359] snap-y snap-mandatory overflow-y-scroll h-screen">
-      <Navbar />
+
+    <main className="min-h-screen bg-[#213359] text-white relative flex flex-col items-center">
+      <Navbar color="light" />
       <Hero />
       <VisionSection />
       <RecentProjects />
