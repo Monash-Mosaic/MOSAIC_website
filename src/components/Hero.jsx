@@ -35,6 +35,7 @@ export default function Hero() {
           stiffness: 40,     // Lower = more fluid (try 40-100)
           mass: 0.3,         // Lower = faster movement
         }}
+        className='max-w-3xl'
       >
         <p className="mt-6 text-base md:text-lg text-gray-200">
           MOSAIC (Monash Students for AI with Communities) is where cutting-edge technology meets social impact.

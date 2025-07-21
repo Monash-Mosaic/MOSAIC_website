@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
-import OctopusDecoration from '../components/OctopusDecoration';
+import Footer from '../components/Footer';
 import VisionSection from '../components/VisionSection';
 import RecentProjects from '../components/RecentProjects';
 
@@ -12,6 +12,7 @@ export default function Home() {
       <Hero />
       <VisionSection />
       <RecentProjects />
+      <Footer/>
     </main>
   );
 }
