@@ -51,15 +51,15 @@ export default function Navbar({ color = 'light' }) {
       className={`w-full sticky top-0 left-0 z-[999] bg-[#213359] transition-transform duration-300 ${scrolled ? 'shadow-md' : ''} ${show ? 'translate-y-0' : '-translate-y-full'}`}
       tabIndex={-1}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center py-5 px-6">
+      <div className="max-w-7xl mx-auto flex justify-between items-center py-0 px-6" style={{ minHeight: '5.5rem' }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', damping: 8, stiffness: 100 }}
         >
-          <div className="text-2xl">
-            <Link href="/" tabIndex={0} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 rounded">
-              <img src={logoSource} alt="MOSAIC logo" className="h-12 cursor-pointer" />
+          <div className="text-2xl mr-6 flex items-center h-full">
+            <Link href="/" tabIndex={0} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 rounded block h-full">
+              <img src={logoSource} alt="MOSAIC logo" className="h-20 max-h-full w-auto cursor-pointer" />
             </Link>
           </div>
         </motion.div>
