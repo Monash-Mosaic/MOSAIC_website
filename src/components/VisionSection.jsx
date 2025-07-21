@@ -58,7 +58,7 @@ export default function VisionSection() {
         <div className="flex-1 flex flex-col items-center text-center px-4">
             {/* ICON WRAPPER */}
             <img
-              src="/Lastingimpact.svg"
+              src="/LastingImpact.svg"
               alt="Scalable Icon"
               className="h-16 w-16 mb-4"
             />
