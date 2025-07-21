@@ -1,6 +1,7 @@
 'use client';
 
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
@@ -44,7 +45,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white text-[#213359] relative flex flex-col items-center">
       <Navbar color="dark" />
-      <section className="w-full flex flex-col items-center mt-10 px-4">
+      <section className="w-full flex flex-col items-center mt-10 px-4 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}  // Start above and invisible
           animate={{ opacity: 1, y: 0 }}    // Slide down and fade in
@@ -72,8 +73,10 @@ export default function ContactPage() {
           }}
           className="w-full max-w-7xl bg-[#213359] rounded-2xl mt-8 p-8 md:p-12 flex flex-col md:flex-row gap-8 justify-center">
           <form className="flex-1 flex flex-col gap-8 max-w-6xl" onSubmit={handleSubmit}>
-            <div className="flex gap-26">
-              <div className="w-1/3 flex flex-col gap-y-14">
+            <div className="flex flex-col md:flex-row gap-26 ">
+
+              {/* {First Column} */}
+              <div className="md:w-1/3 flex flex-col gap-y-14">
                 <div className='flex flex-col gap-y-2'>
                   <label className="block text-lime-400 text-2xl font-semibold mb-1">Name <span className="text-base text-lime-400">(Required)</span></label>
                   <input name="Name" type="text" required placeholder="Type your name here" value={form.Name} onChange={handleChange} className="w-full p-3 text-xl border-2 rounded-lg rounded-md text-[#213359] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-lime-400" />
@@ -92,7 +95,9 @@ export default function ContactPage() {
                   </select>
                 </div>
               </div>
-              <div className="w-2/3 flex flex-col gap-y-2">
+
+              {/* {Second Column} */}
+              <div className="md:w-2/3 flex flex-col gap-y-2">
                 <label className="block text-lime-400 text-2xl font-semibold mb-1">Message <span className="text-base text-lime-400">(Required)</span></label>
                 <textarea name="Message" required placeholder="Type your message here" rows={7} value={form.Message} onChange={handleChange} className="w-full p-4 text-xl border-2 rounded-lg  rounded-md p-3 text-[#213359] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-lime-400 resize-none" />
               </div>
@@ -108,6 +113,7 @@ export default function ContactPage() {
           <div className="border-b-2 border-blue-500"></div>
         </motion.div>
       </section>
+      <Footer/>
     </main>
   );
 }

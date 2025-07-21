@@ -17,22 +17,7 @@ export default function OctopusDecoration() {
 
   return (
     <div>
-      {/* <motion.div
-        initial={{ y: 60 }}
-        animate={{ y: 30 }}
-        className="absolute bottom-10 left-10"
-        transition={{
-          type: "smooth",
-          duration: 0.3,
-        }}>
-        <motion.img
-          initial={{ opacity: 0.5 }}
-          animate={{ opacity: 0 }}
-          src="/Octopus_icon_green_3.png"
-          className="w-20 md:w-32"
-        />
-      </motion.div> */}
-      <div className="absolute bottom-20 left-10">
+      <div className="absolute bottom-20 left-5">
         <AnimatePresence>
           <motion.div
             whileHover={{ scale: 1.1 }}
@@ -62,7 +47,7 @@ export default function OctopusDecoration() {
         </AnimatePresence>
 
       </div>
-      <div className="absolute top-50 right-50">
+      <div className="absolute top-40 right-40">
         <AnimatePresence mode="wait">
           {isFirstIcon ? (
             <motion.div
