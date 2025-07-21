@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={spaceGrotesk.variable}>
       <body
 
-        className={`${spaceGrotesk.className} antialiased`}
+        className={`${spaceGrotesk.className} antialiased pt-24`}
       >
         {children}
       </body>
