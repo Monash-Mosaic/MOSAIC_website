@@ -35,7 +35,7 @@ export default function Navbar({ color = 'light' }) {
   const borderStyle = borderHoverStyle[pathname] + commonBorderStyle
   return (
 
-    <header className="w-full flex justify-between items-center py-6 mx-auto px-6 fixed bg-[#213359] w-full">
+    <header className="w-full flex justify-between items-center py-6 mx-auto px-6 fixed bg-[#213359] w-full z-[999]">
       <motion.div
         initial={{ opacity: 0, y: 50 }}  // Start above and invisible
         animate={{ opacity: 1, y: 0 }}    // Slide down and fade in
