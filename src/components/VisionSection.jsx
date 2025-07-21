@@ -8,7 +8,7 @@ export default function VisionSection() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="min-h-screen flex flex-col justify-center bg-white items-center text-center px-6 snap-start"
+      className="min-h-screen flex flex-col justify-center bg-white items-center text-center px-6 snap-start w-full"
     >
 
       <h2 className="text-3xl md:text-4xl font-bold text-[#6D92E2] mb-12">Our Vision</h2>
