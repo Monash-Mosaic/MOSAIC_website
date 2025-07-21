@@ -1,4 +1,6 @@
+
 import { Space_Grotesk } from "next/font/google";
+
 import "./globals.css";
 
 
@@ -15,8 +17,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={spaceGrotesk.variable}>
       <body
+
         className={`${spaceGrotesk.className} antialiased`}
       >
         {children}
