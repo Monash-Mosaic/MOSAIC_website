@@ -1,11 +1,12 @@
 'use client';
 import { motion } from 'framer-motion'
+import OctopusDecoration from './OctopusDecoration';
 
 
 export default function Hero() {
   return (
 
-    <section className="text-center max-w-3xl mt-20 px-6">
+    <section className="relative min-h-screen snap-start flex flex-col justify-center items-center text-center px-6">
       <motion.h1
         style={{ color: '#BDFF15' }}
         initial={{ opacity: 0, y: -30, x: -5, scale: 0.95 }}  // Start above and invisible
@@ -42,6 +43,7 @@ export default function Hero() {
       </motion.div>
       <motion.button
         initial={{ opacity: 0, y: 30 }}  // Start above and invisible
+        whileHover={{ scale: 1.1, duration: 0.05 }}
         animate={{ opacity: 1, y: 0 }}    // Slide down and fade in
         transition={{
           type: "spring",  // Bouncy spring animation
@@ -52,6 +54,7 @@ export default function Hero() {
         style={{ background: '#BDFF15' }} className="mt-8 bg-lime-400 text-[#0C1D45] px-6 py-3 rounded-full font-semibold hover:bg-lime-300 transition">
         Explore projects
       </motion.button>
+      <OctopusDecoration />
     </section>
 
   );
