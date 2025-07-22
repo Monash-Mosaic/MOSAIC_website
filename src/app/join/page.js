@@ -4,9 +4,16 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { useRouter } from 'next/navigation';
 
 export default function JoinPage() {
   const [expandedRole, setExpandedRole] = useState('data-scientist');
+
+  const router = useRouter();
+
+  const handleClickToContact = () => {
+    router.push('/contact');
+  };
 
   const projectRoles = [
     { id: 'ai-engineer', title: 'AI Engineer', description: 'Build and deploy AI models to solve real-world problems in our community projects.' },
@@ -167,7 +174,7 @@ export default function JoinPage() {
                           className="pb-4"
                         >
                           <p className="text-gray-300 text-base mb-4">{role.description}</p>
-                          <button className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
+                          <button onClick={handleClickToContact}  className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
                             Apply now
                           </button>
                         </motion.div>
@@ -204,7 +211,7 @@ export default function JoinPage() {
                           className="pb-4"
                         >
                            <p className="text-gray-300 text-base mb-4">{role.description}</p>
-                          <button className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
+                          <button onClick={handleClickToContact} className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
                             Apply now
                           </button>
                         </motion.div>
