@@ -87,7 +87,7 @@ export default function ContactPage() {
                 </div>
                 <div className='flex flex-col gap-y-2'>
                   <label className="block text-lime-400 text-2xl font-semibold mb-1">Inquiry type <span className="text-base text-lime-400">(Required)</span></label>
-                  <select name="InquiryTypeDropdown" value={form.InquiryType} onChange={handleChange} className="w-full text-xl border-2 rounded-lg  rounded-md p-3 text-[#213359] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-lime-400">
+                  <select name="InquiryType" value={form.InquiryType} onChange={handleChange} className="w-full text-xl border-2 rounded-lg  rounded-md p-3 text-[#213359] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-lime-400">
                     <option value="General">General</option>
                     <option value="Recruitment">Recruitment</option>
                     <option value="Projects">Projects</option>
