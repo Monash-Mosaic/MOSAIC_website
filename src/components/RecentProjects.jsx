@@ -1,11 +1,10 @@
 'use client';
 import { motion } from 'framer-motion';
-
 export default function RecentProjects() {
 
 
   const projects = [
-    { delay: 0, title: 'International Federation of Red Cross', description: 'Imagine creating a web platform for the organisation that helps communities all over the world.', image: '/disinformer.png' },
+    { delay: 0, title: 'International Federation of Red Cross', description: 'Imagine creating a web platform for the organisation that helps communities all over the world.', image: '/mos+ifrc.png' },
     { delay: 0.4, title: '⁠Nestle-In: Tackling Secondary Homelessnes', description: 'A Hackathon project that turned to a real life application for people who experience secondary and tertiary homelessness.', image: '/nestled.jpg' },
     { delay: 0.8, title: '⁠Aged Care: Supporting aged care workers', description: 'Co-designing solutions with and for people who transition from being active and independent to a new era of their lives.', image: '/agedCare.jpg' },
 

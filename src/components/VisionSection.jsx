@@ -13,7 +13,7 @@ export default function VisionSection() {
 
       <h2 className="text-4xl md:text-4xl font-extrabold text-[#6D92E2] mb-12">Our Vision</h2>
 
-      <div className="flex flex-col md:flex-row justify-center gap-12 max-w-5xl mx-auto">
+      <div className="flex flex-col md:flex-row justify-center gap-16 max-w-6xl mx-auto">
         {/* Card 1 */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -24,16 +24,16 @@ export default function VisionSection() {
           <img
             src="/ScalableSolutions.svg"
             alt="Scalable Icon"
-            className="h-16 w-16 mb-4"
+            className="h-20 w-20 mb-4"
           />
 
           {/* HEADING */}
-          <h3 className="text-lg font-semibold text-[#6D92E2] mb-2">
+          <h3 className="text-xl font-semibold text-[#6D92E2] mb-2">
             Scalable Solutions
           </h3>
 
           {/* PARAGRAPH */}
-          <p className="text-sm text-gray-600 max-w-xs">
+          <p className="text-base text-gray-600 max-w-xs">
             Package and launch successful projects as whitepapers or toolkits to benefit other organisations.
           </p>
         </motion.div>
@@ -48,16 +48,16 @@ export default function VisionSection() {
           <img
             src="/CommunityDrivenProjects.svg"
             alt="Scalable Icon"
-            className="h-16 w-16 mb-4"
+            className="h-20 w-20 mb-4"
           />
 
           {/* HEADING */}
-          <h3 className="text-lg font-semibold text-[#6D92E2] mb-2">
+          <h3 className="text-xl font-semibold text-[#6D92E2] mb-2">
             Community Driven Projects
           </h3>
 
           {/* PARAGRAPH */}
-          <p className="text-sm text-gray-600 max-w-xs">
+          <p className="text-base text-gray-600 max-w-xs">
             Work on active problems from non-academic community organisations, including international partners like Oxfam and IFRC.
           </p>
         </motion.div>
@@ -72,16 +72,16 @@ export default function VisionSection() {
           <img
             src="/LastingImpact.svg"
             alt="Scalable Icon"
-            className="h-16 w-16 mb-4"
+            className="h-20 w-20 mb-4"
           />
 
           {/* HEADING */}
-          <h3 className="text-lg font-semibold text-[#6D92E2] mb-2">
+          <h3 className="text-xl font-semibold text-[#6D92E2] mb-2">
             Lasting Impact
           </h3>
 
           {/* PARAGRAPH */}
-          <p className="text-sm text-gray-600 max-w-xs">
+          <p className="text-base text-gray-600 max-w-xs">
             Create AI solutions that address real challenges faced by underserved communities worldwide.
           </p>
         </motion.div>
