@@ -32,7 +32,7 @@ export default function Navbar({ color = 'light' }) {
   const logoPaths = {
     '/': color === 'dark' ? '/Primary_logo.png' : '/Primary_logo.png',
     '/join': color === 'dark' ? '/Primary_logo.png' : '/Primary_Blue_Transparent.png',
-    '/project': color === 'dark' ? '/Primary_logo.png' : '/Primary_Blue_Transparent.png',
+    '/projects': color === 'dark' ? '/Primary_logo.png' : '/Primary_Blue_Transparent.png',
     '/contact': color === 'dark' ? '/Primary_logo.png' : '/Primary_Blue_Transparent.png',
   };
   const logoSource = logoPaths[pathname] || '/Primary_logo.png';
@@ -42,7 +42,7 @@ export default function Navbar({ color = 'light' }) {
 
   const navLinks = [
     { href: '#team', label: 'Our team' },
-    { href: '#projects', label: 'Projects' },
+    { href: '/projects', label: 'Projects' },
     { href: '/contact', label: 'Contact us' },
   ];
 
