@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Navbar from '../../components/Navbar';
 import { useEffect } from 'react';
+import Footer from '../../components/Footer';
 
 export default function ProjectsPage() {
   const projects = [
@@ -249,6 +250,7 @@ export default function ProjectsPage() {
           })}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
