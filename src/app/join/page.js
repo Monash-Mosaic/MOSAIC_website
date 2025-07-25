@@ -7,30 +7,39 @@ import Footer from '../../components/Footer';
 import { useRouter } from 'next/navigation';
 
 export default function JoinPage() {
-  const [expandedRole, setExpandedRole] = useState('data-scientist');
+  const [expandedRole, setExpandedRole] = useState();
 
   const router = useRouter();
 
-  const handleClickToContact = () => {
-    router.push('/contact');
+  const ai_form = 'https://forms.gle/Psynbezjw8dFdtY78'
+
+  const ui_form = 'https://docs.google.com/forms/d/e/1FAIpQLSfj6nVGiR0mGrudVZGTpqlrrMlytO6nKceAaKT0Sj97e3qP4w/viewform?usp=sharing&ouid=107450200585547751566'
+
+  const dev_form = 'https://docs.google.com/forms/d/e/1FAIpQLSd242Vx1Ywn0k3DUNP50Fkgb0M1UJVKP_dvAMhsreAI38zWRQ/viewform?usp=sharing&ouid=107450200585547751566'
+
+  const marketing_form = 'https://forms.gle/X4BYEoWhSE2PJwgq8'
+
+  const handleClickToContact = (id) => {
+    router.push(projectRoles[id]);
   };
 
-  const projectRoles = [
-    { id: 'ai-engineer', title: 'AI Engineer', description: 'Build and deploy AI models to solve real-world problems in our community projects.' },
-    { id: 'data-scientist', title: 'Data Scientist', description: 'Analyze data, uncover insights, and support decision-making through visualizations and models.' },
-    { id: 'mobile-app-dev', title: 'Mobile App Developer', description: 'Design and build cross-platform mobile apps using Flutter, integrating APIs and managing app state effectively.' },
-    { id: 'full-stack-dev', title: 'Full-Stack Web Developer', description: 'Develop web applications using Python or JavaScript frameworks, with opportunities to explore cloud platforms, databases, and AI integration tools.' },
-    { id: 'ui-designer', title: 'UI/UX Designer', description: 'Craft intuitive, accessible, and visually engaging designs that enhance user experience across our digital platforms.' },
+    const projectRoles = [
+    { formPath: ai_form, id: 'ai-engineer', title: 'AI Engineer', description: 'Build and deploy AI models to solve real-world problems in our community projects.' },
+    // { formPath: dev_form, id: 'data-scientist', title: 'Data Scientist', description: 'Analyze data, uncover insights, and support decision-making through visualizations and models.' },
+    { formPath: dev_form, id: 'mobile-app-dev', title: 'Mobile App Developer', description: 'Design and build cross-platform mobile apps using Flutter, integrating APIs and managing app state effectively.' },
+    { formPath: dev_form, id: 'full-stack-dev', title: 'Full-Stack Web Developer', description: 'Develop web applications using Python or JavaScript frameworks, with opportunities to explore cloud platforms, databases, and AI integration tools.' },
+    { formPath: ui_form, id: 'ui-designer', title: 'UI/UX Designer', description: 'Craft intuitive, accessible, and visually engaging designs that enhance user experience across our digital platforms.' },
 
   ];
 
+
   const committeeRoles = [
-    { id: 'community-engagement', title: 'Community and Engagement Officer', description: 'Foster connections, organize outreach, and keep communities engaged and informed.' },
-    { id: 'accountant', title: 'Accountant',  description: 'Manage budgets, track spending, and ensure financial transparency for all activities' },
-    { id: 'events-officer', title: 'Events Officer', description: 'Plan and coordinate engaging events that bring our members and communities together.' },
-    { id: 'marketing-officer', title: 'Marketing Officer', description: 'Promote our work through both online and offline channels, create engaging content, and strengthen our overall presence.' },
-    { id: 'people-cultures', title: 'People and Cultures Officer', description: 'Support team wellbeing, coordinate onboarding, and celebrate diversity.' },
-    { id: 'design-officer', title: 'Design Officer', description: 'Create visuals, graphics, and materials that reflect our identity and values.' }
+    // { formPath: marketing_form, id: 'community-engagement', title: 'Community and Engagement Officer', description: 'Foster connections, organize outreach, and keep communities engaged and informed.' },
+    // { formPath: marketing_form, id: 'accountant', title: 'Accountant',  description: 'Manage budgets, track spending, and ensure financial transparency for all activities' },
+    // { formPath: marketing_form, id: 'events-officer', title: 'Events Officer', description: 'Plan and coordinate engaging events that bring our members and communities together.' },
+    { formPath: marketing_form, id: 'marketing-officer', title: 'Marketing Officer', description: 'Promote our work through both online and offline channels, create engaging content, and strengthen our overall presence.' },
+    // { formPath: marketing_form, id: 'people-cultures', title: 'People and Cultures Officer', description: 'Support team wellbeing, coordinate onboarding, and celebrate diversity.' },
+    { formPath: ui_form, id: 'design-officer', title: 'Design Officer', description: 'Create visuals, graphics, and materials that reflect our identity and values.' }
   ];
 
   const toggleRole = (roleId) => {
@@ -174,9 +183,12 @@ export default function JoinPage() {
                           className="pb-4"
                         >
                           <p className="text-gray-300 text-base mb-4">{role.description}</p>
-                          <button onClick={handleClickToContact}  className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
+                          <a href={role.formPath}>
+                            <button className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
                             Apply now
                           </button>
+                          </a>
+
                         </motion.div>
                       )}
                       {index < projectRoles.length - 1 && (
@@ -210,10 +222,12 @@ export default function JoinPage() {
                           transition={{ duration: 0.3 }}
                           className="pb-4"
                         >
-                           <p className="text-gray-300 text-base mb-4">{role.description}</p>
-                          <button onClick={handleClickToContact} className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
+                          <p className="text-gray-300 text-base mb-4">{role.description}</p>
+                          <a href={role.formPath}>
+                            <button className="bg-lime-400 text-white px-6 py-2 rounded font-semibold hover:bg-lime-500 transition-colors duration-200">
                             Apply now
-                          </button>
+                            </button>
+                          </a>
                         </motion.div>
                       )}
                       {index < committeeRoles.length - 1 && (
