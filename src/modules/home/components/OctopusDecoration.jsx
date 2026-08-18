@@ -1,6 +1,7 @@
-'use client'
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+'use client';
+
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export default function OctopusDecoration() {
   const [isFirstIcon, setIsFirstIcon] = useState(true);
@@ -8,9 +9,9 @@ export default function OctopusDecoration() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsFirstIcon(prev => !prev);
-      setAnimationKey(prev => prev + 1); // Force re-render for smooth transition
-    }, 5000); // Change every 2 seconds
+      setIsFirstIcon((prev) => !prev);
+      setAnimationKey((prev) => prev + 1);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -26,26 +27,29 @@ export default function OctopusDecoration() {
               y: 0,
               transition: {
                 duration: 0.5,
-                ease: "easeInOut"
-              }
+                ease: 'easeInOut',
+              },
             }}
             className="w-20 md:w-32"
             transition={{
-              type: "smooth",
+              type: 'smooth',
               duration: 1.5,
-            }}>
+            }}
+          >
             <motion.img
               initial={{ y: -10, x: 10 }}
               animate={{ y: 10, x: -10 }}
               transition={{
-                type: "smooth",
-                repeatType: "mirror",
+                type: 'smooth',
+                repeatType: 'mirror',
                 duration: 3,
                 repeat: Infinity,
-              }} src="/Octopus_icon_green_1.png" alt="Octopus left" />
+              }}
+              src="/Octopus_icon_green_1.png"
+              alt="Octopus left"
+            />
           </motion.div>
         </AnimatePresence>
-
       </div>
       <div className="absolute top-40 right-40">
         <AnimatePresence mode="wait">
@@ -59,20 +63,23 @@ export default function OctopusDecoration() {
                 y: 30,
                 transition: {
                   duration: 2,
-                  ease: "easeInOut"
-                }
+                  ease: 'easeInOut',
+                },
               }}
-              className="absolute w-20 md:w-32">
+              className="absolute w-20 md:w-32"
+            >
               <motion.img
                 initial={{ y: -7, x: 7 }}
                 animate={{ y: 7, x: -7 }}
                 transition={{
-                  type: "smooth",
-                  repeatType: "mirror",
+                  type: 'smooth',
+                  repeatType: 'mirror',
                   duration: 3,
                   repeat: Infinity,
                 }}
-                src="/Octopus_icon_green_2.png" alt="Octopus right" />
+                src="/Octopus_icon_green_2.png"
+                alt="Octopus right"
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -84,23 +91,25 @@ export default function OctopusDecoration() {
                 y: -30,
                 transition: {
                   duration: 2,
-                  ease: "easeInOut"
-                }
+                  ease: 'easeInOut',
+                },
               }}
-              className="absolute w-20 md:w-32">
+              className="absolute w-20 md:w-32"
+            >
               <motion.img
                 initial={{ y: -7, x: 7 }}
                 animate={{ y: 7, x: -7 }}
                 transition={{
-                  type: "smooth",
-                  repeatType: "mirror",
+                  type: 'smooth',
+                  repeatType: 'mirror',
                   duration: 3,
                   repeat: Infinity,
                 }}
-                src="/Octopus_icon_green_2_flipped.png" alt="Octopus right" />
+                src="/Octopus_icon_green_2_flipped.png"
+                alt="Octopus right"
+              />
             </motion.div>
-          )
-          }
+          )}
         </AnimatePresence>
       </div>
     </div>
