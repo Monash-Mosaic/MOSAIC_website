@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "google:token": "node scripts/get-google-refresh-token.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.6",
