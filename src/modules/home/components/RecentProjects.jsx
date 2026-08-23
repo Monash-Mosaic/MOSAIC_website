@@ -84,13 +84,7 @@ export default function RecentProjects() {
 
   const pages = useMemo(() => chunkProjects(projects, slidesPerView), [projects, slidesPerView]);
   const pageCount = pages.length;
-
-  useEffect(() => {
-    setPage((current) => {
-      if (pageCount === 0) return 0;
-      return Math.min(current, pageCount - 1);
-    });
-  }, [pageCount]);
+  const currentPage = pageCount === 0 ? 0 : Math.min(page, pageCount - 1);
 
   useEffect(() => {
     if (pageCount <= 1 || paused) return undefined;
@@ -135,20 +129,20 @@ export default function RecentProjects() {
             }}
             onTouchEnd={(event) => {
               const delta = event.changedTouches[0].clientX - touchStartX.current;
-              if (delta < -50) goTo(page + 1);
-              else if (delta > 50) goTo(page - 1);
+              if (delta < -50) goTo(currentPage + 1);
+              else if (delta > 50) goTo(currentPage - 1);
             }}
           >
             <motion.div
               className="flex"
-              animate={{ x: `-${page * 100}%` }}
+              animate={{ x: `-${currentPage * 100}%` }}
               transition={{ type: 'spring', stiffness: 70, damping: 18 }}
             >
               {pages.map((pageItems, pageIndex) => (
                 <div
                   key={pageIndex}
                   className="grid gap-2 md:gap-10 grid-cols-1 md:grid-cols-3 w-full shrink-0 basis-full"
-                  aria-hidden={pageIndex !== page}
+                  aria-hidden={pageIndex !== currentPage}
                 >
                   {pageItems.map((project) => (
                     <motion.div
@@ -169,7 +163,7 @@ export default function RecentProjects() {
             <div className="mt-10 flex items-center justify-center gap-4">
               <button
                 type="button"
-                onClick={() => goTo(page - 1)}
+                onClick={() => goTo(currentPage - 1)}
                 className="rounded-full bg-white/80 p-2 text-[#4953A1] shadow-md hover:bg-white transition"
                 aria-label="Previous projects"
               >
@@ -178,7 +172,7 @@ export default function RecentProjects() {
 
               {pageCount > 8 ? (
                 <span className="min-w-16 text-sm font-semibold text-[#4953A1]">
-                  {page + 1} / {pageCount}
+                  {currentPage + 1} / {pageCount}
                 </span>
               ) : (
                 <div className="flex items-center gap-2">
@@ -188,10 +182,10 @@ export default function RecentProjects() {
                       type="button"
                       onClick={() => goTo(index)}
                       className={`h-2.5 rounded-full transition-all ${
-                        index === page ? 'w-7 bg-[#4953A1]' : 'w-2.5 bg-[#4953A1]/35 hover:bg-[#4953A1]/60'
+                        index === currentPage ? 'w-7 bg-[#4953A1]' : 'w-2.5 bg-[#4953A1]/35 hover:bg-[#4953A1]/60'
                       }`}
                       aria-label={`Go to project slide ${index + 1}`}
-                      aria-current={index === page}
+                      aria-current={index === currentPage}
                     />
                   ))}
                 </div>
@@ -199,7 +193,7 @@ export default function RecentProjects() {
 
               <button
                 type="button"
-                onClick={() => goTo(page + 1)}
+                onClick={() => goTo(currentPage + 1)}
                 className="rounded-full bg-white/80 p-2 text-[#4953A1] shadow-md hover:bg-white transition"
                 aria-label="Next projects"
               >

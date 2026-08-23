@@ -14,7 +14,7 @@ export default function WhyJoin() {
         <h2 className="text-5xl font-bold text-[#213359] leading-tight">Why should you join us?</h2>
         <p className="text-xl text-gray-700 leading-relaxed">
           MOSAIC offers a unique opportunity to apply your skills in AI, design, and IT to solve real-world
-          problems faced by marginalised communities. You'll gain hands-on experience, work with diverse teams,
+          problems faced by marginalised communities. You&apos;ll gain hands-on experience, work with diverse teams,
           and make a lasting impact.
         </p>
       </div>
