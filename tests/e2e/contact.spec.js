@@ -12,6 +12,7 @@ test.describe('contact', () => {
 
     await page.goto('/contact');
     await expect(page.getByRole('heading', { name: /love to hear from you/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Submit' })).toBeEnabled();
 
     await page.getByPlaceholder('Type your name here').fill('Ada Lovelace');
     await page.getByPlaceholder('abc@gmail.com').fill('ada@example.com');

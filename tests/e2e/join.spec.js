@@ -8,7 +8,7 @@ test.describe('join', () => {
     await expect(page.getByRole('heading', { name: 'Project Roles' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Committee Roles' })).toBeVisible();
 
-    await page.getByText('AI Engineer').click();
+    await page.getByText('AI Engineer', { exact: true }).click();
     await expect(page.getByRole('link', { name: 'Apply now' })).toBeVisible();
   });
 });
