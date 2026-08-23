@@ -1,0 +1,29 @@
+{
+  "success": true,
+  "projects": [
+    {
+      "id": "local-community-hub",
+      "name": "Community Hub",
+      "subtitle": "Connect students across clubs",
+      "description": "A local-dev sample project for exploring how MOSAIC surfaces community initiatives. Swap this JSON when you need different fixtures without hitting Apps Script.",
+      "image": "/CommunityDrivenProjects.svg",
+      "link": "https://example.com/community-hub"
+    },
+    {
+      "id": "local-scalable-tools",
+      "name": "Scalable Tools",
+      "subtitle": "Shared utilities for club teams",
+      "description": "Placeholder project used only when APP_ENV=local. Images point at public assets so Google Drive auth is not required during development.",
+      "image": "/ScalableSolutions.svg",
+      "link": "PENDING_APPROVAL"
+    },
+    {
+      "id": "local-lasting-impact",
+      "name": "Lasting Impact",
+      "subtitle": "Measure what we ship",
+      "description": "Third sample card for layout and theming checks. Edit src/modules/projects/localProjects.json to change titles, copy, or links while developing locally.",
+      "image": "/LastingImpact.svg",
+      "link": "https://example.com/lasting-impact"
+    }
+  ]
+}
