@@ -10,8 +10,11 @@ import {
   readProjectsCache,
   writeProjectsCache,
 } from './cache';
+import localProjectsPayload from './localProjects.json';
 
 const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;
+const APP_ENV = (process.env.APP_ENV || 'production').toLowerCase();
+const USE_LOCAL_PROJECTS = APP_ENV === 'local';
 
 const CARD_THEMES = [
   {
@@ -68,6 +71,14 @@ function parseProjectsPayload(text) {
   return payload.projects.map(normalizeProject);
 }
 
+function loadLocalProjects() {
+  if (!Array.isArray(localProjectsPayload?.projects)) {
+    throw new Error('localProjects.json must include a projects array');
+  }
+
+  return localProjectsPayload.projects.map(normalizeProject);
+}
+
 async function loadProjectsWithToken(accessToken) {
   if (!APPS_SCRIPT_URL) {
     throw new Error('Missing APPS_SCRIPT_URL.');
@@ -82,6 +93,10 @@ async function loadProjectsWithToken(accessToken) {
 }
 
 export async function fetchProjectsFromSource() {
+  if (USE_LOCAL_PROJECTS) {
+    return { projects: loadLocalProjects(), error: null };
+  }
+
   const accessToken = await getGoogleAccessToken();
 
   try {
@@ -95,6 +110,11 @@ export async function fetchProjectsFromSource() {
 
 export async function getProjects({ force = false } = {}) {
   try {
+    // Local fixtures skip Apps Script + disk cache so JSON edits show up on refresh.
+    if (USE_LOCAL_PROJECTS) {
+      return { projects: loadLocalProjects(), error: null, cached: false, cachedAt: null };
+    }
+
     if (!force) {
       const cached = await readProjectsCache();
       if (isProjectsCacheFresh(cached)) {
