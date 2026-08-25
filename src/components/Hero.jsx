@@ -1,9 +1,12 @@
 'use client';
 import { motion } from 'framer-motion'
 import OctopusDecoration from './OctopusDecoration';
+import { useRouter } from 'next/navigation';
 
 
 export default function Hero() {
+  
+  const router = useRouter();
   return (
 
     <section className="relative min-h-screen snap-start flex flex-col justify-center items-center text-center px-6">
@@ -52,6 +55,7 @@ export default function Hero() {
           damping: 10,     // Less bounciness
           stiffness: 50   // Snappier motion
         }}
+        onClick={()=>{router.push("/projects")}}
         style={{ background: '#BDFF15' }} className="mt-8 bg-lime-400 text-[#0C1D45] px-6 py-3 rounded-full font-semibold hover:bg-lime-300 transition">
         Explore projects
       </motion.button>
