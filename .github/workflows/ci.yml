@@ -96,6 +96,9 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     steps:
+      # Checkout first so the local composite actions exist on the runner.
+      - uses: actions/checkout@v6
+
       - name: Setup Node environment
         uses: ./.github/actions/setup-node-environment
 
