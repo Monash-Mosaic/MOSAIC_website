@@ -1,0 +1,23 @@
+name: Refresh projects cache
+
+on:
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refresh deployed projects cache
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          CACHE_REFRESH_SECRET: ${{ secrets.CACHE_REFRESH_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SITE_URL:-}" ] || [ -z "${CACHE_REFRESH_SECRET:-}" ]; then
+            echo "Set GitHub secrets SITE_URL and CACHE_REFRESH_SECRET."
+            exit 1
+          fi
+
+          curl --fail --silent --show-error -X POST "${SITE_URL%/}/api/projects/refresh" \
+            -H "Authorization: Bearer ${CACHE_REFRESH_SECRET}" \
+            -H "Content-Type: application/json"
