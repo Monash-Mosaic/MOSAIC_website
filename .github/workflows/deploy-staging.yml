@@ -63,6 +63,9 @@ jobs:
           NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ env.NEXT_PUBLIC_CF_BEACON_TOKEN }}
         run: |
+          # Without pipefail the pipeline reports tee's exit code, so a failed
+          # wrangler upload would be swallowed and the job would pass.
+          set -o pipefail
           LOG=$(npm run upload -- --preview-alias staging --tag $NEXT_PUBLIC_GIT_TAG 2>&1 | tee /dev/stderr)
           VERSION_ID=$(echo "$LOG" | grep -oE 'Worker Version ID: [0-9a-f-]+' | awk '{print $4}')
           PREVIEW_URL=$(echo "$LOG" | grep -oE 'Version Preview URL: https?://[^[:space:]]+' | awk '{print $4}')
