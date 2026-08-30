@@ -94,22 +94,9 @@ jobs:
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: |
           if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
-            npm install --package-lock-only --workspaces --include-workspace-root
+            npm install --package-lock-only
           fi
           npm ci
-
-      - name: Inject D1 database IDs into Wrangler config
-        env:
-          CF_D1_SEARCH_DB_ID: ${{ secrets.CF_D1_SEARCH_DB_ID }}
-        run: node scripts/ci/inject-d1-database-ids.mjs
-
-      - name: Build search index
-        if: github.event_name != 'pull_request'
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          NEXT_PUBLIC_GIT_TAG: ${{ steps.preview.outputs.branch_slug }}
-        run: npm run build:search
 
       - name: Deploy to Cloudflare (preview for PR)
         id: deploy_pr

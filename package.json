@@ -1,18 +1,26 @@
 {
-  "name": "frontend",
+  "name": "mosaic-website",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
     "google:token": "node scripts/get-google-refresh-token.mjs",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "test:all": "vitest run && playwright test"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write $(git diff --name-only --diff-filter=ACM HEAD | grep -E '\\.(js|jsx|ts|tsx|json|css|md)$')",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "ci:build": "opennextjs-cloudflare build",
+    "ci:test": "jest --testLocationInResults --ci --coverage --reporters=default --reporters=github-actions --reporters=jest-junit --json --outputFile=report.json"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "framer-motion": "^12.23.6",
@@ -22,7 +30,8 @@
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.62.1",
+    "@eslint/eslintrc": "^3.3.6",
+    "@opennextjs/cloudflare": "^1.3.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.1",
@@ -31,11 +40,24 @@
     "@vitejs/plugin-react": "^6.1.0",
     "@vitest/coverage-v8": "^4.1.11",
     "autoprefixer": "^10.4.21",
-    "eslint": "^9.39.5",
-    "eslint-config-next": "^16.3.2",
-    "jsdom": "^29.1.1",
-    "postcss": "^8.5.6",
+    "eslint": "^9",
+    "eslint-config-next": "^15.4.1",
+    "eslint-config-prettier": "^10.1.5",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "jest-junit": "^16.0.0",
+    "postcss": "^8.5.26",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4.1.11",
-    "vitest": "^4.1.11"
+    "wrangler": "^4.24.0"
+  },
+  "jest-junit": {
+    "outputName": "junit.xml"
+  },
+  "overrides": {
+    "nanoid": "^3.3.18",
+    "postcss": "^8.5.26",
+    "sharp": "^0.35.4",
+    "uuid": "^11.1.1"
   }
 }

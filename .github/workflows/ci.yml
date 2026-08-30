@@ -135,7 +135,7 @@ jobs:
         if: steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.node-modules-cache.outputs.cache-hit != 'true'
         run: |
           if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
-            npm install --package-lock-only --workspaces --include-workspace-root
+            npm install --package-lock-only
           fi
           npm ci
 

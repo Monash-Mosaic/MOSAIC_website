@@ -23,7 +23,7 @@ runs:
       shell: bash
       run: |
         if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
-          npm install --package-lock-only --workspaces --include-workspace-root
+          npm install --package-lock-only
         fi
         npm ci
 
