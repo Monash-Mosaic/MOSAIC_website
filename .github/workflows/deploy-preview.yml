@@ -1,0 +1,217 @@
+name: Deploy to Cloudflare (PR Preview)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'jest.config.js'
+      - 'jest.setup.js'
+      - 'next.config.*'
+      - 'open-next.config.*'
+      - 'wrangler.jsonc'
+      - 'eslint.config.*'
+      - '.github/**'
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'jest.config.js'
+      - 'jest.setup.js'
+      - 'next.config.*'
+      - 'open-next.config.*'
+      - 'wrangler.jsonc'
+      - 'eslint.config.*'
+      - '.github/**'
+
+concurrency:
+  group: deploy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+  statuses: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: preview
+
+    steps:
+      - name: Compute preview name and route
+        id: preview
+        run: |
+          RAW_BRANCH="${{ github.head_ref || github.ref_name }}"
+          BRANCH_SLUG=$(echo "$RAW_BRANCH" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z]+/-/g' | sed -E 's/^-+|-+$//g' | cut -c1-40)
+          if [ -z "$BRANCH_SLUG" ]; then
+            BRANCH_SLUG="${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || 'main' }}"
+          fi
+          echo "branch_slug=$BRANCH_SLUG" >> "$GITHUB_OUTPUT"
+          echo "head_sha=${{ github.event.pull_request.head.sha || github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          lfs: true
+          ref: ${{ steps.preview.outputs.head_sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Restore node_modules cache
+        id: node-modules-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            next-${{ runner.os }}-
+
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: |
+          if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+            npm install --package-lock-only --workspaces --include-workspace-root
+          fi
+          npm ci
+
+      - name: Inject D1 database IDs into Wrangler config
+        env:
+          CF_D1_SEARCH_DB_ID: ${{ secrets.CF_D1_SEARCH_DB_ID }}
+        run: node scripts/ci/inject-d1-database-ids.mjs
+
+      - name: Build search index
+        if: github.event_name != 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEXT_PUBLIC_GIT_TAG: ${{ steps.preview.outputs.branch_slug }}
+        run: npm run build:search
+
+      - name: Deploy to Cloudflare (preview for PR)
+        id: deploy_pr
+        if: github.event_name == 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEXT_PUBLIC_GIT_TAG: main
+          NEXT_PUBLIC_SITE_URL: ${{ format('{0}-{1}.{2}.workers.dev', steps.preview.outputs.branch_slug, vars.CLOUDFLARE_WORKER_NAME, vars.CLOUDFLARE_WORKERS_SUBDOMAIN) }}
+          NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
+        run: |
+          LOG=$(npm run upload -- --preview-alias ${{ steps.preview.outputs.branch_slug }} --tag $NEXT_PUBLIC_GIT_TAG 2>&1 | tee /dev/stderr)
+          VERSION_ID=$(echo "$LOG" | grep -oE 'Worker Version ID: [0-9a-f-]+' | awk '{print $4}')
+          BRANCH_PREVIEW_URL=$(echo "$LOG" | grep -oE 'Version Preview Alias URL: https?://[^[:space:]]+' | awk '{print $5}')
+          echo "version_id=$VERSION_ID" >> "$GITHUB_OUTPUT"
+          echo "branch_preview_url=$BRANCH_PREVIEW_URL" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy to Cloudflare (main)
+        id: deploy_main
+        if: github.event_name != 'pull_request'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEXT_PUBLIC_SITE_URL: ${{ env.NEXT_PUBLIC_PREVIEW_SITE_URL }}
+          NEXT_PUBLIC_GIT_TAG: ${{ steps.preview.outputs.branch_slug }}
+          NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
+        run: |
+          LOG=$(npm run upload -- --tag main 2>&1 | tee /dev/stderr)
+          VERSION_ID=$(echo "$LOG" | grep -oE 'Worker Version ID: [0-9a-f-]+' | awk '{print $4}')
+          npx wrangler versions deploy -y "$VERSION_ID"
+
+      - name: Comment preview deployment on PR
+        if: github.event_name == 'pull_request' && steps.deploy_pr.outcome == 'success'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const marker = '<!-- preview-deployment -->';
+            const previewUrl = `${{ steps.deploy_pr.outputs.branch_preview_url }}`;
+            const versionId = `${{ steps.deploy_pr.outputs.version_id }}`;
+            const previewCell = previewUrl
+              ? `[${previewUrl}](${previewUrl})`
+              : '—';
+            const body = [
+              marker,
+              '## Preview Deployment',
+              '',
+              '| Key | Value |',
+              '| --- | --- |',
+              `| Preview URL | ${previewCell} |`,
+              `| Worker Version | \`${versionId || '—'}\` |`,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body,
+            });
+
+      - name: Comment preview deployment failure on PR
+        if: github.event_name == 'pull_request' && steps.deploy_pr.outcome == 'failure'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const body = [
+              '<!-- preview-deployment -->',
+              '## Preview Deployment',
+              '',
+              '❌ Preview deploy failed. See the workflow logs for details.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body,
+            });
+
+      - name: Update deployment status
+        if: always()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const sha = context.eventName === 'pull_request'
+              ? context.payload.pull_request.head.sha
+              : context.sha;
+            const state = '${{ job.status }}' === 'success' ? 'success' : 'failure';
+            const previewUrl = '${{ steps.deploy_pr.outputs.branch_preview_url }}';
+
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha,
+              state,
+              context: 'deploy/preview',
+              description: state === 'success' ? 'Preview deployed' : 'Preview deploy failed',
+              target_url: previewUrl || undefined,
+            });
+
+      - name: Cleanup workspace
+        if: always()
+        run: |
+          rm -rf node_modules .next .open-next

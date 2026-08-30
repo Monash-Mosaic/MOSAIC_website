@@ -1,0 +1,35 @@
+name: Install dependencies
+description: Restore node_modules cache and install npm dependencies when needed.
+
+outputs:
+  node-modules-cache-hit:
+    description: Whether the node_modules cache was restored.
+    value: ${{ steps.restore-node-modules-cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - name: Restore node_modules cache
+      id: restore-node-modules-cache
+      uses: actions/cache/restore@v4
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        restore-keys: |
+          node-modules-${{ runner.os }}-
+
+    - name: Install dependencies
+      if: steps.restore-node-modules-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+          npm install --package-lock-only --workspaces --include-workspace-root
+        fi
+        npm ci
+
+    - name: Save node_modules cache
+      if: steps.restore-node-modules-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}

@@ -1,0 +1,27 @@
+name: Setup Node environment
+description: Checkout repository and configure Node.js with npm cache.
+
+inputs:
+  checkout-ref:
+    description: Optional git ref to checkout instead of the default commit.
+    required: false
+    default: ''
+  enable-lfs:
+    description: Whether to enable Git LFS during checkout.
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+      with:
+        lfs: ${{ inputs.enable-lfs == 'true' }}
+        ref: ${{ inputs.checkout-ref != '' && inputs.checkout-ref || github.sha }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: 22
+        cache: npm

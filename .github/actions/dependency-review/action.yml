@@ -1,0 +1,11 @@
+name: Dependency Review
+description: Run GitHub Dependency Review for the current change.
+
+runs:
+  using: composite
+  steps:
+    - name: Dependency Review
+      uses: actions/dependency-review-action@v4
+      with:
+        base-ref: ${{ github.event.pull_request.base.sha || github.event.before }}
+        head-ref: ${{ github.event.pull_request.head.sha || github.sha }}

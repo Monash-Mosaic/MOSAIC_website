@@ -1,0 +1,11 @@
+name: Save Next.js cache
+description: Persist the Next.js build cache after a production build.
+
+runs:
+  using: composite
+  steps:
+    - name: Save Next.js cache
+      uses: actions/cache/save@v4
+      with:
+        path: .next/cache
+        key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}

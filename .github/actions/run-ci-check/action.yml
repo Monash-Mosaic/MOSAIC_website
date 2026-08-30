@@ -1,0 +1,134 @@
+name: Run CI check
+description: Run a single CI matrix leg (lint, test, or build).
+
+inputs:
+  check:
+    description: Matrix leg id (lint, test, or build).
+    required: true
+  command:
+    description: npm command to run for this leg.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node environment
+      uses: ./.github/actions/setup-node-environment
+
+    - name: Install dependencies
+      uses: ./.github/actions/install-dependencies
+
+    - name: Restore Next.js cache
+      uses: ./.github/actions/restore-next-cache
+
+    - name: Restore Jest cache
+      id: restore-jest-cache
+      uses: ./.github/actions/restore-jest-cache
+
+    - name: Lint
+      if: inputs.check == 'lint'
+      shell: bash
+      run: ${{ inputs.command }}
+
+    - name: Test
+      if: inputs.check == 'test'
+      id: test
+      shell: bash
+      run: ${{ inputs.command }}
+
+    - name: Publish test report
+      if: always() && inputs.check == 'test' && steps.test.outcome != 'skipped'
+      uses: dorny/test-reporter@v2
+      with:
+        name: Jest Tests
+        path: junit.xml
+        reporter: jest-junit
+        fail-on-error: true
+
+    - name: Write test summary
+      if: always() && inputs.check == 'test' && steps.test.outcome != 'skipped'
+      shell: bash
+      run: |
+        if [ ! -f report.json ]; then
+          {
+            echo '## Test results'
+            echo ''
+            echo '_Test report could not be parsed._'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
+        fi
+
+        STATUS_ICON=$(jq -r 'if .success then "✅" else "❌" end' report.json)
+        NUM_TOTAL=$(jq -r '.numTotalTests // 0' report.json)
+        NUM_PASSED=$(jq -r '.numPassedTests // 0' report.json)
+        NUM_FAILED=$(jq -r '.numFailedTests // 0' report.json)
+        NUM_PENDING=$(jq -r '.numPendingTests // 0' report.json)
+        DURATION_MS=$(jq -r '
+          if (.endTime and .startTime) then (.endTime - .startTime)
+          else ([.testResults[]?.assertionResults[]?.duration // 0] | add) end
+        ' report.json)
+        if [ "$DURATION_MS" != "0" ] && [ -n "$DURATION_MS" ]; then
+          DURATION_SEC=$(awk "BEGIN {printf \"%.1f\", $DURATION_MS / 1000}")
+        else
+          DURATION_SEC="—"
+        fi
+
+        {
+          echo "## Test results ${STATUS_ICON}"
+          echo ''
+          echo '| Metric | Count |'
+          echo '| --- | ---: |'
+          echo "| Total | ${NUM_TOTAL} |"
+          echo "| Passed | ${NUM_PASSED} |"
+          echo "| Failed | ${NUM_FAILED} |"
+          echo "| Skipped | ${NUM_PENDING} |"
+          echo "| Duration | ${DURATION_SEC}s |"
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        FAILED_LIST=$(jq -r '
+          [.testResults[]?.assertionResults[]? | select(.status == "failed") | "- `" + .fullName + "`"]
+          | .[0:20] | join("\n")
+        ' report.json)
+        if [ -n "$FAILED_LIST" ]; then
+          {
+            echo ''
+            echo '### Failed tests'
+            echo ''
+            echo "$FAILED_LIST"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$NUM_FAILED" -gt 20 ]; then
+            echo "_…and $((NUM_FAILED - 20)) more. See the Checks tab for details._" >> "$GITHUB_STEP_SUMMARY"
+          fi
+        fi
+
+    - name: Upload test report artifact
+      if: always() && inputs.check == 'test' && hashFiles('report.json') != ''
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-report
+        path: |
+          report.json
+          junit.xml
+        retention-days: 7
+
+    - name: Build
+      if: inputs.check == 'build'
+      shell: bash
+      run: ${{ inputs.command }}
+
+    - name: Save Next.js cache
+      if: always() && inputs.check == 'build'
+      uses: ./.github/actions/save-next-cache
+
+    - name: Save Jest cache
+      if: always() && inputs.check == 'test' && steps.restore-jest-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: node_modules/.cache/jest
+        key: jest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'jest.config.js') }}
+
+    - name: Cleanup workspace
+      if: always()
+      uses: ./.github/actions/cleanup-ci-workspace
+      with:
+        mode: ci-checks
