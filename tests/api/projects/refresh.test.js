@@ -31,6 +31,24 @@ describe('POST /api/projects/refresh', () => {
     expect(refreshProjectsCache).not.toHaveBeenCalled();
   });
 
+  it('rejects tokens whose length differs from the secret', async () => {
+    // The comparison hashes both sides before comparing, so a length mismatch
+    // has to come back as a 401 rather than throwing out of timingSafeEqual.
+    for (const token of ['', 's', 'secret-toke', 'secret-token-with-extra']) {
+      const response = await POST(requestWithAuth(token));
+      expect(response.status).toBe(401);
+    }
+    expect(refreshProjectsCache).not.toHaveBeenCalled();
+  });
+
+  it('rejects every request when no secret is configured', async () => {
+    delete process.env.CACHE_REFRESH_SECRET;
+
+    const response = await POST(requestWithAuth('secret-token'));
+    expect(response.status).toBe(401);
+    expect(refreshProjectsCache).not.toHaveBeenCalled();
+  });
+
   it('refreshes the cache when authorized', async () => {
     refreshProjectsCache.mockResolvedValue({
       projects: [{ id: 'hub' }],
