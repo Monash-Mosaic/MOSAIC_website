@@ -1,0 +1,37 @@
+name: Write CI summary
+description: Write CI timing and job results to the workflow step summary.
+
+inputs:
+  security-gates-result:
+    description: Result of the security_gates job.
+    required: true
+  coverage-report-result:
+    description: Result of the coverage_report job.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Write CI timing summary
+      shell: bash
+      env:
+        SECURITY_GATES_RESULT: ${{ inputs.security-gates-result }}
+        COVERAGE_REPORT_RESULT: ${{ inputs.coverage-report-result }}
+      run: |
+        if [ "$SECURITY_GATES_RESULT" = "success" ]; then
+          CI_CHECKS_CELL="✅"
+        else
+          CI_CHECKS_CELL="see jobs"
+        fi
+
+        {
+          echo "## CI timing"
+          echo ""
+          echo "Workflow completed at $(date -u '+%Y-%m-%d %H:%M:%S UTC')."
+          echo ""
+          echo "| Job | Result |"
+          echo "| --- | --- |"
+          echo "| ci-checks | ${CI_CHECKS_CELL} |"
+          echo "| security_gates | ${SECURITY_GATES_RESULT} |"
+          echo "| coverage_report | ${COVERAGE_REPORT_RESULT} |"
+        } >> "$GITHUB_STEP_SUMMARY"

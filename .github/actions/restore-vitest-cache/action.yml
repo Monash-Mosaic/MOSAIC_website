@@ -1,0 +1,19 @@
+name: Restore Vitest cache
+description: Restore the Vite/Vitest transform cache.
+
+outputs:
+  cache-hit:
+    description: Whether the Vitest cache was restored.
+    value: ${{ steps.restore-vitest-cache.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - name: Restore Vitest cache
+      id: restore-vitest-cache
+      uses: actions/cache/restore@v4
+      with:
+        path: node_modules/.vite
+        key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
+        restore-keys: |
+          vitest-${{ runner.os }}-

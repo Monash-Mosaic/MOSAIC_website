@@ -1,0 +1,18 @@
+name: Post PR quality placeholder
+description: Post the initial sticky PR quality report while CI is running.
+
+runs:
+  using: composite
+  steps:
+    - name: Post running PR quality report
+      uses: marocchino/sticky-pull-request-comment@v3
+      with:
+        header: pr-quality-report
+        message: |
+          <!-- pr-quality-report -->
+          ## PR Quality Report
+
+          | Category | Status |
+          | --- | --- |
+          | Tests | ⏳ Running… |
+          | Coverage | ⏳ Running… |

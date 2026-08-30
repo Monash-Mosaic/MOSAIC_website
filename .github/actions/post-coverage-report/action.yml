@@ -1,0 +1,68 @@
+name: Post coverage report
+description: Build and post the sticky PR quality report comment.
+
+runs:
+  using: composite
+  steps:
+    - name: Download test report
+      continue-on-error: true
+      uses: actions/download-artifact@v4
+      with:
+        name: test-report
+
+    - name: Download base coverage report
+      continue-on-error: true
+      uses: actions/download-artifact@v4
+      with:
+        name: base-coverage-report
+
+    - name: Build PR quality report
+      id: build_comment
+      shell: bash
+      run: |
+        HEAD_REPORT="report.json"
+        BASE_REPORT=""
+
+        if [ ! -f "$HEAD_REPORT" ] && [ -f "test-report/report.json" ]; then
+          HEAD_REPORT="test-report/report.json"
+        fi
+
+        if [ -f base-coverage-report/report.json ]; then
+          BASE_REPORT="base-coverage-report/report.json"
+        fi
+
+        node scripts/ci/build-pr-quality-comment.mjs "$HEAD_REPORT" "$BASE_REPORT"
+
+        if [ ! -s pr-quality-comment.md ]; then
+          echo "::error::PR quality comment file is missing or empty after build."
+          exit 1
+        fi
+
+    - name: Post PR quality report
+      if: always() && steps.build_comment.outcome == 'success'
+      uses: marocchino/sticky-pull-request-comment@v3
+      with:
+        header: pr-quality-report
+        path: pr-quality-comment.md
+
+    - name: Post PR quality report failure
+      if: failure() && steps.build_comment.outcome != 'success'
+      uses: marocchino/sticky-pull-request-comment@v3
+      with:
+        header: pr-quality-report
+        message: |
+          <!-- pr-quality-report -->
+          ## PR Quality Report
+
+          | Category | Status |
+          | --- | --- |
+          | Tests | ❌ Could not build CI report |
+          | Coverage | ❌ Could not build CI report |
+
+          _See the `coverage_report` job logs for details._
+
+    - name: Cleanup workspace
+      if: always()
+      uses: ./.github/actions/cleanup-ci-workspace
+      with:
+        mode: coverage-report

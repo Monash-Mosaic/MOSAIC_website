@@ -1,0 +1,32 @@
+name: Cleanup CI workspace
+description: Remove CI build outputs and temporary files from the runner workspace.
+
+inputs:
+  mode:
+    description: Cleanup profile (ci-checks, base-coverage, or coverage-report).
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Cleanup workspace
+      shell: bash
+      run: |
+        case "${{ inputs.mode }}" in
+          ci-checks)
+            rm -rf node_modules .next .open-next coverage
+            rm -f report.json junit.xml
+            ;;
+          base-coverage)
+            rm -rf node_modules coverage
+            rm -f report.json
+            ;;
+          coverage-report)
+            rm -rf base-coverage-report test-report
+            rm -f report.json junit.xml pr-quality-comment.md
+            ;;
+          *)
+            echo "Unknown cleanup mode: ${{ inputs.mode }}"
+            exit 1
+            ;;
+        esac

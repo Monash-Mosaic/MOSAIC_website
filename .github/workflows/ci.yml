@@ -2,68 +2,125 @@ name: CI
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
+    paths: &ci-paths
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vitest.config.*'
+      - 'playwright.config.*'
+      - 'next.config.*'
+      - 'open-next.config.*'
+      - 'wrangler.jsonc'
+      - 'eslint.config.*'
+      - '.github/**'
   push:
     branches: [main]
+    paths: *ci-paths
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
-  checks: write
-  statuses: write
-  pull-requests: write
-  issues: write
 
 jobs:
-  security_gates:
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
+  pr_quality_placeholder:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
-        checks: write
-        pull-requests: write
-        contents: write
-        issues: write
-
+      contents: read
+      pull-requests: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          lfs: true
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/post-pr-quality-placeholder
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+  dependency_review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/dependency-review
+
+  osv_scan_pr:
+    if: github.event_name == 'pull_request'
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8
+    with:
+      fail-on-vuln: true
+
+  osv_scan_main:
+    if: github.event_name == 'push'
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.8
+    with:
+      fail-on-vuln: true
+      scan-args: |-
+        --recursive
+        --severity=HIGH
+        --severity=CRITICAL
+        ./
+
+  ci-checks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: lint
+            command: npm run lint
+          - id: test
+            command: npm run ci:test
+          - id: build
+            command: npm run ci:build
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/run-ci-check
         with:
-          node-version: 22
-          cache: npm
+          check: ${{ matrix.id }}
+          command: ${{ matrix.command }}
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout first so the local composite actions exist on the runner.
+      - uses: actions/checkout@v6
+
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-environment
 
       - name: Install dependencies
-        run: npm ci
+        uses: ./.github/actions/install-dependencies
 
-      - name: Lint
-        run: npm run lint
+      - name: Restore Next.js cache
+        uses: ./.github/actions/restore-next-cache
 
+      # playwright.config.js serves the app with `next start` under CI, so the
+      # production build has to exist before the suite runs.
       - name: Build
         run: npm run build
 
-      - name: Unit tests with coverage
-        run: npm run test:coverage
-
-      - name: Report coverage
-        if: ${{ !cancelled() && hashFiles('coverage/coverage-summary.json') != '' }}
-        uses: davelosert/vitest-coverage-report-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          file-coverage-mode: changes
-
       - name: Install Playwright Chromium
-        if: ${{ !cancelled() }}
         run: npx playwright install --with-deps chromium
 
       - name: End-to-end tests
-        if: ${{ !cancelled() }}
-        run: npm run test:e2e
+        run: npm run ci:e2e
 
       - name: Upload Playwright report
-        if: ${{ !cancelled() && failure() }}
+        if: always() && failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
@@ -71,13 +128,177 @@ jobs:
             playwright-report/
             test-results/
           if-no-files-found: ignore
+          retention-days: 7
 
-  dependency_audit:
-    name: Dependency audit
-    if: ${{ github.event_name != 'pull_request' || github.event.action != 'closed' }}
-    uses: ./.github/workflows/dependency-security.yml
-    with:
-      apply_fixes: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+      - name: Cleanup workspace
+        if: always()
+        run: rm -rf node_modules .next playwright-report test-results
+
+  base_coverage:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base branch code
+        uses: actions/checkout@v6
+        with:
+          lfs: true
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - name: Restore cached base coverage report
+        id: restore-base-coverage
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/base-coverage
+          key: base-coverage-${{ runner.os }}-${{ github.event.pull_request.base.sha }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
+
+      - name: Rehydrate cached base coverage report
+        if: steps.restore-base-coverage.outputs.cache-hit == 'true'
+        run: cp .cache/base-coverage/report.json report.json
+
+      - name: Setup Node.js
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Restore node_modules cache
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true'
+        id: node-modules-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
+      - name: Install dependencies
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: |
+          if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+            npm install --package-lock-only
+          fi
+          npm ci
+
+      - name: Save node_modules cache
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.node-modules-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Restore Vitest cache
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true'
+        id: vitest-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules/.vite
+          key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
+          restore-keys: |
+            vitest-${{ runner.os }}-
+
+      - name: Collect base branch coverage
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true'
+        run: |
+          # The base commit can predate the CI setup (or drop the script), in
+          # which case there is no baseline to collect and the delta is simply
+          # reported as unavailable rather than failing the run.
+          if ! node -e "process.exit(require('./package.json').scripts?.['ci:test'] ? 0 : 1)"; then
+            echo "::notice::Base commit has no ci:test script; skipping coverage baseline."
+            exit 0
+          fi
+          npm run ci:test
+
+      - name: Save Vitest cache
+        if: always() && steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.vitest-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules/.vite
+          key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
+
+      - name: Prepare base coverage cache payload
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true' && hashFiles('report.json') != ''
+        run: |
+          mkdir -p .cache/base-coverage
+          cp report.json .cache/base-coverage/report.json
+
+      - name: Save base coverage cache
+        if: steps.restore-base-coverage.outputs.cache-hit != 'true' && hashFiles('.cache/base-coverage/report.json') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/base-coverage
+          key: base-coverage-${{ runner.os }}-${{ github.event.pull_request.base.sha }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
+
+      - name: Upload base coverage report
+        if: hashFiles('report.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: base-coverage-report
+          path: report.json
+          retention-days: 1
+
+      - name: Cleanup workspace
+        if: always()
+        run: |
+          rm -rf node_modules coverage
+          rm -f report.json
+
+  security_gates:
+    needs:
+      - dependency_review
+      - osv_scan_pr
+      - osv_scan_main
+      - ci-checks
+      - e2e
+    if: >-
+      always() &&
+      !cancelled() &&
+      (needs.dependency_review.result == 'success' || needs.dependency_review.result == 'skipped') &&
+      (needs.osv_scan_pr.result == 'success' || needs.osv_scan_pr.result == 'skipped') &&
+      (needs.osv_scan_main.result == 'success' || needs.osv_scan_main.result == 'skipped') &&
+      needs.ci-checks.result == 'success' &&
+      needs.e2e.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: All security gates passed
+        run: echo "lint, test, build, dependency review, and OSV scan succeeded."
+
+  coverage_report:
+    needs:
+      - ci-checks
+      - base_coverage
+    if: >-
+      always() &&
+      !cancelled() &&
+      github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     permissions:
-      contents: write
-    secrets: inherit
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/post-coverage-report
+
+  ci_summary:
+    needs:
+      - security_gates
+      - coverage_report
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/write-ci-summary
+        with:
+          security-gates-result: ${{ needs.security_gates.result }}
+          coverage-report-result: ${{ needs.coverage_report.result }}
+
+  cleanup:
+    needs:
+      - ci_summary
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/cleanup-workflow-artifacts
