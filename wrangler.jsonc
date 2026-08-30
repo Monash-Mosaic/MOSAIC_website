@@ -3,8 +3,11 @@
     * Wrangler configuration file for Cloudflare Workers
     * For more information, see: https://developers.cloudflare.com/workers/wrangler/configuration/
     IMPORTANT:
-     - Root wrangler configuration file is for production environment.
-     - Preview (a.k.a Development) environment configuration is under the "env" key.
+     - Preview and production share one Cloudflare account and this one Worker,
+       so there is no "env" block: previews are Worker *versions* carrying a
+       preview alias (<branch>-mosaic-website.<subdomain>.workers.dev), and
+       production is whichever version is currently deployed.
+     - Promoting a version to production is `wrangler versions deploy`.
     */
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "mosaic-website",
