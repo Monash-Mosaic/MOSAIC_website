@@ -1,7 +1,18 @@
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { refreshProjectsCache } from '@/modules/projects/api';
 
 export const dynamic = 'force-dynamic';
+
+// `===` on strings short-circuits at the first differing byte, so how long the
+// comparison takes leaks how much of the secret a caller guessed correctly.
+// Comparing SHA-256 digests instead keeps the comparison constant-time and
+// fixed-length, so neither the contents nor the length of the secret leak.
+function secretsMatch(token, secret) {
+  const a = createHash('sha256').update(token).digest();
+  const b = createHash('sha256').update(secret).digest();
+  return timingSafeEqual(a, b);
+}
 
 function isAuthorized(request) {
   const secret = process.env.CACHE_REFRESH_SECRET;
@@ -9,7 +20,7 @@ function isAuthorized(request) {
 
   const header = request.headers.get('authorization') || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : '';
-  return token === secret;
+  return secretsMatch(token, secret);
 }
 
 export async function POST(request) {

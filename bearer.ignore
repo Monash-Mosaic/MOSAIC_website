@@ -1,0 +1,20 @@
+{
+  "03d908e4493044864343e35bd17bdcd4_0": {
+    "author": "Nathan Tran",
+    "comment": "Project image route: the caught error is logged for server-side debugging only; the client receives a generic 'Failed to load image' 502.",
+    "false_positive": true,
+    "ignored_at": "2026-08-30T00:00:00Z"
+  },
+  "dcceef67c74c61d1438c0b31568d8a56_0": {
+    "author": "Nathan Tran",
+    "comment": "Projects fetch: the caught error is logged server-side before falling back to the stale cache; it is never returned to the client.",
+    "false_positive": true,
+    "ignored_at": "2026-08-30T00:00:00Z"
+  },
+  "9847b07845f007b6f572bb236dd85368_0": {
+    "author": "Nathan Tran",
+    "comment": "Projects cache write: failure is logged server-side and otherwise swallowed; nothing is surfaced to the client.",
+    "false_positive": true,
+    "ignored_at": "2026-08-30T00:00:00Z"
+  }
+}
