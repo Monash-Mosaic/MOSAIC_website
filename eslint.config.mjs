@@ -1,19 +1,10 @@
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
 import { defineConfig, globalIgnores } from 'eslint/config';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// eslint-config-next 15 still ships eslintrc-style configs, so they are bridged
-// into flat config here.
-const compat = new FlatCompat({ baseDirectory: __dirname });
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import prettier from 'eslint-config-prettier/flat';
 
 const eslintConfig = defineConfig([
-  // Flat config only lints .js/.mjs/.cjs by default; the components are .jsx.
-  { files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'] },
-  ...compat.extends('next/core-web-vitals'),
-  ...compat.extends('prettier'),
+  ...nextVitals,
+  prettier,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     'scripts/**',
@@ -23,6 +14,8 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'coverage/**',
+    'playwright-report/**',
+    'test-results/**',
     'public/**',
     'cloudflare-env.d.ts',
     'next-env.d.ts',

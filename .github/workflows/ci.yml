@@ -10,8 +10,8 @@ on:
       - 'public/**'
       - 'package.json'
       - 'package-lock.json'
-      - 'jest.config.js'
-      - 'jest.setup.js'
+      - 'vitest.config.*'
+      - 'playwright.config.*'
       - 'next.config.*'
       - 'open-next.config.*'
       - 'wrangler.jsonc'
@@ -93,6 +93,44 @@ jobs:
           check: ${{ matrix.id }}
           command: ${{ matrix.command }}
 
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node environment
+        uses: ./.github/actions/setup-node-environment
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-dependencies
+
+      - name: Restore Next.js cache
+        uses: ./.github/actions/restore-next-cache
+
+      # playwright.config.js serves the app with `next start` under CI, so the
+      # production build has to exist before the suite runs.
+      - name: Build
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: npm run ci:e2e
+
+      - name: Upload Playwright report
+        if: always() && failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Cleanup workspace
+        if: always()
+        run: rm -rf node_modules .next playwright-report test-results
+
   base_coverage:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -108,7 +146,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: .cache/base-coverage
-          key: base-coverage-${{ runner.os }}-${{ github.event.pull_request.base.sha }}-${{ hashFiles('package-lock.json', 'jest.config.js', 'jest.setup.js') }}
+          key: base-coverage-${{ runner.os }}-${{ github.event.pull_request.base.sha }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
 
       - name: Rehydrate cached base coverage report
         if: steps.restore-base-coverage.outputs.cache-hit == 'true'
@@ -146,15 +184,15 @@ jobs:
           path: node_modules
           key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      - name: Restore Jest cache
+      - name: Restore Vitest cache
         if: steps.restore-base-coverage.outputs.cache-hit != 'true'
-        id: jest-cache
+        id: vitest-cache
         uses: actions/cache/restore@v4
         with:
-          path: node_modules/.cache/jest
-          key: jest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'jest.config.js') }}
+          path: node_modules/.vite
+          key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
           restore-keys: |
-            jest-${{ runner.os }}-
+            vitest-${{ runner.os }}-
 
       - name: Collect base branch coverage
         if: steps.restore-base-coverage.outputs.cache-hit != 'true'
@@ -168,12 +206,12 @@ jobs:
           fi
           npm run ci:test
 
-      - name: Save Jest cache
-        if: always() && steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.jest-cache.outputs.cache-hit != 'true'
+      - name: Save Vitest cache
+        if: always() && steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.vitest-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
-          path: node_modules/.cache/jest
-          key: jest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'jest.config.js') }}
+          path: node_modules/.vite
+          key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
 
       - name: Prepare base coverage cache payload
         if: steps.restore-base-coverage.outputs.cache-hit != 'true' && hashFiles('report.json') != ''
@@ -186,7 +224,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: .cache/base-coverage
-          key: base-coverage-${{ runner.os }}-${{ github.event.pull_request.base.sha }}-${{ hashFiles('package-lock.json', 'jest.config.js', 'jest.setup.js') }}
+          key: base-coverage-${{ runner.os }}-${{ github.event.pull_request.base.sha }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
 
       - name: Upload base coverage report
         if: hashFiles('report.json') != ''
@@ -208,13 +246,15 @@ jobs:
       - osv_scan_pr
       - osv_scan_main
       - ci-checks
+      - e2e
     if: >-
       always() &&
       !cancelled() &&
       (needs.dependency_review.result == 'success' || needs.dependency_review.result == 'skipped') &&
       (needs.osv_scan_pr.result == 'success' || needs.osv_scan_pr.result == 'skipped') &&
       (needs.osv_scan_main.result == 'success' || needs.osv_scan_main.result == 'skipped') &&
-      needs.ci-checks.result == 'success'
+      needs.ci-checks.result == 'success' &&
+      needs.e2e.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: All security gates passed

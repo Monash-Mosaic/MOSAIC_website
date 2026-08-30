@@ -11,7 +11,7 @@ This repository uses a single orchestration workflow (`ci.yml`) that defines job
 │   ├── setup-node-environment/        # Checkout + Node.js + npm cache
 │   ├── install-dependencies/          # node_modules cache + npm ci
 │   ├── restore-next-cache/            # .next/cache restore
-│   ├── restore-jest-cache/            # Jest transform cache restore
+│   ├── restore-vitest-cache/          # Vite/Vitest transform cache restore
 │   ├── save-next-cache/               # .next/cache save (after build)
 │   ├── cleanup-ci-workspace/          # Runner workspace cleanup profiles
 │   ├── dependency-review/             # Dependency Review action
@@ -39,7 +39,8 @@ Jobs that call local composite actions run `actions/checkout` first so action fi
 ```
 dependency_review ──┐
 osv_scan_pr/main ───┼──► security_gates ──► ci_summary ──► cleanup
-ci-checks ──────────┘         ▲
+ci-checks ──────────┤         ▲
+e2e ────────────────┘         │
     │                         │
     └──► coverage_report ─────┘ (PR only)
 base_coverage ──────► coverage_report (PR only)
@@ -68,7 +69,7 @@ base_coverage ──────► coverage_report (PR only)
 | `setup-node-environment` | `run-ci-check` |
 | `install-dependencies` | `run-ci-check` |
 | `restore-next-cache` | `run-ci-check` |
-| `restore-jest-cache` | `run-ci-check` |
+| `restore-vitest-cache` | `run-ci-check` |
 | `save-next-cache` | `run-ci-check` (build leg) |
 | `cleanup-ci-workspace` | `run-ci-check`, `post-coverage-report` |
 
@@ -85,9 +86,9 @@ OSV scanning (`osv_scan_pr` / `osv_scan_main`) calls Google's reusable workflows
 | npm (via setup-node) | Managed by `actions/setup-node` | — |
 | `node_modules` | `node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}` | `node-modules-${{ runner.os }}-` |
 | `.next/cache` | `next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}` | `next-${{ runner.os }}-` |
-| Jest | `jest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'jest.config.js') }}` | `jest-${{ runner.os }}-` |
+| Vitest | `vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}` | `vitest-${{ runner.os }}-` |
 
-`install-dependencies` explicitly restores and saves the `node_modules` cache, and `run-ci-check` saves the Jest cache after the test leg. Build saves `.next/cache` after the build matrix leg completes.
+`install-dependencies` explicitly restores and saves the `node_modules` cache, and `run-ci-check` saves the Vitest cache after the test leg. Build saves `.next/cache` after the build matrix leg completes.
 
 ### Dependabot
 
@@ -106,7 +107,7 @@ When `github.actor` is `dependabot[bot]`, `install-dependencies` runs `npm insta
 
 | Output | Where |
 | --- | --- |
-| Jest GitHub Check | `dorny/test-reporter` in `run-ci-check` (test leg) |
+| Vitest GitHub Check | `dorny/test-reporter` in `run-ci-check` (test leg) |
 | Test step summary | `GITHUB_STEP_SUMMARY` in `run-ci-check` (test leg) |
 | CI timing summary | `write-ci-summary` composite action |
 | PR sticky comment | `post-coverage-report` (`header: pr-quality-report`) |

@@ -21,9 +21,9 @@ runs:
     - name: Restore Next.js cache
       uses: ./.github/actions/restore-next-cache
 
-    - name: Restore Jest cache
-      id: restore-jest-cache
-      uses: ./.github/actions/restore-jest-cache
+    - name: Restore Vitest cache
+      id: restore-vitest-cache
+      uses: ./.github/actions/restore-vitest-cache
 
     - name: Lint
       if: inputs.check == 'lint'
@@ -40,9 +40,9 @@ runs:
       if: always() && inputs.check == 'test' && steps.test.outcome != 'skipped'
       uses: dorny/test-reporter@v2
       with:
-        name: Jest Tests
+        name: Vitest Tests
         path: junit.xml
-        reporter: jest-junit
+        reporter: java-junit
         fail-on-error: true
 
     - name: Write test summary
@@ -120,12 +120,12 @@ runs:
       if: always() && inputs.check == 'build'
       uses: ./.github/actions/save-next-cache
 
-    - name: Save Jest cache
-      if: always() && inputs.check == 'test' && steps.restore-jest-cache.outputs.cache-hit != 'true'
+    - name: Save Vitest cache
+      if: always() && inputs.check == 'test' && steps.restore-vitest-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
-        path: node_modules/.cache/jest
-        key: jest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'jest.config.js') }}
+        path: node_modules/.vite
+        key: vitest-${{ runner.os }}-${{ hashFiles('package-lock.json', 'vitest.config.mjs') }}
 
     - name: Cleanup workspace
       if: always()
