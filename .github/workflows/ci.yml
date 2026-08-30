@@ -158,7 +158,15 @@ jobs:
 
       - name: Collect base branch coverage
         if: steps.restore-base-coverage.outputs.cache-hit != 'true'
-        run: npm run ci:test
+        run: |
+          # The base commit can predate the CI setup (or drop the script), in
+          # which case there is no baseline to collect and the delta is simply
+          # reported as unavailable rather than failing the run.
+          if ! node -e "process.exit(require('./package.json').scripts?.['ci:test'] ? 0 : 1)"; then
+            echo "::notice::Base commit has no ci:test script; skipping coverage baseline."
+            exit 0
+          fi
+          npm run ci:test
 
       - name: Save Jest cache
         if: always() && steps.restore-base-coverage.outputs.cache-hit != 'true' && steps.jest-cache.outputs.cache-hit != 'true'
