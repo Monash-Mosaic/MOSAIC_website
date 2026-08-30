@@ -159,7 +159,7 @@ jobs:
         if: steps.restore-base-coverage.outputs.cache-hit != 'true'
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Restore node_modules cache
