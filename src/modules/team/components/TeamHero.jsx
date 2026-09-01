@@ -11,7 +11,7 @@ const FLOAT = {
 
 export default function TeamHero() {
   return (
-    <section className="relative isolate flex min-h-[60vh] items-center justify-center overflow-hidden rounded-b-[2.5rem] bg-[#213359] px-6 pb-16 pt-32 text-center">
+    <section className="relative isolate flex min-h-[60vh] items-center justify-center overflow-hidden bg-[#213359] px-6 pb-24 pt-32 text-center">
       {heroImage ? (
         <img
           src={heroImage}
