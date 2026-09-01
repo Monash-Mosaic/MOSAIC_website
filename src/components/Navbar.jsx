@@ -20,13 +20,22 @@ export default function Navbar({ color = 'dark' }) {
   const lastScrollY = useRef(0);
 
   const isLight = color === 'light';
+  const isTransparent = color === 'transparent';
   const logoSource =
     pathname === '/'
       ? '/Primary_logo.png'
       : isLight
         ? '/Primary_Blue_Transparent.png'
         : '/Primary_logo.png';
-  const headerBg = isLight ? 'bg-white' : 'bg-[#213359]';
+  const headerBg = isTransparent
+    ? scrolled
+      ? 'bg-[#213359]'
+      : 'bg-transparent'
+    : isLight
+      ? 'bg-white'
+      : 'bg-[#213359]';
+  const headerPosition = isTransparent ? 'fixed' : 'sticky';
+  const hasShadow = isTransparent ? scrolled : scrolled || isLight;
   const navText = isLight ? 'text-[#213359]' : 'text-white';
   const mobileMenuBg = isLight ? 'bg-white border-b border-gray-200' : 'bg-[#213359]';
   const joinButtonClass =
@@ -46,7 +55,7 @@ export default function Navbar({ color = 'dark' }) {
 
   return (
     <header
-      className={`w-full sticky top-0 left-0 z-[999] ${headerBg} transition-transform duration-300 ${scrolled || isLight ? 'shadow-md' : ''} ${show ? 'translate-y-0' : '-translate-y-full'}`}
+      className={`w-full ${headerPosition} top-0 left-0 z-[999] ${headerBg} transition-transform transition-colors duration-300 ${hasShadow ? 'shadow-md' : ''} ${show ? 'translate-y-0' : '-translate-y-full'}`}
       tabIndex={-1}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center py-0 px-6" style={{ minHeight: '5.5rem' }}>
