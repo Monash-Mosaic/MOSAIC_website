@@ -2,7 +2,7 @@
 // and set `image` to its path (e.g. '/team/grace-xie.jpg'). While `image` is null a
 // styled placeholder is rendered in its place.
 
-export const heroImage = null;
+export const heroImage = '/agedCare.jpg';
 
 export const academicAdvisors = [
   { id: 'jue-grace-xie', name: 'Jue (Grace) Xie', image: null },
