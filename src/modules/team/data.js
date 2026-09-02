@@ -5,9 +5,9 @@
 export const heroImage = '/agedCare.jpg';
 
 export const academicAdvisors = [
-  { id: 'jue-grace-xie', name: 'Jue (Grace) Xie', image: null },
-  { id: 'kla-tantithamthavorn', name: 'Kla Tantithamthavorn', image: null },
-  { id: 'trang-vu', name: 'Trang Vu', image: null },
+  { id: 'jue-grace-xie', name: 'Jue (Grace) Xie', image: '/grace.jpg' },
+  { id: 'kla-tantithamthavorn', name: 'Kla Tantithamthavorn', image: '/kla.png' },
+  { id: 'trang-vu', name: 'Trang Vu', image: '/trang.jpg' },
 ];
 
 export const studentTeam = [
