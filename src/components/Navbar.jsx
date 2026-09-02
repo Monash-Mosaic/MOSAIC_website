@@ -30,7 +30,7 @@ export default function Navbar({ color = 'dark' }) {
   const navText = isLight ? 'text-[#213359]' : 'text-white';
   const mobileMenuBg = isLight ? 'bg-white border-b border-gray-200' : 'bg-[#213359]';
   const joinButtonClass =
-    'border-2 border-[#213359] text-[#213359] bg-white hover:bg-[#213359]/10';
+    'border-2 border-[#213359] text-[#213359] bg-white hover:bg-[#213359]/80 hover:text-white hover:border-white';
 
   useEffect(() => {
     const handleScroll = () => {
