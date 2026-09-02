@@ -1,10 +1,10 @@
-const AI_FORM = 'https://forms.gle/Psynbezjw8dFdtY78';
+const AI_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSd5eENRJZx4EMC4h5gPppLPVUM1r_zes4OOlWSDAEY7Mu2kpw/viewform?usp=publish-editor';
 const UI_FORM =
-  'https://docs.google.com/forms/d/e/1FAIpQLSfj6nVGiR0mGrudVZGTpqlrrMlytO6nKceAaKT0Sj97e3qP4w/viewform?usp=sharing&ouid=107450200585547751566';
+  'https://docs.google.com/forms/d/e/1FAIpQLSdRil9Rm2Fpr1XhBJ0xfv4ieZUlyMFNkAMAtlNrsn_l-fACHw/viewform?usp=publish-editor';
 const DEV_FORM =
-  'https://docs.google.com/forms/d/e/1FAIpQLSd242Vx1Ywn0k3DUNP50Fkgb0M1UJVKP_dvAMhsreAI38zWRQ/viewform?usp=sharing&ouid=107450200585547751566';
-const MARKETING_FORM = 'https://forms.gle/X4BYEoWhSE2PJwgq8';
-
+  'https://docs.google.com/forms/d/e/1FAIpQLSdRil9Rm2Fpr1XhBJ0xfv4ieZUlyMFNkAMAtlNrsn_l-fACHw/viewform?usp=publish-editor';
+const MARKETING_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSf9zHzxGf4BKamx-X1BYiaulIZIX8Swq3b-NMZuR52cRQvnKQ/viewform?usp=dialog';
+const DESIGN_FORM = 'https://docs.google.com/forms/d/e/1FAIpQLSdk3tEyrqJaffKbWh0vsNmt3rAnD-lObohOpRRPXOuKAH7zYg/viewform?usp=publish-editor';
 export const projectRoles = [
   {
     formPath: AI_FORM,
@@ -44,7 +44,7 @@ export const committeeRoles = [
       'Promote our work through both online and offline channels, create engaging content, and strengthen our overall presence.',
   },
   {
-    formPath: UI_FORM,
+    formPath: DESIGN_FORM,
     id: 'design-officer',
     title: 'Design Officer',
     description: 'Create visuals, graphics, and materials that reflect our identity and values.',
