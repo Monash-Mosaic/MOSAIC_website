@@ -39,7 +39,7 @@
 	"vars": {
 		"ENVIRONMENT": "production",
 	},
-	// Using workers.dev domain for staging (production preview) environment
+	// workers.dev domain is used for preview URLs
 	"preview_urls": true,
 	"workers_dev": true,
 }
