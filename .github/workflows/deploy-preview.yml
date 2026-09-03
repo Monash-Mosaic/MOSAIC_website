@@ -107,6 +107,9 @@ jobs:
           NEXT_PUBLIC_GIT_TAG: main
           NEXT_PUBLIC_SITE_URL: ${{ format('{0}-{1}.{2}.workers.dev', steps.preview.outputs.branch_slug, vars.CLOUDFLARE_WORKER_NAME, vars.CLOUDFLARE_WORKERS_SUBDOMAIN) }}
           NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
           # Without pipefail the pipeline reports tee's exit code, so a failed
           # wrangler upload would be swallowed and the job would pass.
@@ -126,6 +129,9 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ env.NEXT_PUBLIC_PREVIEW_SITE_URL }}
           NEXT_PUBLIC_GIT_TAG: ${{ steps.preview.outputs.branch_slug }}
           NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
           # Without pipefail the pipeline reports tee's exit code, so a failed
           # wrangler upload would be swallowed and the job would pass.

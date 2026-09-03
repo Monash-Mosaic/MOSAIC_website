@@ -99,6 +99,9 @@ jobs:
           NEXT_PUBLIC_GIT_TAG: ${{ steps.version.outputs.tag }}
           NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
           NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ env.NEXT_PUBLIC_CF_BEACON_TOKEN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
           # Without pipefail the pipeline reports tee's exit code, so a failed
           # wrangler upload would be swallowed and the job would pass.
