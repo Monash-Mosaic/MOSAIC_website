@@ -103,6 +103,11 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
+          # upload the runtime creds to cloudflare secrets
+          npx wrangler secrets put GOOGLE_CLIENT_ID "$GOOGLE_CLIENT_ID"
+          npx wrangler secrets put GOOGLE_CLIENT_SECRET "$GOOGLE_CLIENT_SECRET"
+          npx wrangler secrets put GOOGLE_REFRESH_TOKEN "$GOOGLE_REFRESH_TOKEN"
+
           # Without pipefail the pipeline reports tee's exit code, so a failed
           # wrangler upload would be swallowed and the job would pass.
           set -o pipefail
