@@ -11,6 +11,7 @@ describe('Navbar', () => {
   it('links to the main site sections', () => {
     render(<Navbar />);
     expect(screen.getByRole('link', { name: 'MOSAIC logo' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Our team' })).toHaveAttribute('href', '/team');
     expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/projects');
     expect(screen.getByRole('link', { name: 'Contact us' })).toHaveAttribute('href', '/contact');
     expect(screen.getAllByRole('link', { name: 'Join us' })[0]).toHaveAttribute('href', '/join');
