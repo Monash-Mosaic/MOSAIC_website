@@ -23,8 +23,7 @@ This repository uses a single orchestration workflow (`ci.yml`) that defines job
 └── workflows/
     ├── ci.yml                         # Orchestrator (entry point)
     ├── deploy-preview.yml             # Preview deploy (separate from CI)
-    ├── deploy-staging.yml
-    ├── deploy.yml
+    ├── deploy.yml                     # Production deploy
     └── codeql.yml
 ```
 
@@ -130,6 +129,5 @@ Matrix checks appear as **`CI / ci-checks / ci-checks (lint|test|build)`**.
 ## Related workflows
 
 - **`deploy-preview.yml`** — Cloudflare preview deploy (runs in parallel with CI on PRs; not part of `ci.yml`).
-- **`deploy-staging.yml`** — Staging deploy on release publish.
-- **`deploy.yml`** — Manual production deploy.
+- **`deploy.yml`** — Manual production deploy from a GitHub release tag (builds and deploys independently).
 - **`codeql.yml`** — CodeQL security scanning.

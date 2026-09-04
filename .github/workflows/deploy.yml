@@ -21,7 +21,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Resolve version id from metadata.json asset
+      - name: Resolve release tag
         id: version
         uses: actions/github-script@v8
         with:
@@ -53,48 +53,80 @@ jobs:
             const resolvedTag = release.tag_name;
             core.info(`Deploying release tag: ${resolvedTag}`);
             core.setOutput('tag', resolvedTag);
-            const assets = await github.rest.repos.listReleaseAssets({
-              owner,
-              repo,
-              release_id: release.id,
-            });
-
-            const asset = assets.data.find(a => a.name === 'metadata.json');
-            if (!asset) {
-              core.setFailed('metadata.json not found in release assets.');
-              return;
-            }
-
-            const response = await github.request(asset.url, {
-              headers: { Accept: 'application/octet-stream' },
-            });
-
-            const metadata = JSON.parse(Buffer.from(response.data).toString('utf8'));
-            const versionId = metadata.version_id || metadata.versionId;
-
-            if (!versionId) {
-              core.setFailed('version_id not found in metadata.json.');
-              return;
-            }
-
-            core.setOutput('version_id', versionId);
 
       - name: Checkout code
         uses: actions/checkout@v6
         with:
+          lfs: true
           ref: ${{ steps.version.outputs.tag }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: npm
+
+      - name: Restore node_modules cache
+        id: node-modules-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            next-${{ runner.os }}-
+
+      - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: |
+          if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+            npm install --package-lock-only
+          fi
+          npm ci
 
       - name: Deploy to Cloudflare (production)
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          VERSION_ID: ${{ steps.version.outputs.version_id }}
-        run: npx wrangler versions deploy -y "$VERSION_ID"
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_GIT_TAG: ${{ steps.version.outputs.tag }}
+          NEXT_PUBLIC_GA_ID: ${{ env.NEXT_PUBLIC_GA_ID }}
+          NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ env.NEXT_PUBLIC_CF_BEACON_TOKEN }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+        run: |
+          # wrangler secret put takes only the key; the value is stdin or --secrets-file.
+          SECRETS_FILE=$(mktemp)
+          trap 'rm -f "$SECRETS_FILE"' EXIT
+          node -e '
+            const keys = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN", "APPS_SCRIPT_URL"];
+            const missing = keys.filter((key) => !process.env[key]);
+            if (missing.length) {
+              console.error("Missing required secrets: " + missing.join(", "));
+              process.exit(1);
+            }
+            process.stdout.write(JSON.stringify(Object.fromEntries(keys.map((key) => [key, process.env[key]]))));
+          ' > "$SECRETS_FILE"
+
+          # Without pipefail the pipeline reports tee's exit code, so a failed
+          # wrangler upload would be swallowed and the job would pass.
+          set -o pipefail
+          LOG=$(npm run upload -- --tag "$NEXT_PUBLIC_GIT_TAG" --secrets-file "$SECRETS_FILE" 2>&1 | tee /dev/stderr)
+          VERSION_ID=$(echo "$LOG" | grep -oE 'Worker Version ID: [0-9a-f-]+' | awk '{print $4}')
+          if [ -z "$VERSION_ID" ]; then
+            echo "Failed to parse Worker Version ID from upload output."
+            exit 1
+          fi
+          npx wrangler versions deploy -y "$VERSION_ID"
 
       - name: Purge Cloudflare CDN cache
         if: ${{ vars.CLOUDFLARE_ZONE_ID != '' }}
