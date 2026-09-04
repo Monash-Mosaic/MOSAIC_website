@@ -102,12 +102,13 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
         run: |
           # wrangler secret put takes only the key; the value is stdin or --secrets-file.
           SECRETS_FILE=$(mktemp)
           trap 'rm -f "$SECRETS_FILE"' EXIT
           node -e '
-            const keys = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"];
+            const keys = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN", "APPS_SCRIPT_URL"];
             const missing = keys.filter((key) => !process.env[key]);
             if (missing.length) {
               console.error("Missing required secrets: " + missing.join(", "));
