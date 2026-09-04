@@ -111,15 +111,24 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
-          # upload the runtime creds to cloudflare secrets
-          npx wrangler secret put GOOGLE_CLIENT_ID "$GOOGLE_CLIENT_ID"
-          npx wrangler secret put GOOGLE_CLIENT_SECRET "$GOOGLE_CLIENT_SECRET"
-          npx wrangler secret put GOOGLE_REFRESH_TOKEN "$GOOGLE_REFRESH_TOKEN"
+          # wrangler secret put takes only the key; the value is stdin or --secrets-file.
+          # Attach secrets to this versioned upload so preview does not deploy production.
+          SECRETS_FILE=$(mktemp)
+          trap 'rm -f "$SECRETS_FILE"' EXIT
+          node -e '
+            const keys = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"];
+            const missing = keys.filter((key) => !process.env[key]);
+            if (missing.length) {
+              console.error("Missing required secrets: " + missing.join(", "));
+              process.exit(1);
+            }
+            process.stdout.write(JSON.stringify(Object.fromEntries(keys.map((key) => [key, process.env[key]]))));
+          ' > "$SECRETS_FILE"
 
           # Without pipefail the pipeline reports tee's exit code, so a failed
           # wrangler upload would be swallowed and the job would pass.
           set -o pipefail
-          LOG=$(npm run upload -- --preview-alias ${{ steps.preview.outputs.branch_slug }} --tag $NEXT_PUBLIC_GIT_TAG 2>&1 | tee /dev/stderr)
+          LOG=$(npm run upload -- --preview-alias ${{ steps.preview.outputs.branch_slug }} --tag "$NEXT_PUBLIC_GIT_TAG" --secrets-file "$SECRETS_FILE" 2>&1 | tee /dev/stderr)
           VERSION_ID=$(echo "$LOG" | grep -oE 'Worker Version ID: [0-9a-f-]+' | awk '{print $4}')
           BRANCH_PREVIEW_URL=$(echo "$LOG" | grep -oE 'Version Preview Alias URL: https?://[^[:space:]]+' | awk '{print $5}')
           echo "version_id=$VERSION_ID" >> "$GITHUB_OUTPUT"
@@ -138,15 +147,23 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
-          # upload the runtime creds to cloudflare secrets
-          npx wrangler secret put GOOGLE_CLIENT_ID "$GOOGLE_CLIENT_ID"
-          npx wrangler secret put GOOGLE_CLIENT_SECRET "$GOOGLE_CLIENT_SECRET"
-          npx wrangler secret put GOOGLE_REFRESH_TOKEN "$GOOGLE_REFRESH_TOKEN"
+          # wrangler secret put takes only the key; the value is stdin or --secrets-file.
+          SECRETS_FILE=$(mktemp)
+          trap 'rm -f "$SECRETS_FILE"' EXIT
+          node -e '
+            const keys = ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"];
+            const missing = keys.filter((key) => !process.env[key]);
+            if (missing.length) {
+              console.error("Missing required secrets: " + missing.join(", "));
+              process.exit(1);
+            }
+            process.stdout.write(JSON.stringify(Object.fromEntries(keys.map((key) => [key, process.env[key]]))));
+          ' > "$SECRETS_FILE"
 
           # Without pipefail the pipeline reports tee's exit code, so a failed
           # wrangler upload would be swallowed and the job would pass.
           set -o pipefail
-          LOG=$(npm run upload -- --preview-alias ${{ steps.preview.outputs.branch_slug }} --tag $NEXT_PUBLIC_GIT_TAG 2>&1 | tee /dev/stderr)
+          LOG=$(npm run upload -- --preview-alias ${{ steps.preview.outputs.branch_slug }} --tag "$NEXT_PUBLIC_GIT_TAG" --secrets-file "$SECRETS_FILE" 2>&1 | tee /dev/stderr)
           VERSION_ID=$(echo "$LOG" | grep -oE 'Worker Version ID: [0-9a-f-]+' | awk '{print $4}')
           npx wrangler versions deploy -y "$VERSION_ID"
 
