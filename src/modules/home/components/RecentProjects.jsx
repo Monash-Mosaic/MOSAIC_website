@@ -114,14 +114,14 @@ export default function RecentProjects() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">Recent projects</h2>
+      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">Recent Projects</h2>
 
       {loading ? (
         <CarouselSkeleton />
       ) : error || projects.length === 0 ? (
         <p className="text-[#4953A1]">Projects will appear here soon.</p>
       ) : (
-        <div className="max-w-8xl mx-auto" aria-roledescription="carousel" aria-label="Recent projects">
+        <div className="max-w-8xl mx-auto" aria-roledescription="carousel" aria-label="Recent Projects">
           <div
             className="overflow-hidden"
             onTouchStart={(event) => {
@@ -165,7 +165,7 @@ export default function RecentProjects() {
                 type="button"
                 onClick={() => goTo(currentPage - 1)}
                 className="rounded-full bg-white/80 p-2 text-[#4953A1] shadow-md hover:bg-white transition"
-                aria-label="Previous projects"
+                aria-label="Previous Projects"
               >
                 <HiChevronLeft className="h-6 w-6" />
               </button>
