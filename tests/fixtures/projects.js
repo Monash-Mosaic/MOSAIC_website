@@ -24,7 +24,7 @@ export const normalizedProjects = [
     subtitle: 'Connect clubs',
     previewTitle: 'Community Hub: Connect clubs',
     description: 'A sample community project.',
-    image: '/api/projects/images/abcdefghij1234567890',
+    image: '/project-images/abcdefghij1234567890.jpg',
     link: 'https://example.com/hub',
     imageAlign: 'left',
     delay: 0,

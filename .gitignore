@@ -23,6 +23,10 @@
 .cache/
 /.open-next/
 
+# build-time Google Drive images (written by npm run build / sync:projects)
+/public/project-images/*
+!/public/project-images/.gitkeep
+
 # production
 /build
 
