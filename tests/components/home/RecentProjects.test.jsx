@@ -13,7 +13,7 @@ describe('RecentProjects', () => {
   it('shows a loading skeleton', () => {
     useProjects.mockReturnValue({ projects: [], loading: true, error: null });
     const { container } = render(<RecentProjects />);
-    expect(screen.getByRole('heading', { name: 'Recent projects' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Recent Projects' })).toBeInTheDocument();
     expect(container.querySelector('.animate-pulse')).toBeTruthy();
   });
 
