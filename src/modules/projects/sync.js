@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { fetchProjectsFromSource, loadLocalProjects } from './api.js';
 import { extensionForContentType, extractBuiltProjectFileId } from './drive.js';
 import { fetchWithGoogleAccessToken, getGoogleAccessToken, getGoogleOAuthConfig } from './googleAuth.js';
-import { useLocalProjects } from './normalize.js';
+import { isLocalProjectsEnv } from './normalize.js';
 
 const SNAPSHOT_FILENAME = 'projects.json';
 const IMAGE_DIR_NAME = 'project-images';
@@ -98,7 +98,7 @@ async function writeProjectsSnapshot(projects, source) {
 }
 
 export async function syncProjects() {
-  if (useLocalProjects()) {
+  if (isLocalProjectsEnv()) {
     const projects = loadLocalProjects();
     return writeProjectsSnapshot(projects, 'local');
   }

@@ -15,7 +15,7 @@ const CARD_THEMES = [
   },
 ];
 
-export function useLocalProjects() {
+export function isLocalProjectsEnv() {
   return (process.env.APP_ENV || 'production').toLowerCase() === 'local';
 }
 

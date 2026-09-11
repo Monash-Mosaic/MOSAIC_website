@@ -1,9 +1,9 @@
 import builtProjectsPayload from './generated/projects.json';
 import localProjectsPayload from './localProjects.json';
-import { normalizeProject, useLocalProjects } from './normalize.js';
+import { isLocalProjectsEnv, normalizeProject } from './normalize.js';
 
 export function loadPageProjects() {
-  if (useLocalProjects()) {
+  if (isLocalProjectsEnv()) {
     if (!Array.isArray(localProjectsPayload?.projects)) {
       throw new Error('localProjects.json must include a projects array');
     }

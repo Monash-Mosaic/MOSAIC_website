@@ -6,9 +6,9 @@ import {
   fetchWithGoogleAccessToken,
   getGoogleAccessToken,
 } from './googleAuth.js';
-import { normalizeProject, parseProjectsPayload, useLocalProjects } from './normalize.js';
+import { isLocalProjectsEnv, normalizeProject, parseProjectsPayload } from './normalize.js';
 
-export { isExternalProjectLink, normalizeProject, useLocalProjects } from './normalize.js';
+export { isExternalProjectLink, isLocalProjectsEnv, normalizeProject } from './normalize.js';
 
 function localProjectsPath() {
   return join(dirname(fileURLToPath(import.meta.url)), 'localProjects.json');
@@ -38,7 +38,7 @@ async function loadProjectsWithToken(accessToken) {
 }
 
 export async function fetchProjectsFromSource() {
-  if (useLocalProjects()) {
+  if (isLocalProjectsEnv()) {
     return { projects: loadLocalProjects(), error: null };
   }
 
