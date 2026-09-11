@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "google:token": "node scripts/get-google-refresh-token.mjs",
+    "sync:projects": "node scripts/sync-projects.mjs",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",

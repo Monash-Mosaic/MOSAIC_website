@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+  extensionForContentType,
+  extractBuiltProjectFileId,
   extractDriveFileId,
   isValidDriveFileId,
-  toProxiedProjectImage,
+  toBuiltProjectImage,
 } from '@/modules/projects/drive';
 
 describe('extractDriveFileId', () => {
@@ -32,16 +34,42 @@ describe('extractDriveFileId', () => {
   });
 });
 
-describe('toProxiedProjectImage', () => {
-  it('rewrites Drive URLs onto the local image proxy', () => {
-    expect(toProxiedProjectImage('https://drive.google.com/file/d/abcdefghij1234567890/view')).toBe(
-      '/api/projects/images/abcdefghij1234567890',
+describe('toBuiltProjectImage', () => {
+  it('rewrites Drive URLs onto static project-image paths', () => {
+    expect(toBuiltProjectImage('https://drive.google.com/file/d/abcdefghij1234567890/view')).toBe(
+      '/project-images/abcdefghij1234567890.jpg',
+    );
+    expect(toBuiltProjectImage('https://drive.google.com/file/d/abcdefghij1234567890/view', 'png')).toBe(
+      '/project-images/abcdefghij1234567890.png',
     );
   });
 
   it('leaves public or empty image paths unchanged', () => {
-    expect(toProxiedProjectImage('/ScalableSolutions.svg')).toBe('/ScalableSolutions.svg');
-    expect(toProxiedProjectImage('')).toBe('');
+    expect(toBuiltProjectImage('/ScalableSolutions.svg')).toBe('/ScalableSolutions.svg');
+    expect(toBuiltProjectImage('')).toBe('');
+  });
+});
+
+describe('extractBuiltProjectFileId', () => {
+  it('reads ids from built image paths and Drive URLs', () => {
+    expect(extractBuiltProjectFileId('/project-images/abcdefghij1234567890.jpg')).toBe(
+      'abcdefghij1234567890',
+    );
+    expect(extractBuiltProjectFileId('https://drive.google.com/file/d/abcdefghij1234567890/view')).toBe(
+      'abcdefghij1234567890',
+    );
+    expect(extractBuiltProjectFileId('/ScalableSolutions.svg')).toBeNull();
+  });
+});
+
+describe('extensionForContentType', () => {
+  it('maps image MIME types to file extensions', () => {
+    expect(extensionForContentType('image/png; charset=utf-8')).toBe('png');
+    expect(extensionForContentType('image/webp')).toBe('webp');
+    expect(extensionForContentType('image/gif')).toBe('gif');
+    expect(extensionForContentType('image/svg+xml')).toBe('svg');
+    expect(extensionForContentType('image/jpeg')).toBe('jpg');
+    expect(extensionForContentType('text/html')).toBe('jpg');
   });
 });
 

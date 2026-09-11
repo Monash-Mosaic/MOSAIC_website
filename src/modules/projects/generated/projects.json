@@ -1,0 +1,52 @@
+{
+  "success": true,
+  "source": "apps-script",
+  "builtAt": "2026-09-10T06:16:07.663Z",
+  "projects": [
+    {
+      "id": "PRJ-11d64ce1-87ec-4f6a-8786-2a11f27e5a8f",
+      "title": "Disinformer",
+      "subtitle": "International Federation of Red Cross",
+      "previewTitle": "Disinformer: International Federation of Red Cross",
+      "description": "Imagine creating a web platform for the organisation that helps communities all over the world",
+      "image": "/project-images/1Lz7k-2a7fqqvQundFz0OayLlSzThzGf2.jpg",
+      "link": "https://disinformer.wdr26.org/",
+      "imageAlign": "left",
+      "delay": 0,
+      "bgColor": "#ffffffff",
+      "textColor": "black",
+      "buttonColor": "#213359",
+      "buttonTextColor": "white"
+    },
+    {
+      "id": "PRJ-cf57380f-1c97-4071-b80c-3c7107bdcaa3",
+      "title": "Nestle-In",
+      "subtitle": "Tackling Secondary Homelessnes",
+      "previewTitle": "Nestle-In: Tackling Secondary Homelessnes",
+      "description": "A Hackathon project that turned to a real life application for people who experience secondary and tertiary homelessness",
+      "image": "/project-images/1OumkxWyBC0ngIrBEaPkSZxjI3lsqUpPo.jpg",
+      "link": "https://www.mosaic-monash.ai/projects",
+      "imageAlign": "right",
+      "delay": 0.12,
+      "bgColor": "#C8D1F0",
+      "textColor": "#213359",
+      "buttonColor": "#213359",
+      "buttonTextColor": "white"
+    },
+    {
+      "id": "PRJ-5b6477a9-4b52-45a1-a7a3-d1078839bfd2",
+      "title": "Aged Care",
+      "subtitle": "Supporting aged care workers",
+      "previewTitle": "Aged Care: Supporting aged care workers",
+      "description": "Co-designing solutions with and for people who transition from being active and independent to a new era of their lives",
+      "image": "/project-images/1fNwo1R_M5WdIvZI9ANqBLathErzy0oX8.jpg",
+      "link": "https://www.mosaic-monash.ai/projects",
+      "imageAlign": "left",
+      "delay": 0.24,
+      "bgColor": "#ffffffff",
+      "textColor": "black",
+      "buttonColor": "#213359",
+      "buttonTextColor": "white"
+    }
+  ]
+}

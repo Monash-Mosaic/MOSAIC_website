@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
-import useProjects from '@/modules/projects/useProjects';
 
 const AUTOPLAY_MS = 6000;
 
@@ -59,24 +58,7 @@ function ProjectSlideCard({ project }) {
   );
 }
 
-function CarouselSkeleton() {
-  return (
-    <div className="grid gap-2 md:gap-10 grid-cols-1 md:grid-cols-3 max-w-8xl mx-auto">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <div key={index} className="rounded-lg p-1 md:p-6 animate-pulse">
-          <div className="w-full h-50 md:h-70 flex items-center justify-center mb-4 p-6">
-            <div className="h-40 md:h-60 w-48 rounded-lg bg-white/70" />
-          </div>
-          <div className="h-5 w-2/3 mx-auto rounded bg-white/70 mb-3" />
-          <div className="h-4 w-5/6 mx-auto rounded bg-white/60" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export default function RecentProjects() {
-  const { projects, loading, error } = useProjects();
+export default function RecentProjects({ projects = [] }) {
   const slidesPerView = useSlidesPerView();
   const [page, setPage] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -116,9 +98,7 @@ export default function RecentProjects() {
     >
       <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">Recent projects</h2>
 
-      {loading ? (
-        <CarouselSkeleton />
-      ) : error || projects.length === 0 ? (
+      {projects.length === 0 ? (
         <p className="text-[#4953A1]">Projects will appear here soon.</p>
       ) : (
         <div className="max-w-8xl mx-auto" aria-roledescription="carousel" aria-label="Recent projects">
