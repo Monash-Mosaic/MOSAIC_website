@@ -96,12 +96,12 @@ export default function RecentProjects({ projects = [] }) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">Recent Projects</h2>
+      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">Recent projects</h2>
 
       {projects.length === 0 ? (
         <p className="text-[#4953A1]">Projects will appear here soon.</p>
       ) : (
-        <div className="max-w-8xl mx-auto" aria-roledescription="carousel" aria-label="Recent Projects">
+        <div className="max-w-8xl mx-auto" aria-roledescription="carousel" aria-label="Recent projects">
           <div
             className="overflow-hidden"
             onTouchStart={(event) => {

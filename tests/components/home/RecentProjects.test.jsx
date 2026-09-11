@@ -4,6 +4,13 @@ import { normalizedProjects } from '@tests/fixtures/projects.js';
 import { render, screen } from '@tests/setup/test-utils.jsx';
 
 describe('RecentProjects', () => {
+  it('shows a loading skeleton', () => {
+    useProjects.mockReturnValue({ projects: [], loading: true, error: null });
+    const { container } = render(<RecentProjects />);
+    expect(screen.getByRole('heading', { name: 'Recent projects' })).toBeInTheDocument();
+    expect(container.querySelector('.animate-pulse')).toBeTruthy();
+  });
+
   it('shows an empty state when there are no projects', () => {
     render(<RecentProjects projects={[]} />);
     expect(screen.getByRole('heading', { name: 'Recent Projects' })).toBeInTheDocument();
