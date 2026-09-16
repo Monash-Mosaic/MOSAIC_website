@@ -1,9 +1,20 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 function ProjectContent({ project, index }) {
-  const ButtonTag = project.link ? motion.a : motion.button;
+  const router = useRouter();
+  const hasLink = Boolean(project.id);
+  const isExternal = Boolean(project.link && project.link.startsWith('http'));
+
+  const ButtonTag = isExternal ? motion.a : motion.button;
+
+  const handleClick = () => {
+    if (hasLink && !isExternal) {
+      router.push(`/projects/${project.id}`);
+    }
+  };
 
   return (
     <>
@@ -26,17 +37,19 @@ function ProjectContent({ project, index }) {
       </p>
 
       <ButtonTag
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        href={project.link || undefined}
-        target={project.link ? '_blank' : undefined}
-        rel={project.link ? 'noopener noreferrer' : undefined}
+        whileHover={hasLink ? { scale: 1.05 } : {}}
+        whileTap={hasLink ? { scale: 0.95 } : {}}
         className="inline-block px-8 py-3 rounded-full font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
         style={{
           backgroundColor: project.buttonColor,
           color: project.buttonTextColor,
+          opacity: hasLink ? 1 : 0.6,
+          cursor: hasLink ? 'pointer' : 'not-allowed'
         }}
-        {...(project.link ? {} : { type: 'button' })}
+        {...(isExternal
+          ? { href: project.link, target: '_blank', rel: 'noopener noreferrer' }
+          : { onClick: handleClick, type: 'button' }
+        )}
       >
         Learn more
       </ButtonTag>

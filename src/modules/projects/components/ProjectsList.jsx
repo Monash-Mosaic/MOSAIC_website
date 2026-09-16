@@ -16,7 +16,7 @@ export default function ProjectsList() {
     );
   }
 
-  if (error || projects.length === 0) {
+  if (error || !projects) {
     return (
       <p className="text-center text-[#213359] text-lg">Projects will appear here soon.</p>
     );
