@@ -11,7 +11,7 @@ describe('PageLayout', () => {
     );
 
     expect(screen.getByText('Page body')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'MOSAIC logo' })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: 'MOSAIC logo' })).toHaveLength(2);
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 });
