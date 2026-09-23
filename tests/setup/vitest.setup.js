@@ -47,6 +47,17 @@ vi.mock('framer-motion', () => {
     {},
     {
       get(_target, tag) {
+        // `motion.create(Component)` wraps an arbitrary component (e.g. next/image).
+        if (tag === 'create') {
+          return (Wrapped) => {
+            const Motion = React.forwardRef(({ children, ...props }, ref) =>
+              React.createElement(Wrapped, { ...stripMotionProps(props), ref }, children),
+            );
+            Motion.displayName = `motion.create(${Wrapped.displayName || Wrapped.name || 'Component'})`;
+            return Motion;
+          };
+        }
+
         const Component = React.forwardRef(({ children, ...props }, ref) =>
           React.createElement(tag, { ...stripMotionProps(props), ref }, children),
         );
