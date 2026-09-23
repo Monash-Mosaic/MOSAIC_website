@@ -1,5 +1,5 @@
 
-import { Space_Grotesk } from "next/font/google";
+import { Fira_Code, Space_Grotesk } from "next/font/google";
 
 import "./globals.css";
 
@@ -7,6 +7,11 @@ import "./globals.css";
 const spaceGrotesk = Space_Grotesk({
   weight: '400',
   subsets: ["latin"],
+})
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  variable: "--font-fira-code",
 })
 
 export const metadata = {
@@ -17,7 +22,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={spaceGrotesk.variable}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${firaCode.variable}`}>
       <body
 
         className={`${spaceGrotesk.className} antialiased pt-24`}

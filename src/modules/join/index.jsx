@@ -16,7 +16,7 @@ export default function JoinPage() {
   };
 
   return (
-    <PageLayout navbarColor="dark" className="min-h-screen bg-white">
+    <PageLayout className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto px-6 py-12">
         <WhyJoin />
         <RecruitmentProcess />

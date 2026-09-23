@@ -8,7 +8,6 @@ export default function ContactPage() {
   return (
     <PageLayout
       as="main"
-      navbarColor="dark"
       className="min-h-screen bg-white text-[#213359] relative flex flex-col items-center"
     >
       <section className="w-full flex flex-col items-center mt-10 px-4 pb-8">
