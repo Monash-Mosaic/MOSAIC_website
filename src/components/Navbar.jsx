@@ -13,18 +13,18 @@ const NAV_LINKS = [
 
 const CONTACT_LINK = { href: '/contact', label: 'Contact Us' };
 
-const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]';
-const contactButtonClass = `rounded-md bg-[#D4F75A] px-4 py-1.5 text-[#213359] transition-colors duration-150 hover:bg-[#c5ec3f] ${focusRing}`;
+const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-ink';
+const contactButtonClass = `rounded-md bg-lime px-4 py-1.5 transition-colors duration-150 hover:bg-lime-hover ${focusRing}`;
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const linkClass = (href) =>
-    `rounded px-1 py-1 hover:underline underline-offset-8 decoration-2 decoration-[#D4F75A] ${focusRing}${pathname === href ? ' underline' : ''}`;
+    `rounded px-1 py-1 hover:underline underline-offset-8 decoration-2 decoration-lime ${focusRing}${pathname === href ? ' underline' : ''}`;
 
   return (
-    <header className="absolute top-0 left-0 z-[999] w-full bg-transparent font-mono text-[#213359]">
+    <header className="absolute top-0 left-0 z-[999] w-full bg-transparent font-mono font-semibold text-ink">
       <div className="flex items-center justify-between px-6 py-2 md:px-12">
         <Link href="/" className={`block rounded ${focusRing}`}>
           <img src="/Primary_Blue_Transparent.png" alt="MOSAIC logo" className="h-20 w-auto" />

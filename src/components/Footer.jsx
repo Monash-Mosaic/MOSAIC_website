@@ -16,11 +16,11 @@ const SOCIAL_LINKS = [
 ];
 
 const linkClass =
-  'rounded hover:underline underline-offset-4 decoration-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]';
+  'rounded hover:underline underline-offset-4 decoration-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink';
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t-2 border-[#213359] bg-[#BDFF15] font-mono text-[#1C1C1C]">
+    <footer className="w-full border-t-2 border-navy bg-footer-lime font-mono text-ink">
       <div className="mx-auto flex flex-col items-center justify-between gap-6 px-6 py-5 md:flex-row">
         <Link href="/" className={`block shrink-0 bg-white ${linkClass}`}>
           <img src="/Primary_Blue_Transparent.png" alt="MOSAIC logo" className="h-20 w-auto" />
@@ -28,7 +28,7 @@ export default function Footer() {
 
         <nav
           aria-label="Footer"
-          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-lg font-bold uppercase tracking-wide md:border-x-2 md:border-[#213359] md:px-4"
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-lg font-bold uppercase tracking-wide md:border-x-2 md:border-navy md:px-4"
         >
           {PAGE_LINKS.map((link) => (
             <Link key={link.href} href={link.href} className={linkClass}>
