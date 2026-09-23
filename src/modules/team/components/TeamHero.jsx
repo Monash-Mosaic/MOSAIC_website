@@ -1,7 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { heroImage } from '../data';
+
+const MotionImage = motion.create(Image);
 
 const FLOAT = {
   initial: { y: -8 },
@@ -13,10 +16,13 @@ export default function TeamHero() {
   return (
     <section className="relative isolate flex min-h-[60vh] items-center justify-center overflow-hidden bg-[#213359] px-6 pb-24 pt-32 text-center">
       {heroImage ? (
-        <img
+        <Image
           src={heroImage}
           alt="The MOSAIC team working together"
-          className="absolute inset-0 -z-10 h-full w-full object-cover"
+          fill
+          sizes="100vw"
+          preload
+          className="-z-10 object-cover"
         />
       ) : (
         <div
@@ -24,22 +30,26 @@ export default function TeamHero() {
           className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_25%,#31456f_0%,#213359_45%,#16233f_100%)]"
         />
       )}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[#0B1531]/45" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[#0B1531]/80" />
 
-      <motion.img
+      <MotionImage
         {...FLOAT}
         src="/Octopus_icon_green_1.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute left-[8%] top-[22%] w-16 md:w-24"
+        width={96}
+        height={153}
+        className="pointer-events-none absolute left-[8%] top-[22%] h-auto w-16 md:w-24"
       />
-      <motion.img
+      <MotionImage
         {...FLOAT}
         transition={{ ...FLOAT.transition, duration: 3.6 }}
         src="/Octopus_icon_green_2.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[18%] right-[12%] w-16 md:w-24"
+        width={96}
+        height={144}
+        className="pointer-events-none absolute bottom-[18%] right-[12%] h-auto w-16 md:w-24"
       />
 
       <motion.div

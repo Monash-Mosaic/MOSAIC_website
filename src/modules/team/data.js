@@ -1,8 +1,5 @@
-// Photos are placeholders for now. To add a real image, drop the file in `public/`
-// and set `image` to its path (e.g. '/team/grace-xie.jpg'). While `image` is null a
-// styled placeholder is rendered in its place.
 
-export const heroImage = '/agedCare.jpg';
+export const heroImage = '/Team-Hero.JPG';
 
 export const academicAdvisors = [
   { id: 'jue-grace-xie', name: 'Jue (Grace) Xie', image: '/grace.jpg' },
@@ -13,20 +10,32 @@ export const academicAdvisors = [
 export const studentTeam = [
   {
     id: 'ceo',
-    caption: 'Meet our CEO Viktoriia...',
-    alt: 'MOSAIC CEO Viktoriia with a team member',
-    image: null,
+    caption: 'Meet our CEO Aarav, who is leading the charge of the team...',
+    alt: 'MOSAIC CEO Aarav profile picture',
+    image: "/Aarav-CEO.jpeg",
   },
   {
-    id: 'developers',
-    caption: 'and our talented developers Varun and Aditya...',
-    alt: 'MOSAIC developers Varun and Aditya',
-    image: null,
+    id: 'tech-lead',
+    caption: 'and our talented teach lead Raveesh...',
+    alt: 'MOSAIC tech lead Raveesh profile picture',
+    image: "/Raveesh-TechLead.png",
   },
   {
     id: 'coos',
-    caption: 'one of our COOs Annmarie as well as Livie, Aneri, Hanifa and Aarav...',
-    alt: 'MOSAIC COO Annmarie with Livie, Aneri, Hanifa and Aarav',
-    image: null,
+    caption: 'Our CTO Youssef Hassanein...',
+    alt: 'MOSAIC CTO Youssef profile picture',
+    image: "/Youssef-CTO.jpeg",
+  },
+  {
+    id: 'product-manager',
+    caption: 'One of our extraordinary PMs Harsha...',
+    alt: 'MOSAIC PM Harsha profile picture',
+    image: "/Harsha-PM.png",
+  },
+  {
+    id: 'developers',
+    caption: 'One of our dilligent developers Luke...',
+    alt: 'MOSAIC Developer Luke profile picture',
+    image: "/Luke-Dev.png",
   },
 ];

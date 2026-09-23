@@ -5,7 +5,11 @@ import { render, screen } from '@tests/setup/test-utils.jsx';
 describe('TeamImage', () => {
   it('renders the photo once a source is provided', () => {
     render(<TeamImage src="/team/grace.jpg" alt="Jue (Grace) Xie" />);
-    expect(screen.getByRole('img', { name: 'Jue (Grace) Xie' })).toHaveAttribute('src', '/team/grace.jpg');
+    // next/image rewrites `src` to the optimizer route, so assert on the source it points at.
+    expect(screen.getByRole('img', { name: 'Jue (Grace) Xie' })).toHaveAttribute(
+      'src',
+      expect.stringContaining(encodeURIComponent('/team/grace.jpg')),
+    );
   });
 
   it('falls back to a labelled placeholder while the photo is missing', () => {

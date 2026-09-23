@@ -38,8 +38,6 @@ export default function StudentTeam() {
           </motion.figure>
         ))}
       </div>
-
-      <p className="mt-20 text-center text-lg text-[#213359]">more introductions soon to come :)</p>
     </section>
   );
 }
