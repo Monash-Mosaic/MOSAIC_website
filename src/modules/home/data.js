@@ -24,3 +24,9 @@ export const visionItems = [
     delay: 0.4,
   },
 ];
+
+export const heroStats = [
+  { value: 5, label: 'Projects' },
+  { value: 3, label: 'Partners' },
+  { value: 48, label: 'Members' },
+];

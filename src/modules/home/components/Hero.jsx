@@ -1,66 +1,63 @@
-'use client';
-
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import OctopusDecoration from './OctopusDecoration';
+import { HiArrowDown } from 'react-icons/hi';
+import { heroStats } from '../data';
+
+const dottedBackground = {
+  backgroundColor: '#ffffff',
+  backgroundImage: 'radial-gradient(#b4bdf2 1.5px, transparent 1.5px)',
+  backgroundSize: '16px 16px',
+};
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen snap-start flex flex-col justify-center items-center text-center px-6">
-      <motion.h1
-        style={{ color: '#BDFF15' }}
-        initial={{ opacity: 0, y: -30, x: -5, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-        transition={{
-          duration: 1.5,
-          delay: 0.2,
-          type: 'spring',
-          damping: 10,
-          stiffness: 40,
-          mass: 0.5,
-        }}
-        className="text-4xl md:text-6xl font-extrabold"
-      >
-        AI for Social Impact
-      </motion.h1>
-      <motion.div
-        initial={{ opacity: 0, y: -30, x: 5, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-        transition={{
-          duration: 1.5,
-          ease: [0.2, 0.8, 0.4, 1],
-          delay: 0.3,
-          type: 'spring',
-          damping: 10,
-          stiffness: 40,
-          mass: 0.3,
-        }}
-        className="max-w-3xl"
-      >
-        <p className="mt-6 text-base md:text-lg text-gray-200">
-          MOSAIC (Monash Students for AI with Communities) is where cutting-edge technology meets social impact.
-          Join a team that applies data science and human-centred computing to real-world challenges faced by
-          marginalised communities.
+    <section
+      className="relative grid min-h-screen w-full snap-start grid-cols-1 text-[#213359] md:grid-cols-2"
+      style={dottedBackground}
+    >
+      <div className="flex flex-col pt-32 md:pt-48">
+        <ul className="flex gap-6 px-6 md:px-16">
+          {heroStats.map((stat) => (
+            <li
+              key={stat.label}
+              className="flex size-24 flex-col items-center justify-center bg-[#213359] font-mono text-white md:size-28"
+            >
+              <span className="text-5xl leading-none font-bold md:text-6xl">{stat.value}</span>
+              <span className="text-sm md:text-base">{stat.label}</span>
+            </li>
+          ))}
+        </ul>
+        <img
+          src="/HeroImage.png"
+          alt="Halftone illustration of people working together"
+          className="mt-auto w-full max-w-[42rem] pt-12"
+        />
+      </div>
+
+      <div className="flex flex-col justify-center border-[#213359] px-6 pt-12 pb-24 md:border-l-4 md:pt-24 md:pr-12 md:pl-[14%]">
+        <h1 className="font-mono text-4xl leading-tight font-bold md:text-5xl md:leading-[1.35] lg:text-6xl">
+          Building Production-Ready Software &amp; AI Solutions For{' '}
+          <span className="box-decoration-clone bg-[linear-gradient(to_top,#D4F75A_0.25em,transparent_0.25em)]">
+            Social Good
+          </span>
+        </h1>
+        <p className="mt-4 max-w-xl text-lg md:text-xl">
+          We partner with global humanitarian organisations, research labs, and industry leaders to build
+          high-impact software.
         </p>
-      </motion.div>
-      <Link href="/projects">
-        <motion.button
-          initial={{ opacity: 0, y: 30 }}
-          whileHover={{ scale: 1.1, duration: 0.05 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: 'spring',
-            duration: 1,
-            damping: 10,
-            stiffness: 50,
-          }}
-          style={{ background: '#BDFF15' }}
-          className="mt-8 bg-lime-400 text-[#0C1D45] px-6 py-3 rounded-full font-semibold hover:bg-lime-300 transition"
+        <Link
+          href="/contact"
+          className="mt-8 self-start rounded-md bg-[#D4F75A] px-5 py-2 font-mono text-3xl font-bold transition-colors duration-150 hover:bg-[#c5ec3f] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
         >
-          Explore projects
-        </motion.button>
+          Get in touch
+        </Link>
+      </div>
+
+      <Link
+        href="#partners"
+        className="absolute right-6 bottom-6 hidden items-center gap-1 rounded font-mono text-sm tracking-widest uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:right-12 md:flex"
+      >
+        Scroll to partnerships <HiArrowDown aria-hidden="true" />
       </Link>
-      <OctopusDecoration />
     </section>
   );
 }

@@ -7,6 +7,7 @@ export default function HomePage() {
   return (
     <PageLayout
       as="main"
+      offsetHeader={false}
       className="min-h-screen snap-y snap-mandatory bg-[#E3E3E3] text-white relative flex flex-col items-center overflow-y-scroll h-screen"
     >
       <Hero />

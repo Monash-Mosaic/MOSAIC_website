@@ -20,7 +20,7 @@ const linkClass =
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t-2 border-[#213359] bg-[#D4F75A] font-mono text-[#213359]">
+    <footer className="w-full border-t-2 border-[#213359] bg-[#BDFF15] font-mono text-[#1C1C1C]">
       <div className="mx-auto flex flex-col items-center justify-between gap-6 px-6 py-5 md:flex-row">
         <Link href="/" className={`block shrink-0 bg-white ${linkClass}`}>
           <img src="/Primary_Blue_Transparent.png" alt="MOSAIC logo" className="h-20 w-auto" />

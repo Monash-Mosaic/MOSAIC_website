@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <header className="absolute top-0 left-0 z-[999] w-full bg-transparent font-mono text-[#213359]">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
+      <div className="flex items-center justify-between px-6 py-2 md:px-12">
         <Link href="/" className={`block rounded ${focusRing}`}>
           <img src="/Primary_Blue_Transparent.png" alt="MOSAIC logo" className="h-20 w-auto" />
         </Link>

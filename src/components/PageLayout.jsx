@@ -4,10 +4,11 @@ import Navbar from './Navbar';
 export default function PageLayout({
   children,
   className = '',
+  offsetHeader = true,
   as: Tag = 'div',
 }) {
   return (
-    <Tag className={className}>
+    <Tag className={`${className}${offsetHeader ? ' pt-24' : ''}`}>
       <Navbar />
       {children}
       <Footer />
