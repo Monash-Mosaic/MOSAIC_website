@@ -11,7 +11,7 @@ const dottedBackground = {
 export default function Hero() {
   return (
     <section
-      className="relative grid min-h-screen w-full snap-start grid-cols-1 text-ink md:grid-cols-2"
+      className="relative grid min-h-screen w-full shrink-0 snap-start grid-cols-1 text-ink md:min-h-[751px] md:grid-cols-2"
       style={dottedBackground}
     >
       <div className="flex flex-col pt-32 md:pt-48">
