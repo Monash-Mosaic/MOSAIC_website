@@ -2,10 +2,14 @@ import Link from 'next/link';
 import { HiArrowDown } from 'react-icons/hi';
 import { heroStats } from '../data';
 
+
+const dot = 'radial-gradient(circle, #C2CCFB 1.5px, transparent 2.5px)';
+
 const dottedBackground = {
-  backgroundColor: '#ffffff',
-  backgroundImage: 'radial-gradient(#b4bdf2 2px, transparent 2px)',
-  backgroundSize: '16px 16px',
+  backgroundColor: '#FCFCFC',
+  backgroundImage: `${dot}, ${dot}`,
+  backgroundSize: '24px 12px',
+  backgroundPosition: '-10px -4px, 2px 2px',
 };
 
 export default function Hero() {
@@ -15,7 +19,7 @@ export default function Hero() {
       style={dottedBackground}
     >
       <div className="flex flex-col pt-32 md:pt-48 xl:pt-[230px]">
-        <ul className="flex gap-6 px-6 md:px-16 xl:gap-[34.5px] xl:pr-0 xl:pl-[50px]">
+        <ul className="flex gap-6 px-6 md:px-16 xl:gap-[34.35px] xl:pr-0 xl:pl-[54px]">
           {heroStats.map((stat) => (
             <li
               key={stat.label}
@@ -33,7 +37,7 @@ export default function Hero() {
         />
       </div>
 
-      <div className="flex flex-col justify-center border-[#101010] px-6 pt-12 pb-24 md:border-l-4 md:pt-24 md:pr-12 md:pl-[14%] xl:relative xl:justify-start xl:border-l-0 xl:pt-[162px] xl:pr-0 xl:pb-0 xl:pl-[202px] xl:before:absolute xl:before:inset-y-0 xl:before:-left-[2.5px] xl:before:w-[5px] xl:before:bg-[#101010]">
+      <div className="flex flex-col justify-center border-[#101010] px-6 pt-12 pb-24 md:border-l-4 md:pt-24 md:pr-12 md:pl-[14%] xl:justify-start xl:border-l-[5px] xl:pt-[162px] xl:pr-0 xl:pb-0 xl:pl-[197px]">
         <h1 className="font-mono text-4xl leading-tight font-semibold md:text-5xl md:leading-[1.35] xl:max-w-[483px] xl:text-[52px] xl:leading-[normal]">
           Building Production-Ready Software &amp; AI Solutions For{' '}
           <span className="relative isolate whitespace-nowrap before:absolute before:-right-1.5 before:bottom-0 before:-left-1 before:-z-0 before:h-[0.385em] before:rounded-[10px] before:bg-lime/70">
