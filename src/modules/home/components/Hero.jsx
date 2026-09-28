@@ -41,8 +41,8 @@ export default function Hero() {
           </span>
         </h1>
         <p className="mt-4 max-w-xl text-lg md:text-xl">
-          We partner with global humanitarian organisations, research labs, and industry leaders to build
-          high-impact software.
+          We partner with global humanitarian organisations, research labs, and industry leaders to
+          build high-impact software.
         </p>
         <Link
           href="/contact"
