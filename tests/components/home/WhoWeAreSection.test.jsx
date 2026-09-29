@@ -8,6 +8,10 @@ describe('WhoWeAreSection', () => {
 
     expect(screen.getByRole('heading', { name: 'Who we are' })).toBeInTheDocument();
     expect(screen.getByText('Engineering for community resilience and global equity')).toBeInTheDocument();
+    const section = document.getElementById('team');
+    expect(section.className).toContain('bg-white');
+    expect(section.firstElementChild.style.backgroundColor).toBe('rgb(255, 255, 255)');
+    expect(section.firstElementChild.style.backgroundImage).toContain('who-we-are-texture.svg');
     expect(screen.getByRole('button', { name: '[00] TEAM_OVERVIEW' })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByText('[04] TRACK_RECORD')).toBeInTheDocument();
     expect(screen.getByText('FACULTY OF IT BACKED // EST. 2025')).toBeInTheDocument();
@@ -20,7 +24,7 @@ describe('WhoWeAreSection', () => {
     expect(document.getElementById('team')).toBeInTheDocument();
   });
 
-  it('switches to the contact panel when the partnership option is selected', async () => {
+  it('switches to the contact panel when the partnership option is selected', () => {
     render(<WhoWeAreSection />);
 
     fireEvent.click(screen.getByRole('button', { name: /contact us/i }));

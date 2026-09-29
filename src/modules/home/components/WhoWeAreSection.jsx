@@ -37,7 +37,7 @@ const topics = [
 ];
 const CONTACT_EMAIL = 'mosaic@monash.edu';
 const sectionStyle = {
-  backgroundColor: '#f3f3f3',
+  backgroundColor: '#FFFFFF',
   backgroundImage: "url('/who-we-are-texture.svg')",
   backgroundSize: '360px 360px',
   backgroundRepeat: 'repeat',
@@ -66,20 +66,20 @@ export default function WhoWeAreSection() {
   return (
     <section
       id="team"
-      className="w-full snap-start px-5 py-12 text-[#213359] md:px-12 md:py-16"
-      style={sectionStyle}
+      className="w-full snap-start bg-white text-[#213359]"
     >
-      <div className="mx-auto w-full max-w-[1340px]">
+      <div className="w-full px-5 py-12 md:px-12 md:py-16" style={sectionStyle}>
+        <div className="mx-auto w-full max-w-[1340px]">
         <h2 className="font-mono text-4xl leading-none font-bold md:text-5xl">Who we are</h2>
         <p className="mt-3 text-base font-semibold md:text-lg">
           Engineering for community resilience and global equity
         </p>
 
         <div
-          className="mt-10 grid min-h-[506px] w-full border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px] md:grid-cols-[18rem_minmax(0,1fr)]"
-          style={{ backgroundColor: 'rgba(208, 255, 99, 0.51)' }}
+          className="mt-10 grid min-h-[506px] w-full border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px] md:grid-cols-[344px_minmax(0,1fr)]"
+          style={{ backgroundColor: '#D0FF63' }}
         >
-          <aside className="flex flex-col border-b border-[#213359]/70 p-4 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-5 md:text-base">
+          <aside className="flex flex-col border-b border-[#213359]/70 p-4 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:text-base">
             <p>&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
             <p className="mt-2">&gt;SELECT_OPTION:</p>
             <ol className="mt-1 flex flex-col gap-5">
@@ -118,7 +118,7 @@ export default function WhoWeAreSection() {
             </button>
           </aside>
 
-          <div className="p-5 md:p-8">
+          <div className="p-5 md:p-4">
             {activeTopic ? (
               <div aria-live="polite">
                 <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
@@ -147,7 +147,7 @@ export default function WhoWeAreSection() {
                     <span>&lt; 24 Hours (Direct to Student Directors)</span>
                   </p>
                 </div>
-                <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm font-bold md:text-base">
+                <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm font-bold md:text-base">
                   <button
                     type="button"
                     onClick={copyEmail}
@@ -168,6 +168,7 @@ export default function WhoWeAreSection() {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
     </section>
