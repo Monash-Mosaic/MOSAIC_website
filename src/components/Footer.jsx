@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const PAGE_LINKS = [
@@ -23,9 +24,11 @@ export default function Footer() {
     <footer className="w-full border-t border-navy bg-footer-lime font-mono text-ink">
       <div className="mx-auto flex flex-col items-center justify-between gap-6 px-6 py-5 md:flex-row xl:pt-[17px] xl:pr-[33px] xl:pb-[18px] xl:pl-[18px]">
         <Link href="/" className={`block shrink-0 bg-white ${linkClass}`}>
-          <img
+          <Image
             src="/Primary_Blue_Transparent.png"
             alt="MOSAIC logo"
+            width={204}
+            height={80}
             className="h-20 w-auto xl:h-14 xl:w-[161px] xl:object-cover"
           />
         </Link>

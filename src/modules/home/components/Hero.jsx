@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { HiArrowDown } from 'react-icons/hi';
 import { heroStats } from '../data';
@@ -30,9 +31,12 @@ export default function Hero() {
             </li>
           ))}
         </ul>
-        <img
+        <Image
           src="/HeroImage.png"
           alt="Halftone illustration of people working together"
+          width={668}
+          height={364}
+          preload
           className="mt-auto w-full max-w-[42rem] pt-12 mix-blend-multiply xl:w-[668px] xl:pt-0"
         />
       </div>

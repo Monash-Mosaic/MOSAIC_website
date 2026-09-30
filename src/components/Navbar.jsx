@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
@@ -29,9 +30,12 @@ export default function Navbar() {
     <header className="absolute top-0 left-0 z-[999] w-full bg-transparent font-mono font-semibold text-ink">
       <div className="flex items-center justify-between px-6 py-2 md:pt-[17px] md:pr-9 md:pl-4">
         <Link href="/" className={`block rounded ${focusRing}`}>
-          <img
+          <Image
             src="/Primary_Blue_Transparent.png"
             alt="MOSAIC logo"
+            width={204}
+            height={80}
+            loading="eager"
             className="h-20 w-auto md:h-14 md:w-[161px] md:object-cover"
           />
         </Link>
