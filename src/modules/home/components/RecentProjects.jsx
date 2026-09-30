@@ -105,16 +105,18 @@ export default function RecentProjects() {
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="pt-50 bg-[#D6DEFF] py-30 px-6 text-center snap-start w-full"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">#TODO RECENT PROJECTS</h2>
-    </motion.section>
+    <div id="projects" className="w-full">
+      <motion.section
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="pt-50 bg-[#D6DEFF] py-30 px-6 text-center snap-start w-full"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">#TODO RECENT PROJECTS</h2>
+      </motion.section>
+    </div>
   );
 }
