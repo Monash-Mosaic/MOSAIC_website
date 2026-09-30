@@ -1,3 +1,6 @@
+'use client';
+
+import Image from 'next/image';
 import Link from 'next/link';
 import { HiArrowDown } from 'react-icons/hi';
 import { heroStats } from '../data';
@@ -26,10 +29,12 @@ export default function Hero() {
             </li>
           ))}
         </ul>
-        <img
+        <Image
           src="/HeroImage.png"
           alt="Halftone illustration of people working together"
-          className="mt-auto w-full max-w-[42rem] pt-12"
+          width={960}
+          height={720}
+          className="mt-auto h-auto w-full max-w-[42rem] pt-12"
         />
       </div>
 
@@ -45,7 +50,9 @@ export default function Hero() {
           high-impact software.
         </p>
         <Link
-          href="/contact"
+          href="https://github.com/Monash-Mosaic/MOSAIC_website/pull/54"
+          target="_blank"
+          rel="noopener noreferrer"
           className="mt-8 self-start rounded-md bg-lime px-5 py-2 font-mono text-3xl font-bold transition-colors duration-150 hover:bg-lime-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
         >
           Get in touch
