@@ -10,8 +10,8 @@ export const partners = [
     "logos": [
       {
         "name": "IFRC",
-        "src": "/mos+ifrc.png",
-        "link": "https://www.ifrc.org"
+        "src": "/ifrc.png",
+        "link": ""
       }
     ]
   },
@@ -22,12 +22,12 @@ export const partners = [
       {
         "name": "Monash University",
         "src": "/monash.png",
-        "link": "https://www.monash.edu"
+        "link": ""
       },
       {
         "name": "ActionLab",
         "src": "/action_lab.png",
-        "link": "https://www.monash.edu"
+        "link": ""
       }
     ]
   },
@@ -38,7 +38,7 @@ export const partners = [
       {
         "name": "MCCSA",
         "src": "/mccsa.png",
-        "link": "https://example.com"
+        "link": ""
       }
     ]
   }

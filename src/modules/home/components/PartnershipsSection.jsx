@@ -17,7 +17,6 @@ export default function PartnershipsSection() {
     const section = canvas.parentElement;
     if (!section) return;
 
-    // Reduced to 4500 - visually identical but significantly cheaper on the CPU
     const PARTICLE_COUNT = 6500;
 
     const pseudoRandom = (seed) => {
@@ -36,7 +35,6 @@ export default function PartnershipsSection() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, rect.width, rect.height);
 
-      // Group particles into opacity buckets to minimize canvas context switches
       const buckets = {
         1: [],
         2: [],
@@ -54,12 +52,9 @@ export default function PartnershipsSection() {
       const opacities = {
         1: 'rgba(109, 155, 239, 0.15)',
         2: 'rgba(109, 155, 239, 0.2)',
-        // 3: 'rgba(109, 155, 239, 0.4)',
-        // 4: 'rgba(109, 155, 239, 0.6)',
         3: 'rgba(109, 155, 239, 0.8)',
       };
 
-      // Draw all particles of the same opacity at once (reduces draw calls from 8000 to 3)
       Object.entries(buckets).forEach(([tier, particles]) => {
         ctx.beginPath();
         ctx.fillStyle = opacities[tier];
@@ -98,11 +93,9 @@ export default function PartnershipsSection() {
         w-full
         flex-col
         overflow-hidden
-        bg-[#213359]
+        bg-navy
         snap-start
-        px-4
         py-14
-        sm:px-6
       "
     >
       {/* Background Particles */}
@@ -117,11 +110,11 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Partnerships Text */}
-      <div className=" relative z-10 ml-[44px] shrink-0">
+      <div className="relative z-10 flex w-full flex-col px-6 shrink-0 sm:px-12 lg:px-24">
         <h2
           className="
             font-mono
-            text-[clamp(2.5rem,3.6vw,52.074px)]
+            text-[clamp(2.5rem,3.5vw,7.5rem)]
             font-semibold
             leading-tight
             text-[#FCFCFC]
@@ -133,10 +126,12 @@ export default function PartnershipsSection() {
         <p
           className="
             font-inter
-            text-[clamp(0.95rem,1.35vw,19.52px)]
+            text-[clamp(0.95rem,1.4vw,2.5rem)]
             font-semibold
             leading-6
             text-[#FCFCFC]
+            mt-2
+            md:mt-4
           "
         >
           Building high-stakes software alongside global leaders and research labs.
@@ -150,149 +145,163 @@ export default function PartnershipsSection() {
           z-10
           flex
           flex-1
+          w-full
           items-center
           justify-center
+          px-6
+          sm:px-12
+          lg:px-28
           pb-10
-          pt-8
+          pt-12
         "
       >
         <div
           className="
-            grid
+            flex
             w-full
-            max-w-[1231px]
-            grid-cols-1
-            items-center
-            justify-items-center
-            gap-8
-            md:grid-cols-2
+            max-w-[140rem] 
+            mx-auto
+            flex-row
+            flex-wrap
+            items-stretch
+            justify-center
+            gap-[clamp(1.5rem,2vw,3rem)]
           "
         >
-          {partners.map((partner, index) => (
-            <div
-              key={partner.id}
-              className={`
-                partner-float
-                group
-                w-fit
-                max-w-[770px]
-                overflow-hidden
-                rounded-[20px]
-                bg-[#B7FF00]
-                transition-transform
-                duration-500
-                hover:-translate-y-2
-                ${partners.length === 3 && index === 2 ? 'md:col-span-2' : ''}
-              `}
-              style={{
-                animationDelay: `${index * -0.7}s`,
-                animationDuration: `${3.5 + index * 0.4}s`,
-              }}
-            >
-              {/* Logo container */}
-              <div
-                className="
-                flex
-                min-h-[140px]
-                w-full
-                max-w-full
-                items-center
-                justify-center
-                gap-3
-                overflow-hidden
-                rounded-[20px]
-                bg-[#FCFCFC]
-                px-4
-                py-5
-                sm:min-h-[158px]
-                sm:gap-6
-                sm:px-8
-                "
-              >
-                {partner.logos.map((logo) => (
-                  <a
-                    key={logo.name}
-                    href={logo.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="
-                      flex
-                      min-w-0
-                      max-w-full
-                      flex-1
-                      items-center
-                      justify-center
-                      overflow-hidden
-                    "
-                    aria-label={`Visit ${logo.name}`}
-                  >
-                    <img
-                      src={logo.src}
-                      alt={logo.name}
-                      className="
-                        block
-                        h-auto
-                        max-h-[90px]
-                        max-w-full
-                        w-auto
-                        object-contain
-                        transition-transform
-                        duration-300
-                        group-hover:scale-[1]
-                        sm:max-h-[120px]
-                      "
-                    />
-                  </a>
-                ))}
-              </div>
+          {partners.map((partner, index) => {
+            // Percentages ensure the 2-on-top, 1-on-bottom layout regardless of screen width
+            const flexWidthClass =
+              index === 0
+                ? 'w-full md:w-[34%] lg:w-[35%]'
+                : index === 1
+                  ? 'w-full md:w-[62%] lg:w-[61%]'
+                  : index === 2
+                    ? 'w-full md:w-[50%] lg:w-[42%]'
+                    : 'w-full';
 
-              {/* Description */}
-              <p
-                className="
+            return (
+              <div
+                key={partner.id}
+                className={`
+                  partner-float
+                  group
                   flex
-                  min-h-[42px]
-                  items-center
-                  justify-center
-                  px-6
-                  py-2
-                  text-center
-                  font-['Fira_Code']
-                  text-[16.3774px]
-                  font-semibold
-                  leading-[21px]
-                  text-[#1C1C1C]
-                "
+                  flex-col
+                  overflow-hidden
+                  rounded-[1.25rem]
+                  bg-lime
+                  transition-transform
+                  duration-500
+                  hover:-translate-y-2
+                  ${flexWidthClass}
+                `}
+                style={{
+                  animationDelay: `${index * -0.7}s`,
+                  animationDuration: `${3.5 + index * 0.4}s`,
+                }}
               >
-                {partner.description}
-              </p>
-            </div>
-          ))}
+                {/* White Logo Container (Height scales with viewport width for 4K) */}
+                <div
+                  className="
+                    flex
+                    w-fit
+                    flex-1
+                    items-center
+                    justify-center
+                    rounded-[1.25rem]
+                    bg-[#FCFCFC]
+                    px-[clamp(1.5rem,3vw,3rem)]
+                    py-6
+                    gap-5
+                    min-h-[clamp(6rem,12vw,20rem)]
+                  "
+                >
+                  {partner.logos.map((logo) => (
+                    <a
+                      key={logo.name}
+                      href={logo.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="
+                        flex
+                        flex-1
+                        h-full
+                        items-center
+                        justify-center
+                        min-w-0
+                      "
+                      aria-label={`Visit ${logo.name}`}
+                    >
+                      <img
+                        src={logo.src}
+                        alt={logo.name}
+                        className="
+                          block
+                          h-auto
+                          w-screen
+                          max-h-[clamp(5rem,8rem,20rem)]
+                          max-w-full
+                          object-contain
+                          transition-transform
+                          duration-300
+                          group-hover:scale-105
+                        "
+                      />
+                    </a>
+                  ))}
+                </div>
+
+                {/* Description (Green Bar) */}
+                <div
+                  className="
+                    flex
+                    h-[clamp(3rem,3.3vw,5rem)]
+                    shrink-0
+                    items-center
+                    justify-center
+                    px-4
+                  "
+                >
+                  <span
+                    className="
+                    text-center
+                    font-['Fira_Code']
+                    text-[clamp(0.875rem,1.2vw,1.75rem)]
+                    font-semibold
+                    leading-snug
+                    text-ink
+                  "
+                  >
+                    {partner.description}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Scroll to Projects */}
-      <Link
-        href="#projects"
-        className="
-          absolute
-          bottom-6
-          right-6
-          z-10
-          flex
-          items-center
-          gap-2
-          whitespace-nowrap
-          font-['Fira_Code']
-          text-[clamp(0.8rem,1.1vw,16px)]
-          font-semibold
-          leading-[21px]
-          text-[#FCFCFC]
-          hover:underline
-        "
-      >
-        <span>SCROLL TO PROJECTS</span>
-        <HiArrowDown aria-hidden="true" />
-      </Link>
+      <div className="relative z-10 flex w-full justify-end px-6 sm:px-12 lg:px-24 mt-auto shrink-0 pb-6">
+        <Link
+          href="#projects"
+          className="
+            flex
+            items-center
+            gap-2
+            whitespace-nowrap
+            font-['Fira_Code']
+            text-[clamp(0.8rem,1.2vw,1.75rem)]
+            font-semibold
+            leading-5.25
+            text-[#FCFCFC]
+            hover:underline
+          "
+        >
+          <span>SCROLL TO PROJECTS</span>
+          <HiArrowDown aria-hidden="true" className="w-[1em] h-[1em]" />
+        </Link>
+      </div>
     </div>
   );
 }
