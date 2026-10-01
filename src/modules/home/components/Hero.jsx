@@ -44,7 +44,7 @@ export default function Hero() {
       <div className="flex flex-col justify-center border-[#101010] px-6 pt-12 pb-24 md:border-l-4 md:pt-24 md:pr-12 md:pl-[14%] xl:border-l-[5px] xl:pt-[70px] xl:pr-0 xl:pb-0 xl:pl-[197px]">
         <h1 className="font-mono text-4xl leading-tight font-semibold md:text-5xl md:leading-[1.35] xl:max-w-[483px] xl:text-[52px] xl:leading-[normal]">
           Building Production-Ready Software &amp; AI Solutions For{' '}
-          <span className="relative isolate whitespace-nowrap before:absolute before:-right-1.5 before:bottom-0 before:-left-1 before:-z-0 before:h-[0.385em] before:rounded-[10px] before:bg-lime/70">
+          <span className="relative isolate whitespace-nowrap before:absolute before:-right-1.5 before:bottom-0 before:-left-1 before:-z-0 before:h-[0.25em] before:rounded-[10px] before:bg-lime/70">
             Social Good
           </span>
         </h1>
