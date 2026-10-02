@@ -65,7 +65,7 @@ export default function WhoWeAreSection() {
 
   return (
     <section
-      id="team"
+      id="about"
       className="w-full snap-start bg-white text-[#213359]"
     >
       <div className="w-full px-5 py-12 md:px-12 md:py-16" style={sectionStyle}>
