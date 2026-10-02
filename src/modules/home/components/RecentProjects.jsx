@@ -38,27 +38,6 @@ function formatDescription(description) {
   return /[.!?]$/.test(text) ? text : `${text}.`;
 }
 
-function ProjectSlideCard({ project }) {
-  return (
-    <div className="rounded-lg p-1 md:p-6 max-w-6xl h-full">
-      <div className="w-full h-50 md:h-70 flex items-center justify-center mb-4 p-6">
-        {project.image ? (
-          <img
-            src={project.image}
-            alt={project.previewTitle}
-            referrerPolicy="no-referrer"
-            className="h-40 md:h-60 w-auto max-w-full object-contain border-[#6D92E2]/50 rounded-lg shadow-md"
-          />
-        ) : (
-          <div className="h-40 md:h-60 w-full max-w-xs rounded-lg bg-white/60" />
-        )}
-      </div>
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">{project.previewTitle}</h3>
-      <p className="text-sm text-gray-600">{formatDescription(project.description)}</p>
-    </div>
-  );
-}
-
 function CarouselSkeleton() {
   return (
     <div className="grid gap-2 md:gap-10 grid-cols-1 md:grid-cols-3 max-w-8xl mx-auto">
@@ -105,16 +84,18 @@ export default function RecentProjects() {
   };
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="pt-50 bg-[#D6DEFF] py-30 px-6 text-center snap-start w-full"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">#TODO RECENT PROJECTS</h2>
-    </motion.section>
+    <div id="projects" className="w-full">
+      <motion.section
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="pt-50 bg-[#D6DEFF] py-30 px-6 text-center snap-start w-full"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
+        <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">#TODO RECENT PROJECTS</h2>
+      </motion.section>
+    </div>
   );
 }
