@@ -75,14 +75,15 @@ export default function WhoWeAreSection() {
           Engineering for community resilience and global equity
         </p>
 
-        <div
-          className="mt-10 grid min-h-[506px] w-full border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px] md:grid-cols-[344px_minmax(0,1fr)]"
-          style={{ backgroundColor: '#D0FF63' }}
-        >
-          <aside className="flex flex-col border-b border-[#213359]/70 p-4 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:text-base">
-            <p>&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
+        <div className="mt-10 flex min-h-[506px] w-full flex-col border border-[#213359] bg-[#D0FF63]/51 shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px]">
+          <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
+            <p className="whitespace-nowrap">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
             <p className="mt-2">&gt;SELECT_OPTION:</p>
-            <ol className="mt-1 flex flex-col gap-5">
+          </div>
+
+          <div className="grid flex-1 md:min-h-0 md:grid-cols-[344px_minmax(0,1fr)]">
+          <aside className="flex flex-col border-b border-[#213359]/70 p-4 pt-0 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:pt-0 md:text-base">
+            <ol className="flex flex-col gap-5">
               {topics.map((topic, index) => {
                 const isActive = activeTopic?.id === topic.id;
 
@@ -167,6 +168,7 @@ export default function WhoWeAreSection() {
                 </p>
               </div>
             )}
+          </div>
           </div>
         </div>
         </div>
