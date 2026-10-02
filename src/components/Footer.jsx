@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const PAGE_LINKS = [
@@ -20,15 +21,21 @@ const linkClass =
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t-2 border-navy bg-footer-lime font-mono text-ink">
-      <div className="mx-auto flex flex-col items-center justify-between gap-6 px-6 py-5 md:flex-row">
-        <Link href="/" className={`block shrink-0 bg-white ${linkClass}`}>
-          <img src="/Primary_Blue_Transparent.png" alt="MOSAIC logo" className="h-20 w-auto" />
+    <footer className="w-full border-t border-navy bg-footer-lime font-mono text-ink">
+      <div className="mx-auto flex flex-col items-center justify-between gap-6 px-6 py-5 md:flex-row xl:pt-[17px] xl:pr-[33px] xl:pb-[18px] xl:pl-[18px]">
+        <Link href="/" className={`block shrink-0 ${linkClass}`}>
+          <Image
+            src="/Primary_Blue_Transparent.png"
+            alt="MOSAIC logo"
+            width={204}
+            height={80}
+            className="h-20 w-auto xl:h-14 xl:w-[161px] xl:object-cover"
+          />
         </Link>
 
         <nav
           aria-label="Footer"
-          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-lg font-bold uppercase tracking-wide md:border-x-2 md:border-navy md:px-4"
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-lg font-semibold uppercase md:border-x-2 md:border-navy md:px-4 xl:box-content xl:w-[817px] xl:flex-nowrap xl:justify-between xl:gap-x-0 xl:text-[16.6px] xl:leading-[normal]"
         >
           {PAGE_LINKS.map((link) => (
             <Link key={link.href} href={link.href} className={linkClass}>
