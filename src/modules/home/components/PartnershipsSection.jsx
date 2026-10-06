@@ -5,6 +5,7 @@ import { partners } from '../data';
 import { HiArrowDown } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { ParallaxLayer, ParallaxSection } from '@/components';
 
 export default function PartnershipsSection() {
   const canvasRef = useRef(null);
@@ -83,7 +84,8 @@ export default function PartnershipsSection() {
   }, []);
 
   return (
-    <div
+    <ParallaxSection
+      as="div"
       id="partners"
       className="
         relative
@@ -98,16 +100,19 @@ export default function PartnershipsSection() {
         py-14
       "
     >
-      {/* Background Particles */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <motion.canvas
-          ref={canvasRef}
-          className="absolute inset-0 h-full w-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: 'easeOut' }}
-        />
-      </div>
+      {/* Background Particles: drift behind the page as one layer. A symmetric range lags the
+          scroll slowly enough that the layer's edges never come into view, so it needs no overhang. */}
+      <ParallaxLayer y={[-80, 80]} className="pointer-events-none absolute inset-0">
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <motion.canvas
+            ref={canvasRef}
+            className="absolute inset-0 h-full w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+          />
+        </div>
+      </ParallaxLayer>
 
       {/* Partnerships Text */}
       <div className="relative z-10 flex w-full flex-col px-6 shrink-0 sm:px-12 lg:px-24">
@@ -139,7 +144,8 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Partners */}
-      <div
+      <ParallaxLayer
+        y={[40, -40]}
         className="
           relative 
           z-10
@@ -279,7 +285,7 @@ export default function PartnershipsSection() {
             );
           })}
         </div>
-      </div>
+      </ParallaxLayer>
 
       {/* Scroll to Projects */}
       <div className="relative z-10 flex w-full justify-end px-6 sm:px-12 lg:px-24 mt-auto shrink-0 pb-6">
@@ -302,6 +308,6 @@ export default function PartnershipsSection() {
           <HiArrowDown aria-hidden="true" className="w-[1em] h-[1em]" />
         </Link>
       </div>
-    </div>
+    </ParallaxSection>
   );
 }
