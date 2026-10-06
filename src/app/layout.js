@@ -27,7 +27,6 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    // data-scroll-behavior lets Next.js skip smooth scrolling on route changes, keeping it for anchor links
     <html
       lang="en"
       className={`${inter.variable} ${firaCode.variable} motion-safe:scroll-smooth`}
