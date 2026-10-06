@@ -109,9 +109,9 @@ export const projects = {
 };
 
 export const projectLayout = [
-  { id: 'ctrlAltPrebunk', cell: 'md:col-start-2 md:row-start-1' },
-  { id: 'aiPolicyAgedCare', cell: 'md:col-start-3 md:row-start-1' },
-  { id: 'worldDisastersReport', cell: 'md:col-start-1 md:row-start-2' },
-  { id: 'disinformer', cell: 'md:col-start-2 md:row-start-2' },
-  { id: 'demystifyingLlms', cell: 'md:col-start-3 md:row-start-2' },
+  { id: 'ctrlAltPrebunk', column: 2, cell: 'md:col-start-2 md:row-start-1' },
+  { id: 'aiPolicyAgedCare', column: 3, cell: 'md:col-start-3 md:row-start-1' },
+  { id: 'worldDisastersReport', column: 1, cell: 'md:col-start-1 md:row-start-2' },
+  { id: 'disinformer', column: 2, cell: 'md:col-start-2 md:row-start-2' },
+  { id: 'demystifyingLlms', column: 3, cell: 'md:col-start-3 md:row-start-2' },
 ];

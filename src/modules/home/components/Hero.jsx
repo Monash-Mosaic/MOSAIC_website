@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiArrowDown } from 'react-icons/hi';
+import { ParallaxLayer, ParallaxSection } from '@/components';
 import { heroStats } from '../data';
 
 
@@ -15,11 +16,21 @@ const dottedBackground = {
 
 export default function Hero() {
   return (
-    <section
-      className="relative grid min-h-svh w-full shrink-0 snap-start grid-cols-1 text-ink md:grid-cols-2 xl:min-h-(--hero-h) xl:[--hero-h:max(100svh,700px)]"
-      style={dottedBackground}
+    // Progress runs from page load (0) until the hero has scrolled fully out of view (1), so every
+    // layer starts in its designed position
+    <ParallaxSection
+      offset={['start start', 'end start']}
+      className="relative isolate grid min-h-svh w-full shrink-0 snap-start grid-cols-1 overflow-hidden text-ink md:grid-cols-2 xl:min-h-(--hero-h) xl:[--hero-h:max(100svh,700px)]"
     >
+      <ParallaxLayer
+        y={[0, 500]}
+        aria-hidden="true"
+        className="absolute inset-0 -z-10"
+        style={dottedBackground}
+      />
+
       <div className="flex flex-col pt-32 md:pt-48 xl:pt-[calc(var(--hero-h)/2-145.5px)]">
+        <ParallaxLayer y={[0, -100]}>
         <ul className="flex gap-6 px-6 md:px-16 xl:gap-[34.35px] xl:pr-0 xl:pl-[54px]">
           {heroStats.map((stat) => (
             <li
@@ -31,14 +42,19 @@ export default function Hero() {
             </li>
           ))}
         </ul>
-        <Image
-          src="/HeroImage.png"
-          alt="Halftone illustration of people working together"
-          width={668}
-          height={364}
-          preload
-          className="mt-auto w-full max-w-[42rem] pt-12 mix-blend-multiply xl:w-[668px] xl:pt-0"
-        />
+        </ParallaxLayer>
+        {/* Blend lives on the layer: its transform isolates the image from the dots it multiplies onto.
+            Held still on mobile, where the image sits above the headline and would slide over it. */}
+        <ParallaxLayer y={[0, 120]} className="mt-auto mix-blend-multiply max-md:transform-none!">
+          <Image
+            src="/HeroImage.png"
+            alt="Halftone illustration of people working together"
+            width={668}
+            height={364}
+            preload
+            className="w-full max-w-[42rem] pt-12 xl:w-[668px] xl:pt-0"
+          />
+        </ParallaxLayer>
       </div>
 
       <div className="flex flex-col justify-center border-[#101010] px-6 pt-12 pb-24 md:border-l-4 md:pt-24 md:pr-12 md:pl-[14%] xl:border-l-[5px] xl:pt-[70px] xl:pr-0 xl:pb-0 xl:pl-[197px]">
@@ -66,6 +82,6 @@ export default function Hero() {
       >
         Scroll to partnerships <HiArrowDown aria-hidden="true" className="xl:size-[18px] xl:-translate-y-0.5" />
       </Link>
-    </section>
+    </ParallaxSection>
   );
 }

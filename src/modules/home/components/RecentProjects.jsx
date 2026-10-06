@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { HiArrowDown } from 'react-icons/hi';
+import { ParallaxLayer, ParallaxSection } from '@/components';
 import { projectLayout, projects, projectsIntro } from '../data';
 
 const dottedBackground = {
@@ -7,6 +8,10 @@ const dottedBackground = {
   backgroundImage: 'radial-gradient(#c5cce8 1.5px, transparent 1.5px)',
   backgroundSize: '14px 14px',
 };
+
+// On desktop the middle column glides past its neighbours, landing in line with them when the
+// section is centred on screen. Held still on mobile, where the cards stack and would overlap.
+const MIDDLE_COLUMN_Y = [64, -64];
 
 function ProjectCard({ project }) {
   const isDark = project.theme === 'dark';
@@ -55,8 +60,8 @@ function ProjectCard({ project }) {
 
 export default function RecentProjects() {
   return (
-    <section
-      className="flex min-h-screen w-full snap-start flex-col p-1"
+    <ParallaxSection
+      className="flex min-h-screen w-full snap-start flex-col overflow-hidden p-1"
       style={dottedBackground}
     >
       <div className="grid flex-1 grid-cols-1 gap-[2px] md:min-h-0 md:grid-cols-3 md:grid-rows-2">
@@ -64,11 +69,21 @@ export default function RecentProjects() {
           <h2 className="text-4xl font-bold tracking-tight md:text-5xl">{projectsIntro.title}</h2>
           <p className="mt-2 max-w-xs text-sm md:text-base">{projectsIntro.subtitle}</p>
         </div>
-        {projectLayout.map(({ id, cell }) => (
-          <div key={id} className={`h-full ${cell}`}>
-            <ProjectCard project={projects[id]} />
-          </div>
-        ))}
+        {projectLayout.map(({ id, column, cell }) =>
+          column === 2 ? (
+            <ParallaxLayer
+              key={id}
+              y={MIDDLE_COLUMN_Y}
+              className={`h-full max-md:transform-none! ${cell}`}
+            >
+              <ProjectCard project={projects[id]} />
+            </ParallaxLayer>
+          ) : (
+            <div key={id} className={`h-full ${cell}`}>
+              <ProjectCard project={projects[id]} />
+            </div>
+          )
+        )}
       </div>
 
       <Link
@@ -77,6 +92,6 @@ export default function RecentProjects() {
       >
         Scroll to about <HiArrowDown aria-hidden="true" />
       </Link>
-    </section>
+    </ParallaxSection>
   );
 }
