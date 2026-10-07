@@ -108,10 +108,11 @@ export const projects = {
   },
 };
 
+// riseFrom: how many px below its cell a card starts as the section scrolls in.
 export const projectLayout = [
-  { id: 'ctrlAltPrebunk', cell: 'md:col-start-2 md:row-start-1' },
-  { id: 'aiPolicyAgedCare', cell: 'md:col-start-3 md:row-start-1' },
-  { id: 'worldDisastersReport', cell: 'md:col-start-1 md:row-start-2' },
-  { id: 'disinformer', cell: 'md:col-start-2 md:row-start-2' },
-  { id: 'demystifyingLlms', cell: 'md:col-start-3 md:row-start-2' },
+  { id: 'ctrlAltPrebunk', cell: 'md:col-start-2 md:row-start-1', riseFrom: 60 },
+  { id: 'aiPolicyAgedCare', cell: 'md:col-start-3 md:row-start-1', riseFrom: 120 },
+  { id: 'worldDisastersReport', cell: 'md:col-start-1 md:row-start-2', riseFrom: 60 },
+  { id: 'disinformer', cell: 'md:col-start-2 md:row-start-2', riseFrom: 120 },
+  { id: 'demystifyingLlms', cell: 'md:col-start-3 md:row-start-2', riseFrom: 180 },
 ];

@@ -9,7 +9,7 @@ export default function HomePage() {
     <PageLayout
       as="main"
       offsetHeader={false}
-      className="min-h-screen bg-[#E3E3E3] text-white relative flex flex-col items-center overflow-y-scroll h-screen motion-safe:scroll-smooth"
+      className="min-h-screen bg-[#E3E3E3] text-white relative flex flex-col items-center"
     >
       <Hero />
       <PartnershipsSection />
