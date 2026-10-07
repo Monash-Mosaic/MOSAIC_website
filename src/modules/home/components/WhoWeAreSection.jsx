@@ -14,26 +14,26 @@ const topics = [
   {
     id: 'capabilities',
     label: 'CAPABILITIES',
-    heading: 'CAPABILITIES.EXE',
-    description: 'Capabilities information will be added here.',
+    heading: 'FULL-STACK & AI SYSTEMS',
+    description: '**Engineering:** End-to-end software delivery - from architecture and UI/UX design to automated testing, deployment, and long-term maintenance. \n\n**Community & Campus:** Event organisers and tech hosts across Monash O-Week, Open Day, and internal technical workshops for the next generation of engineers.',
   },
   {
     id: 'talent-pipeline',
     label: 'TALENT_PIPELINE',
-    heading: 'TALENT_PIPELINE.EXE',
-    description: 'Talent pipeline information will be added here.',
+    heading: 'ENGINEERING & ACADEMIC TALENT',
+    description: '**Rigorous Selection:** Our team is built through a competitive, multi-stage recruitment process targeting top-tier Monash developers and researchers. \n\n**Specialist Advisory:** Directly guided by Monash Faculty staff, PhD candidates, and AI researchers with real industry leadership backgrounds, giving us instant access to domain expertise when tackling complex architecture.',
   },
   {
     id: 'sponsor-advantage',
     label: 'SPONSOR_ADVANTAGE',
-    heading: 'SPONSOR_ADVANTAGE.EXE',
-    description: 'Sponsor information will be added here.',
+    heading: 'THE PARTNERSHIP VALUE MODEL',
+    description: '**[0% AGENCY MARKUP]** Entire budget goes directly into tech development. \n\n**[100% IP RETENTION]** You retain full, unencumbered ownership of all code and intellectual property. \n\n**[TALENT ACCESS]** Direct, first-look recruitment access to Monash’s top engineering graduates. \n\n**[HIGH-IMPACT CSR]** Directly invest in real-world student innovation while delivering production-grade software for social good.',
   },
   {
     id: 'track-record',
     label: 'TRACK_RECORD',
-    heading: 'TRACK_RECORD.EXE',
-    description: 'Track record information will be added here.',
+    heading: 'PROVEN DELIVERY',
+    description: 'Production software delivered for global leaders including the **International Federation of Red Cross (IFRC)**, with active initiatives underway alongside Australian non-profits like **MCCSA**.',
   },
 ];
 const CONTACT_EMAIL = 'mosaic@monash.edu';
@@ -43,6 +43,18 @@ const sectionStyle = {
   backgroundSize: '360px 360px',
   backgroundRepeat: 'repeat',
 };
+
+function withBold(text) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} className="[-webkit-text-stroke:0.04em_currentColor]">
+        {part}
+      </strong>
+    ) : (
+      part
+    )
+  );
+}
 
 export default function WhoWeAreSection() {
   const [activeTopic, setActiveTopic] = useState(topics[0]);
@@ -133,8 +145,8 @@ export default function WhoWeAreSection() {
             {activeTopic ? (
               <div aria-live="polite">
                 <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
-                <p className="mt-5 max-w-4xl text-base leading-relaxed font-semibold md:text-lg">
-                  {activeTopic.description}
+                <p className="mt-5 max-w-4xl text-base leading-relaxed font-semibold whitespace-pre-line md:text-lg">
+                  {withBold(activeTopic.description)}
                 </p>
               </div>
             ) : (
