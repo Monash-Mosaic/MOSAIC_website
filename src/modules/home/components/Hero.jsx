@@ -16,8 +16,6 @@ const dottedBackground = {
 
 export default function Hero() {
   return (
-    // Progress runs from page load (0) until the hero has scrolled fully out of view (1), so every
-    // layer starts in its designed position
     <ParallaxSection
       offset={['start start', 'end start']}
       className="relative isolate grid min-h-svh w-full shrink-0 snap-start grid-cols-1 overflow-hidden text-ink md:grid-cols-2 xl:min-h-(--hero-h) xl:[--hero-h:max(100svh,700px)]"
@@ -30,7 +28,7 @@ export default function Hero() {
       />
 
       <div className="flex flex-col pt-32 md:pt-48 xl:pt-[calc(var(--hero-h)/2-145.5px)]">
-        <ParallaxLayer y={[0, -100]}>
+        <ParallaxLayer y={[0, -60]}>
         <ul className="flex gap-6 px-6 md:px-16 xl:gap-[34.35px] xl:pr-0 xl:pl-[54px]">
           {heroStats.map((stat) => (
             <li
@@ -43,9 +41,7 @@ export default function Hero() {
           ))}
         </ul>
         </ParallaxLayer>
-        {/* Blend lives on the layer: its transform isolates the image from the dots it multiplies onto.
-            Held still on mobile, where the image sits above the headline and would slide over it. */}
-        <ParallaxLayer y={[0, 120]} className="mt-auto mix-blend-multiply max-md:transform-none!">
+        <ParallaxLayer y={[0, 100]} className="mt-auto mix-blend-multiply max-md:transform-none!">
           <Image
             src="/HeroImage.png"
             alt="Halftone illustration of people working together"
@@ -58,22 +54,26 @@ export default function Hero() {
       </div>
 
       <div className="flex flex-col justify-center border-[#101010] px-6 pt-12 pb-24 md:border-l-4 md:pt-24 md:pr-12 md:pl-[14%] xl:border-l-[5px] xl:pt-[70px] xl:pr-0 xl:pb-0 xl:pl-[197px]">
-        <h1 className="font-mono text-4xl leading-tight font-semibold md:text-5xl md:leading-[1.35] xl:max-w-[483px] xl:text-[52px] xl:leading-[normal]">
-          Building Production-Ready Software &amp; AI Solutions For{' '}
-          <span className="relative isolate whitespace-nowrap before:absolute before:-right-1.5 before:bottom-0 before:-left-1 before:-z-0 before:h-[0.25em] before:rounded-[10px] before:bg-lime/70">
-            Social Good
-          </span>
-        </h1>
-        <p className="mt-4 max-w-xl text-lg md:text-xl">
-          We partner with global humanitarian organisations, research labs, and industry leaders to
-          build high-impact software.
-        </p>
-        <Link
-          href="/contact"
-          className="mt-8 self-start rounded-md bg-lime px-5 py-2 font-mono text-3xl font-semibold transition-colors xl:mt-5.5 xl:flex xl:h-[59px] xl:w-[272px] xl:items-center xl:justify-center xl:rounded-[13px] xl:p-0 xl:text-[34px] duration-150 hover:bg-lime-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
-        >
-          Get in touch
-        </Link>
+        <ParallaxLayer y={[0, -60]} className="flex flex-col max-md:transform-none!">
+          <h1 className="font-mono text-4xl leading-tight font-semibold md:text-5xl md:leading-[1.35] xl:max-w-[483px] xl:text-[52px] xl:leading-[normal]">
+            Building Production-Ready Software &amp; AI Solutions For{' '}
+            <span className="relative isolate whitespace-nowrap before:absolute before:-right-1.5 before:bottom-0 before:-left-1 before:-z-0 before:h-[0.25em] before:rounded-[10px] before:bg-lime/70">
+              Social Good
+            </span>
+          </h1>
+          <p className="mt-4 max-w-xl text-lg md:text-xl">
+            We partner with global humanitarian organisations, research labs, and industry leaders to
+            build high-impact software.
+          </p>
+        </ParallaxLayer>
+        <ParallaxLayer y={[0, -40]} className="flex flex-col max-md:transform-none!">
+          <Link
+            href="/contact"
+            className="mt-8 self-start rounded-md bg-lime px-5 py-2 font-mono text-3xl font-semibold transition-colors xl:mt-5.5 xl:flex xl:h-[59px] xl:w-[272px] xl:items-center xl:justify-center xl:rounded-[13px] xl:p-0 xl:text-[34px] duration-150 hover:bg-lime-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+          >
+            Get in touch
+          </Link>
+        </ParallaxLayer>
       </div>
 
       <Link

@@ -70,7 +70,7 @@ export default function WhoWeAreSection() {
       className="relative isolate w-full snap-start overflow-hidden bg-white text-[#213359]"
     >
       <ParallaxLayer
-        y={[-80, 80]}
+        y={[-160, 160]}
         aria-hidden="true"
         className="absolute inset-x-0 -inset-y-24 -z-10"
         style={sectionStyle}

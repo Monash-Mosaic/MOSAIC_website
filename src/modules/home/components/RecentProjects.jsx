@@ -9,16 +9,13 @@ const dottedBackground = {
   backgroundSize: '14px 14px',
 };
 
-// On desktop the middle column glides past its neighbours, landing in line with them when the
-// section is centred on screen. Held still on mobile, where the cards stack and would overlap.
-const MIDDLE_COLUMN_Y = [64, -64];
-
 function ProjectCard({ project }) {
   const isDark = project.theme === 'dark';
 
   return (
     <article
       className={`flex h-full flex-col p-5 md:p-6 ${isDark ? 'bg-navy text-white' : 'bg-white text-ink'}`}
+      id="projects"
     >
       <div className="mb-3 min-h-16 flex-1">
         {project.image ? (
@@ -60,31 +57,32 @@ function ProjectCard({ project }) {
 
 export default function RecentProjects() {
   return (
-    <ParallaxSection
-      className="flex min-h-screen w-full snap-start flex-col overflow-hidden p-1"
-      style={dottedBackground}
-    >
-      <div className="grid flex-1 grid-cols-1 gap-[2px] md:min-h-0 md:grid-cols-3 md:grid-rows-2">
+    <ParallaxSection className="relative isolate flex min-h-screen w-full snap-start flex-col overflow-hidden p-1">
+      <ParallaxLayer
+        y={[-160, 160]}
+        aria-hidden="true"
+        className="absolute inset-0 -z-10"
+        style={dottedBackground}
+      />
+      <ParallaxSection
+        as="div"
+        offset={['start end', 'start start']}
+        className="grid flex-1 grid-cols-1 gap-[2px] md:min-h-0 md:grid-cols-3 md:grid-rows-2"
+      >
         <div className="bg-navy px-5 py-6 text-white md:col-start-1 md:row-start-1 md:px-6">
           <h2 className="text-4xl font-bold tracking-tight md:text-5xl">{projectsIntro.title}</h2>
           <p className="mt-2 max-w-xs text-sm md:text-base">{projectsIntro.subtitle}</p>
         </div>
-        {projectLayout.map(({ id, column, cell }) =>
-          column === 2 ? (
-            <ParallaxLayer
-              key={id}
-              y={MIDDLE_COLUMN_Y}
-              className={`h-full max-md:transform-none! ${cell}`}
-            >
-              <ProjectCard project={projects[id]} />
-            </ParallaxLayer>
-          ) : (
-            <div key={id} className={`h-full ${cell}`}>
-              <ProjectCard project={projects[id]} />
-            </div>
-          )
-        )}
-      </div>
+        {projectLayout.map(({ id, cell, riseFrom }) => (
+          <ParallaxLayer
+            key={id}
+            y={[riseFrom, 0]}
+            className={`h-full max-md:transform-none! ${cell}`}
+          >
+            <ProjectCard project={projects[id]} />
+          </ParallaxLayer>
+        ))}
+      </ParallaxSection>
 
       <Link
         href="#about"

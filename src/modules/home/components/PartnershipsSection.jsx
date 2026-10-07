@@ -100,9 +100,7 @@ export default function PartnershipsSection() {
         py-14
       "
     >
-      {/* Background Particles: drift behind the page as one layer. A symmetric range lags the
-          scroll slowly enough that the layer's edges never come into view, so it needs no overhang. */}
-      <ParallaxLayer y={[-80, 80]} className="pointer-events-none absolute inset-0">
+      <ParallaxLayer y={[-300, 300]} className="pointer-events-none absolute inset-0">
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
           <motion.canvas
             ref={canvasRef}
@@ -145,7 +143,7 @@ export default function PartnershipsSection() {
 
       {/* Partners */}
       <ParallaxLayer
-        y={[40, -40]}
+        y={[80, -20]}
         className="
           relative 
           z-10
