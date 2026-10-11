@@ -1,6 +1,8 @@
 
 import { Fira_Code, Inter, Space_Grotesk } from "next/font/google";
+import { SmoothScroll } from "@/components";
 
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 
@@ -36,6 +38,7 @@ export default function RootLayout({ children }) {
 
         className={`${spaceGrotesk.className} antialiased`}
       >
+        <SmoothScroll />
         {children}
       </body>
     </html>

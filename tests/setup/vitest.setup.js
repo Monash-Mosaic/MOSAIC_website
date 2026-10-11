@@ -67,6 +67,8 @@ vi.mock('framer-motion', () => {
     AnimatePresence: ({ children }) => children,
     useScroll: vi.fn(() => ({ scrollYProgress: 0 })),
     useTransform: vi.fn(() => 0),
+    frame: { update: vi.fn() },
+    cancelFrame: vi.fn(),
   };
 });
 
