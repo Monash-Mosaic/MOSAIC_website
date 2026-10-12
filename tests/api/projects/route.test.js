@@ -50,4 +50,18 @@ describe('GET /api/projects', () => {
       projects: [],
     });
   });
+
+  it('reports an uncached response when the cache metadata is missing', async () => {
+    getProjects.mockResolvedValue({
+      projects: normalizedProjects,
+      error: null,
+    });
+
+    const response = await GET();
+    await expect(response.json()).resolves.toMatchObject({
+      success: true,
+      cached: false,
+      cachedAt: null,
+    });
+  });
 });

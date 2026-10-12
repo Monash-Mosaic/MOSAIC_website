@@ -75,6 +75,29 @@ describe('getGoogleAccessToken', () => {
 
     await expect(getGoogleAccessToken()).rejects.toThrow(/Token expired/);
   });
+
+  it('reports the HTTP status when the error body is not JSON', async () => {
+    fetch.mockResolvedValue({
+      ok: false,
+      status: 503,
+      json: async () => {
+        throw new Error('not json');
+      },
+    });
+
+    await expect(getGoogleAccessToken()).rejects.toThrow(/HTTP 503/);
+  });
+
+  it('uses the default lifetime when Google omits expires_in', async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ access_token: 'short-lived' }),
+    });
+
+    await expect(getGoogleAccessToken()).resolves.toBe('short-lived');
+    await expect(getGoogleAccessToken()).resolves.toBe('short-lived');
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('fetchWithGoogleAccessToken', () => {
@@ -130,5 +153,27 @@ describe('fetchWithGoogleAccessToken', () => {
     await expect(
       fetchWithGoogleAccessToken('https://script.google.com/exec', 'token', { maxRedirects: 2 }),
     ).rejects.toThrow(/Too many redirects/);
+  });
+
+  it('rejects a redirect that has no Location header', async () => {
+    fetch.mockResolvedValue({
+      status: 302,
+      headers: new Headers(),
+    });
+
+    await expect(fetchWithGoogleAccessToken('https://script.google.com/exec', 'token')).rejects.toThrow(
+      /without a Location header/,
+    );
+  });
+
+  it('rejects Okta login redirects', async () => {
+    fetch.mockResolvedValue({
+      status: 302,
+      headers: new Headers({ location: 'https://monash.okta.com/login' }),
+    });
+
+    await expect(fetchWithGoogleAccessToken('https://script.google.com/exec', 'token')).rejects.toThrow(
+      /Google login redirect/,
+    );
   });
 });

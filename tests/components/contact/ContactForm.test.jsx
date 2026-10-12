@@ -47,4 +47,22 @@ describe('ContactForm', () => {
 
     vi.unstubAllGlobals();
   });
+
+  it('shows an error when the proxy responds with a failure status', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false }));
+
+    const { user } = render(<ContactForm />);
+    await user.type(screen.getByPlaceholderText('Type your name here'), 'Ada');
+    await user.type(screen.getByPlaceholderText('abc@gmail.com'), 'ada@example.com');
+    await user.type(screen.getByPlaceholderText('Type your message here'), 'Hello');
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
+    });
+    expect(screen.getByPlaceholderText('Type your name here')).toHaveValue('Ada');
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeEnabled();
+
+    vi.unstubAllGlobals();
+  });
 });

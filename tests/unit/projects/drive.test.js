@@ -29,6 +29,7 @@ describe('extractDriveFileId', () => {
     expect(extractDriveFileId(null)).toBeNull();
     expect(extractDriveFileId('https://example.com/photo.png')).toBeNull();
     expect(extractDriveFileId('https://drive.google.com/open?id=short')).toBeNull();
+    expect(extractDriveFileId('http://[')).toBeNull();
   });
 });
 
@@ -42,6 +43,7 @@ describe('toProxiedProjectImage', () => {
   it('leaves public or empty image paths unchanged', () => {
     expect(toProxiedProjectImage('/ScalableSolutions.svg')).toBe('/ScalableSolutions.svg');
     expect(toProxiedProjectImage('')).toBe('');
+    expect(toProxiedProjectImage()).toBe('');
   });
 });
 
