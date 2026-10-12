@@ -42,9 +42,18 @@ describe('home page data', () => {
       expect(project.href).toBe('/projects');
       expect(project.lines.length).toBeGreaterThan(0);
       expect(['dark', 'light']).toContain(project.theme);
-      expect(slot.cell).toMatch(/md:col-start-/);
+      expect(['feature', 'equal']).toContain(slot.place);
       expect(slot.riseFrom).toBeGreaterThan(0);
     }
+    expect(projectLayout.filter((slot) => slot.place === 'feature').map((slot) => slot.id)).toEqual([
+      'worldDisastersReport',
+    ]);
+    expect(projectLayout.filter((slot) => slot.place === 'equal').map((slot) => slot.id)).toEqual([
+      'ctrlAltPrebunk',
+      'aiPolicyAgedCare',
+      'disinformer',
+      'demystifyingLlms',
+    ]);
     expect(projects.worldDisastersReport.lines.some((line) => line.highlight)).toBe(true);
     expect(projects.demystifyingLlms.lines.some((line) => line.emphasis)).toBe(true);
   });

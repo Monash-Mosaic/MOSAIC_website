@@ -67,21 +67,38 @@ export default function RecentProjects() {
       <ParallaxSection
         as="div"
         offset={['start end', 'start start']}
-        className="grid flex-1 grid-cols-1 gap-[2px] md:min-h-0 md:grid-cols-3 md:grid-rows-2"
+        className="grid flex-1 grid-cols-1 gap-[2px] md:min-h-0 md:grid-cols-3"
       >
-        <div className="bg-navy px-5 py-6 text-white md:col-start-1 md:row-start-1 md:px-6">
-          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">{projectsIntro.title}</h2>
-          <p className="mt-2 max-w-xs text-sm md:text-base">{projectsIntro.subtitle}</p>
+        <div className="grid grid-rows-[auto_auto] gap-[2px] md:h-full md:min-h-0 md:grid-rows-[minmax(0,1fr)_minmax(0,4fr)]">
+          <div className="h-auto bg-navy px-5 py-6 text-white md:h-full md:min-h-0 md:self-stretch md:overflow-hidden md:px-6 md:py-4">
+            <h2 className="text-4xl font-bold tracking-tight md:text-5xl">{projectsIntro.title}</h2>
+            <p className="mt-2 max-w-xs text-sm md:text-base">{projectsIntro.subtitle}</p>
+          </div>
+          {projectLayout
+            .filter((slot) => slot.place === 'feature')
+            .map(({ id, riseFrom }) => (
+              <ParallaxLayer
+                key={id}
+                y={[riseFrom, 0]}
+                className="h-auto min-h-0 max-md:transform-none! md:h-full md:self-stretch"
+              >
+                <ProjectCard project={projects[id]} />
+              </ParallaxLayer>
+            ))}
         </div>
-        {projectLayout.map(({ id, cell, riseFrom }) => (
-          <ParallaxLayer
-            key={id}
-            y={[riseFrom, 0]}
-            className={`h-full max-md:transform-none! ${cell}`}
-          >
-            <ProjectCard project={projects[id]} />
-          </ParallaxLayer>
-        ))}
+        <div className="grid grid-cols-1 gap-[2px] md:col-span-2 md:h-full md:min-h-0 md:grid-cols-2 md:grid-rows-2">
+          {projectLayout
+            .filter((slot) => slot.place === 'equal')
+            .map(({ id, riseFrom }) => (
+              <ParallaxLayer
+                key={id}
+                y={[riseFrom, 0]}
+                className="h-full min-h-0 max-md:transform-none!"
+              >
+                <ProjectCard project={projects[id]} />
+              </ParallaxLayer>
+            ))}
+        </div>
       </ParallaxSection>
 
       <Link

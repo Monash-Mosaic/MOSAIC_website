@@ -109,12 +109,13 @@ export const projects = {
 };
 
 // riseFrom: how many px below its cell a card starts as the section scrolls in.
+// feature sits under the intro in column one. equal cards fill the remaining columns.
 export const projectLayout = [
-  { id: 'ctrlAltPrebunk', cell: 'md:col-start-2 md:row-start-1', riseFrom: 60 },
-  { id: 'aiPolicyAgedCare', cell: 'md:col-start-3 md:row-start-1', riseFrom: 120 },
-  { id: 'worldDisastersReport', cell: 'md:col-start-1 md:row-start-2', riseFrom: 60 },
-  { id: 'disinformer', cell: 'md:col-start-2 md:row-start-2', riseFrom: 120 },
-  { id: 'demystifyingLlms', cell: 'md:col-start-3 md:row-start-2', riseFrom: 180 },
+  { id: 'worldDisastersReport', place: 'feature', riseFrom: 60 },
+  { id: 'ctrlAltPrebunk', place: 'equal', riseFrom: 60 },
+  { id: 'aiPolicyAgedCare', place: 'equal', riseFrom: 120 },
+  { id: 'disinformer', place: 'equal', riseFrom: 120 },
+  { id: 'demystifyingLlms', place: 'equal', riseFrom: 180 },
 ];
 
 
