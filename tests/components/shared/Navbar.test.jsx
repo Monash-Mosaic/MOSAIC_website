@@ -17,10 +17,19 @@ describe('Navbar', () => {
     expect(screen.getByRole('link', { name: 'Contact Us' })).toHaveAttribute('href', '/contact');
   });
 
-  it('opens the mobile menu', async () => {
+  it('opens the mobile menu and closes it from a link', async () => {
+    mockUsePathname.mockReturnValue('/#about');
     const { user } = render(<Navbar />);
+    expect(screen.getByRole('link', { name: 'About' })).toHaveClass('underline');
+
     await user.click(screen.getByRole('button', { name: 'Open menu' }));
-    expect(screen.getByRole('button', { name: 'Close menu' })).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: 'Projects' })).toHaveLength(2);
+    expect(screen.getByRole('button', { name: 'Close menu' })).toHaveAttribute('aria-expanded', 'true');
+
+    await user.click(screen.getAllByRole('link', { name: 'Projects' })[1]);
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveAttribute('aria-expanded', 'false');
+
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
+    await user.click(screen.getAllByRole('link', { name: 'Contact Us' })[1]);
+    expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
   });
 });

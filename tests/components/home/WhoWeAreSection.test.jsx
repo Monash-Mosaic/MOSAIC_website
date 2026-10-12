@@ -47,4 +47,28 @@ describe('WhoWeAreSection', () => {
 
     expect(await screen.findByRole('button', { name: '[ EMAIL COPIED ]' })).toBeInTheDocument();
   });
+
+  it('renders bold phrases inside a topic description', () => {
+    render(<WhoWeAreSection />);
+
+    fireEvent.click(screen.getByRole('button', { name: '[01] CAPABILITIES' }));
+
+    expect(screen.getByRole('button', { name: '[01] CAPABILITIES' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('Engineering:').tagName).toBe('STRONG');
+    expect(screen.getByText('FULL-STACK & AI SYSTEMS')).toBeInTheDocument();
+  });
+
+  it('reports a failed copy when the clipboard is unavailable or rejects', async () => {
+    const writeText = navigator.clipboard.writeText.bind(navigator.clipboard);
+    navigator.clipboard.writeText = undefined;
+    render(<WhoWeAreSection />);
+    fireEvent.click(screen.getByRole('button', { name: /contact us/i }));
+    fireEvent.click(screen.getByRole('button', { name: '[ CLICK TO COPY EMAIL ]' }));
+    expect(screen.getByRole('button', { name: '[ COPY FAILED ]' })).toBeInTheDocument();
+
+    navigator.clipboard.writeText = () => Promise.reject(new Error('denied'));
+    fireEvent.click(screen.getByRole('button', { name: '[ COPY FAILED ]' }));
+    expect(await screen.findByRole('button', { name: '[ COPY FAILED ]' })).toBeInTheDocument();
+    navigator.clipboard.writeText = writeText;
+  });
 });

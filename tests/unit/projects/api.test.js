@@ -53,12 +53,19 @@ describe('normalizeProject', () => {
       bgColor: '#ffffffff',
     });
 
-    const untitled = normalizeProject({ link: 'PENDING_APPROVAL' }, 1);
+    const untitled = normalizeProject({ link: 'PENDING_APPROVAL', name: '   ', subtitle: '   ' }, 1);
     expect(untitled.title).toBe('Untitled project');
+    expect(untitled.subtitle).toBe('');
+    expect(untitled.previewTitle).toBe('Untitled project');
     expect(untitled.id).toBe('project-1');
     expect(untitled.link).toBeNull();
     expect(untitled.imageAlign).toBe('right');
     expect(untitled.bgColor).toBe('#C8D1F0');
+    expect(untitled.image).toBe('');
+
+    const capped = normalizeProject({ name: 'Late', id: 'late' }, 10);
+    expect(capped.delay).toBe(0.6);
+    expect(capped.imageAlign).toBe('left');
   });
 });
 
@@ -176,5 +183,58 @@ describe('getProjects', () => {
     const { refreshProjectsCache } = await loadApi({ appEnv: 'production' });
     await refreshProjectsCache();
     expect(cacheMocks.clearProjectsMemoryCache).toHaveBeenCalled();
+  });
+
+  it('loads the local fixture directly from the source helper', async () => {
+    const { fetchProjectsFromSource } = await loadApi({ appEnv: 'local' });
+    const result = await fetchProjectsFromSource();
+    expect(result.projects[0].title).toBe('Community Hub');
+    expect(result.error).toBeNull();
+  });
+
+  it('rejects a production fetch when Apps Script is not configured', async () => {
+    const { fetchProjectsFromSource } = await loadApi({ appEnv: 'production', appsScriptUrl: '' });
+    authMocks.getGoogleAccessToken.mockResolvedValue('token');
+    await expect(fetchProjectsFromSource()).rejects.toThrow(/Missing APPS_SCRIPT_URL/);
+  });
+
+  it('rejects a non-OK Apps Script response, a login page, and a payload without projects', async () => {
+    authMocks.getGoogleAccessToken.mockResolvedValue('token');
+    const { fetchProjectsFromSource } = await loadApi({ appEnv: 'production' });
+
+    authMocks.fetchWithGoogleAccessToken.mockResolvedValue({
+      ok: false,
+      status: 500,
+      text: async () => '',
+    });
+    await expect(fetchProjectsFromSource()).rejects.toThrow(/HTTP 500/);
+
+    authMocks.fetchWithGoogleAccessToken.mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: async () => '<html>Sign in</html>',
+    });
+    await expect(fetchProjectsFromSource()).rejects.toThrow(/login page/);
+
+    authMocks.fetchWithGoogleAccessToken.mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: async () => JSON.stringify({ success: false }),
+    });
+    await expect(fetchProjectsFromSource()).rejects.toThrow(/projects array/);
+  });
+
+  it('returns an error when the source and the stale cache are both empty', async () => {
+    cacheMocks.isProjectsCacheFresh.mockReturnValue(false);
+    cacheMocks.readProjectsCache.mockResolvedValue({ projects: [], cachedAt: 1 });
+    authMocks.getGoogleAccessToken.mockRejectedValue('offline');
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { getProjects } = await loadApi({ appEnv: 'production' });
+    const result = await getProjects({ force: true });
+
+    expect(result.projects).toEqual([]);
+    expect(result.cached).toBe(false);
+    expect(result.error).toMatch(/login page/);
   });
 });

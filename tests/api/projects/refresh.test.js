@@ -77,4 +77,16 @@ describe('POST /api/projects/refresh', () => {
     const response = await POST(requestWithAuth('secret-token'));
     expect(response.status).toBe(502);
   });
+
+  it('returns 500 when refresh throws', async () => {
+    refreshProjectsCache.mockRejectedValueOnce(new Error('disk full'));
+    const failed = await POST(requestWithAuth('secret-token'));
+    expect(failed.status).toBe(500);
+    await expect(failed.json()).resolves.toMatchObject({ error: 'disk full' });
+
+    refreshProjectsCache.mockRejectedValueOnce('offline');
+    const nameless = await POST(requestWithAuth('secret-token'));
+    expect(nameless.status).toBe(500);
+    await expect(nameless.json()).resolves.toMatchObject({ error: 'Failed to refresh projects cache' });
+  });
 });
