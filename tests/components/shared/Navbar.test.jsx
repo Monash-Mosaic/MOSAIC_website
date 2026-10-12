@@ -12,7 +12,7 @@ describe('Navbar', () => {
     render(<Navbar />);
     expect(screen.getByRole('link', { name: 'MOSAIC logo' })).toHaveAttribute('href', '/');
     expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/#about');
-    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/projects');
+    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/#projects');
     expect(screen.getByRole('link', { name: 'Partners' })).toHaveAttribute('href', '/#partners');
     expect(screen.getByRole('link', { name: 'Contact Us' })).toHaveAttribute('href', '/contact');
   });

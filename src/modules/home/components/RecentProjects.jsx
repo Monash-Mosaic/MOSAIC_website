@@ -1,120 +1,82 @@
-'use client';
+import Link from 'next/link';
+import { HiArrowDown } from 'react-icons/hi';
+import { projectLayout, projects, projectsIntro } from '../data';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
-import useProjects from '@/modules/projects/useProjects';
+const dottedBackground = {
+  backgroundColor: '#e8eaf6',
+  backgroundImage: 'radial-gradient(#c5cce8 1.5px, transparent 1.5px)',
+  backgroundSize: '14px 14px',
+};
 
-const AUTOPLAY_MS = 6000;
+function ProjectCard({ project }) {
+  const isDark = project.theme === 'dark';
 
-function useSlidesPerView() {
-  const [slidesPerView, setSlidesPerView] = useState(1);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
-    const update = () => setSlidesPerView(mediaQuery.matches ? 3 : 1);
-
-    update();
-    mediaQuery.addEventListener('change', update);
-    return () => mediaQuery.removeEventListener('change', update);
-  }, []);
-
-  return slidesPerView;
-}
-
-function chunkProjects(projects, size) {
-  if (!projects.length) return [];
-
-  const pages = [];
-  for (let index = 0; index < projects.length; index += size) {
-    pages.push(projects.slice(index, index + size));
-  }
-  return pages;
-}
-
-function formatDescription(description) {
-  const text = description?.trim();
-  if (!text) return '';
-  return /[.!?]$/.test(text) ? text : `${text}.`;
-}
-
-function ProjectSlideCard({ project }) {
   return (
-    <div className="rounded-lg p-1 md:p-6 max-w-6xl h-full">
-      <div className="w-full h-50 md:h-70 flex items-center justify-center mb-4 p-6">
+    <article
+      className={`flex h-full flex-col p-5 md:p-6 ${isDark ? 'bg-navy text-white' : 'bg-white text-ink'}`}
+    >
+      <div className="mb-3 min-h-16 flex-1">
         {project.image ? (
           <img
             src={project.image}
-            alt={project.previewTitle}
-            referrerPolicy="no-referrer"
-            className="h-40 md:h-60 w-auto max-w-full object-contain border-[#6D92E2]/50 rounded-lg shadow-md"
+            alt=""
+            className="h-full w-full object-cover"
           />
         ) : (
-          <div className="h-40 md:h-60 w-full max-w-xs rounded-lg bg-white/60" />
+          <div
+            aria-hidden="true"
+            className={`h-full w-full ${isDark ? 'bg-white/10' : 'bg-navy/5'}`}
+          />
         )}
       </div>
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">{project.previewTitle}</h3>
-      <p className="text-sm text-gray-600">{formatDescription(project.description)}</p>
-    </div>
-  );
-}
 
-function CarouselSkeleton() {
-  return (
-    <div className="grid gap-2 md:gap-10 grid-cols-1 md:grid-cols-3 max-w-8xl mx-auto">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <div key={index} className="rounded-lg p-1 md:p-6 animate-pulse">
-          <div className="w-full h-50 md:h-70 flex items-center justify-center mb-4 p-6">
-            <div className="h-40 md:h-60 w-48 rounded-lg bg-white/70" />
-          </div>
-          <div className="h-5 w-2/3 mx-auto rounded bg-white/70 mb-3" />
-          <div className="h-4 w-5/6 mx-auto rounded bg-white/60" />
-        </div>
-      ))}
-    </div>
+      <h3 className="text-2xl leading-tight font-bold md:text-3xl">{project.title}</h3>
+      <div className="mt-2 space-y-0.5 text-sm leading-snug md:text-[15px]">
+        {project.lines.map((line) => (
+          <p
+            key={line.text}
+            className={
+              line.highlight ? 'font-semibold text-lime' : line.emphasis ? 'font-bold' : undefined
+            }
+          >
+            {line.text}
+          </p>
+        ))}
+      </div>
+      <Link
+        href={project.href}
+        className="mt-3 self-start rounded-md bg-lime px-3 py-1 text-sm font-bold text-ink transition-colors duration-150 hover:bg-lime-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      >
+        Visit Project
+      </Link>
+    </article>
   );
 }
 
 export default function RecentProjects() {
-  const { projects, loading, error } = useProjects();
-  const slidesPerView = useSlidesPerView();
-  const [page, setPage] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const touchStartX = useRef(0);
-
-  const pages = useMemo(() => chunkProjects(projects, slidesPerView), [projects, slidesPerView]);
-  const pageCount = pages.length;
-  const currentPage = pageCount === 0 ? 0 : Math.min(page, pageCount - 1);
-
-  useEffect(() => {
-    if (pageCount <= 1 || paused) return undefined;
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion) return undefined;
-
-    const timer = window.setInterval(() => {
-      setPage((current) => (current + 1) % pageCount);
-    }, AUTOPLAY_MS);
-
-    return () => window.clearInterval(timer);
-  }, [pageCount, paused, page]);
-
-  const goTo = (nextPage) => {
-    if (pageCount === 0) return;
-    setPage((nextPage + pageCount) % pageCount);
-  };
-
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="pt-50 bg-[#D6DEFF] py-30 px-6 text-center snap-start w-full"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+    <section
+      className="flex min-h-screen w-full snap-start flex-col p-1"
+      style={dottedBackground}
     >
-      <h2 className="text-4xl md:text-4xl font-extrabold text-[#4953A1] mb-12">#TODO RECENT PROJECTS</h2>
-    </motion.section>
+      <div className="grid flex-1 grid-cols-1 gap-[2px] md:min-h-0 md:grid-cols-3 md:grid-rows-2">
+        <div className="bg-navy px-5 py-6 text-white md:col-start-1 md:row-start-1 md:px-6">
+          <h2 className="text-4xl font-bold tracking-tight md:text-5xl">{projectsIntro.title}</h2>
+          <p className="mt-2 max-w-xs text-sm md:text-base">{projectsIntro.subtitle}</p>
+        </div>
+        {projectLayout.map(({ id, cell }) => (
+          <div key={id} className={`h-full ${cell}`}>
+            <ProjectCard project={projects[id]} />
+          </div>
+        ))}
+      </div>
+
+      <Link
+        href="#about"
+        className="mt-1 mr-2 mb-1 hidden shrink-0 items-center justify-end gap-1 font-mono text-xs tracking-widest text-ink uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ink md:flex"
+      >
+        Scroll to about <HiArrowDown aria-hidden="true" />
+      </Link>
+    </section>
   );
 }
