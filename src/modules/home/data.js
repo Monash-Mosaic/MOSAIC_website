@@ -108,10 +108,46 @@ export const projects = {
   },
 };
 
+// riseFrom: how many px below its cell a card starts as the section scrolls in.
 export const projectLayout = [
-  { id: 'ctrlAltPrebunk', cell: 'md:col-start-2 md:row-start-1' },
-  { id: 'aiPolicyAgedCare', cell: 'md:col-start-3 md:row-start-1' },
-  { id: 'worldDisastersReport', cell: 'md:col-start-1 md:row-start-2' },
-  { id: 'disinformer', cell: 'md:col-start-2 md:row-start-2' },
-  { id: 'demystifyingLlms', cell: 'md:col-start-3 md:row-start-2' },
+  { id: 'ctrlAltPrebunk', cell: 'md:col-start-2 md:row-start-1', riseFrom: 60 },
+  { id: 'aiPolicyAgedCare', cell: 'md:col-start-3 md:row-start-1', riseFrom: 120 },
+  { id: 'worldDisastersReport', cell: 'md:col-start-1 md:row-start-2', riseFrom: 60 },
+  { id: 'disinformer', cell: 'md:col-start-2 md:row-start-2', riseFrom: 120 },
+  { id: 'demystifyingLlms', cell: 'md:col-start-3 md:row-start-2', riseFrom: 180 },
+];
+
+
+export const topics = [
+  {
+    id: 'team-overview',
+    label: 'TEAM_OVERVIEW',
+    heading: 'FACULTY OF IT BACKED // EST. 2025',
+    description:
+      'Established in 2025, we’re a team of Monash students backed and funded by the Faculty of IT. We work directly with real-world clients to build and deliver software projects.',
+  },
+  {
+    id: 'capabilities',
+    label: 'CAPABILITIES',
+    heading: 'FULL-STACK & AI SYSTEMS',
+    description: '**Engineering:** End-to-end software delivery - from architecture and UI/UX design to automated testing, deployment, and long-term maintenance. \n\n**Community & Campus:** Event organisers and tech hosts across Monash O-Week, Open Day, and internal technical workshops for the next generation of engineers.',
+  },
+  {
+    id: 'talent-pipeline',
+    label: 'TALENT_PIPELINE',
+    heading: 'ENGINEERING & ACADEMIC TALENT',
+    description: '**Rigorous Selection:** Our team is built through a competitive, multi-stage recruitment process targeting top-tier Monash developers and researchers. \n\n**Specialist Advisory:** Directly guided by Monash Faculty staff, PhD candidates, and AI researchers with real industry leadership backgrounds, giving us instant access to domain expertise when tackling complex architecture.',
+  },
+  {
+    id: 'sponsor-advantage',
+    label: 'SPONSOR_ADVANTAGE',
+    heading: 'THE PARTNERSHIP VALUE MODEL',
+    description: '**[0% AGENCY MARKUP]** Entire budget goes directly into tech development. \n\n**[100% IP RETENTION]** You retain full, unencumbered ownership of all code and intellectual property. \n\n**[TALENT ACCESS]** Direct, first-look recruitment access to Monash’s top engineering graduates. \n\n**[HIGH-IMPACT CSR]** Directly invest in real-world student innovation while delivering production-grade software for social good.',
+  },
+  {
+    id: 'track-record',
+    label: 'TRACK_RECORD',
+    heading: 'PROVEN DELIVERY',
+    description: 'Production software delivered for global leaders including the **International Federation of Red Cross (IFRC)**, with active initiatives underway alongside Australian non-profits like **MCCSA**.',
+  },
 ];
