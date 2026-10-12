@@ -53,8 +53,8 @@ export const projects = {
   ctrlAltPrebunk: {
     title: 'Ctrl + Alt + Prebunk',
     theme: 'dark',
-    image: null,
-    href: '/projects',
+    image: '/prebunk.png',
+    href: 'https://ctrl-alt-prebunk.wdr26.org/en',
     lines: [
       { text: 'Client: International Federation of Red Cross' },
       { text: 'Presented at PAX Melbourne' },
@@ -64,8 +64,8 @@ export const projects = {
   aiPolicyAgedCare: {
     title: 'AI Policy in Aged Care',
     theme: 'light',
-    image: null,
-    href: '/projects',
+    image: '/aged_care_tactic.png',
+    href: '',
     lines: [
       { text: 'Client: Multicultural Communities Council of South Australia' },
       { text: 'Currently in development' },
@@ -75,8 +75,8 @@ export const projects = {
   worldDisastersReport: {
     title: 'World Disasters Report Playbook',
     theme: 'dark',
-    image: null,
-    href: '/projects',
+    image: '/wdr.png',
+    href: 'https://wdr26.org/',
     lines: [
       { text: 'Client: International Federation of Red Cross' },
       { text: '6 languages, 20k launch day visits', highlight: true },
@@ -88,8 +88,8 @@ export const projects = {
   disinformer: {
     title: 'Disinformer',
     theme: 'light',
-    image: null,
-    href: '/projects',
+    image: '/disinformer_primary.png',
+    href: 'https://disinformer.wdr26.org/',
     lines: [
       { text: 'Client: International Federation of Red Cross' },
       { text: 'Presented at PAX Melbourne' },
@@ -99,8 +99,8 @@ export const projects = {
   demystifyingLlms: {
     title: 'Demystifying LLMs',
     theme: 'dark',
-    image: null,
-    href: '/projects',
+    image: '/LLM_Project.png',
+    href: '',
     lines: [
       { text: 'Internal AI Engineering Project', emphasis: true },
       { text: 'Educational tool to demystify LLMs and teach safe, effective prompting, in development' },

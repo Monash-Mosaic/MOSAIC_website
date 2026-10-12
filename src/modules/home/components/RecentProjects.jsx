@@ -47,6 +47,8 @@ function ProjectCard({ project }) {
       </div>
       <Link
         href={project.href}
+        target="_blank"
+        rel="noopener noreferrer"
         className="mt-3 self-start rounded-md bg-lime px-3 py-1 text-sm font-bold text-ink transition-colors duration-150 hover:bg-lime-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       >
         Visit Project
