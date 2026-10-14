@@ -1,40 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { ParallaxLayer, ParallaxSection } from '@/components';
+import { topics } from '@/modules/home/data';
 
-const topics = [
-  {
-    id: 'team-overview',
-    label: 'TEAM_OVERVIEW',
-    heading: 'FACULTY OF IT BACKED // EST. 2025',
-    description:
-      'Established in 2025, we’re a team of Monash students backed and funded by the Faculty of IT. We work directly with real-world clients to build and deliver software projects.',
-  },
-  {
-    id: 'capabilities',
-    label: 'CAPABILITIES',
-    heading: 'CAPABILITIES.EXE',
-    description: 'Capabilities information will be added here.',
-  },
-  {
-    id: 'talent-pipeline',
-    label: 'TALENT_PIPELINE',
-    heading: 'TALENT_PIPELINE.EXE',
-    description: 'Talent pipeline information will be added here.',
-  },
-  {
-    id: 'sponsor-advantage',
-    label: 'SPONSOR_ADVANTAGE',
-    heading: 'SPONSOR_ADVANTAGE.EXE',
-    description: 'Sponsor information will be added here.',
-  },
-  {
-    id: 'track-record',
-    label: 'TRACK_RECORD',
-    heading: 'TRACK_RECORD.EXE',
-    description: 'Track record information will be added here.',
-  },
-];
 const CONTACT_EMAIL = 'mosaic@monash.edu';
 const sectionStyle = {
   backgroundColor: '#FFFFFF',
@@ -42,6 +11,18 @@ const sectionStyle = {
   backgroundSize: '360px 360px',
   backgroundRepeat: 'repeat',
 };
+
+function withBold(text) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} className="[-webkit-text-stroke:0.04em_currentColor]">
+        {part}
+      </strong>
+    ) : (
+      part
+    )
+  );
+}
 
 export default function WhoWeAreSection() {
   const [activeTopic, setActiveTopic] = useState(topics[0]);
@@ -64,18 +45,27 @@ export default function WhoWeAreSection() {
   }
 
   return (
-    <section
+    <ParallaxSection
       id="about"
-      className="w-full snap-start bg-white text-[#213359]"
+      className="relative isolate w-full snap-start overflow-hidden bg-white text-[#213359]"
     >
-      <div className="w-full px-5 py-12 md:px-12 md:py-16" style={sectionStyle}>
+      <ParallaxLayer
+        y={[-160, 160]}
+        aria-hidden="true"
+        className="absolute inset-x-0 -inset-y-24 -z-10"
+        style={sectionStyle}
+      />
+      <div className="w-full px-5 py-12 md:px-12 md:py-16">
         <div className="mx-auto w-full max-w-[1340px]">
         <h2 className="font-mono text-4xl leading-none font-bold md:text-5xl">Who we are</h2>
         <p className="mt-3 text-base font-semibold md:text-lg">
           Engineering for community resilience and global equity
         </p>
 
-        <div className="mt-10 flex min-h-[506px] w-full flex-col border border-[#213359] bg-[#D0FF63]/51 shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px]">
+        <ParallaxLayer
+          y={[32, -32]}
+          className="mt-10 flex min-h-[506px] w-full flex-col border border-[#213359] bg-[#D0FF63]/51 shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px]"
+        >
           <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
             <p className="whitespace-nowrap">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
             <p className="mt-2">&gt;SELECT_OPTION:</p>
@@ -123,8 +113,8 @@ export default function WhoWeAreSection() {
             {activeTopic ? (
               <div aria-live="polite">
                 <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
-                <p className="mt-5 max-w-4xl text-base leading-relaxed font-semibold md:text-lg">
-                  {activeTopic.description}
+                <p className="mt-5 max-w-4xl text-base leading-relaxed font-semibold whitespace-pre-line md:text-lg">
+                  {withBold(activeTopic.description)}
                 </p>
               </div>
             ) : (
@@ -170,10 +160,10 @@ export default function WhoWeAreSection() {
             )}
           </div>
           </div>
-        </div>
+        </ParallaxLayer>
         </div>
       </div>
-    </section>
+    </ParallaxSection>
   );
 }
 

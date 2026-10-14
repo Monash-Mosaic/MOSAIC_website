@@ -30,6 +30,12 @@ export default defineConfig({
         'src/app/**/layout.js',
         'src/app/globals.css',
       ],
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 });
