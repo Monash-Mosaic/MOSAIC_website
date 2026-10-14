@@ -1,46 +1,31 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import { PageLayout } from '@/components';
-import ContactForm from './components/ContactForm';
+import ContactPrompts from './components/ContactPrompts';
+import EmailCallout from './components/EmailCallout';
+import MakerspaceCard from './components/MakerspaceCard';
 
+// Desktop sizes come from the 1440px-wide Figma frame, converted to vw (px / 14.4)
+// so the layout keeps its proportions at any screen width. Below lg the page stacks.
 export default function ContactPage() {
   return (
     <PageLayout
       as="main"
-      className="min-h-screen bg-white text-[#213359] relative flex flex-col items-center"
+      offsetHeader={false}
+      className="flex min-h-screen flex-col bg-white text-ink"
     >
-      <section className="w-full flex flex-col items-center mt-10 px-4 pb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: 'spring',
-            duration: 1,
-            damping: 10,
-            stiffness: 50,
-          }}
-        >
-          <img src="/Octopus_icon_3.png" alt="Octopus" className="mx-auto mb-4 w-20 md:w-28" />
-          <h1 className="text-2xl md:text-5xl font-extrabold text-center mb-2" style={{ color: '#213359' }}>
-            We’d love to hear from you!
-          </h1>
-        </motion.div>
+      <section className="flex flex-1 flex-col gap-10 px-6 pt-34 lg:gap-[0.49vw] lg:px-[2.92vw] lg:pt-[10.21vw]">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-[2.5vw]">
+          <ContactPrompts />
+          <EmailCallout />
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: 'spring',
-            duration: 1,
-            damping: 15,
-            stiffness: 60,
-          }}
-          className="w-full max-w-7xl bg-[#213359] rounded-2xl mt-8 p-8 md:p-12 flex flex-col md:flex-row gap-8 justify-center"
-        >
-          <ContactForm />
-          <div className="border-b-2 border-blue-500"></div>
-        </motion.div>
+        <div className="mt-auto flex flex-col gap-10 lg:-mr-[2.92vw] lg:flex-row lg:items-end lg:justify-between lg:gap-[3.125vw]">
+          <MakerspaceCard />
+          <img
+            src="/ContactHalftone.png"
+            alt=""
+            className="-mx-6 min-w-0 mix-blend-multiply lg:mx-0 lg:basis-[50.49vw]"
+          />
+        </div>
       </section>
     </PageLayout>
   );
