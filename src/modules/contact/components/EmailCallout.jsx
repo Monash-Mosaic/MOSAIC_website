@@ -27,7 +27,7 @@ export default function EmailCallout() {
       <button
         type="button"
         onClick={copyEmail}
-        className={`mt-3 flex w-fit items-center gap-1 text-lg hover:underline lg:-mt-[2.22vw] lg:text-[1.25vw] ${focusRing}`}
+        className={`relative mt-3 flex w-fit cursor-pointer items-center gap-1 text-lg hover:underline lg:-mt-[2.22vw] lg:text-[1.25vw] ${focusRing}`}
       >
         {copied ? 'copied!' : 'copy email'}
         {copied ? <HiCheck /> : <HiOutlineDuplicate />}
