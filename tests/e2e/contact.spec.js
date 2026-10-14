@@ -8,7 +8,8 @@ test.describe('contact', () => {
       'href',
       'mailto:mosaic@monash.edu'
     );
-    await expect(page.getByRole('img', { name: /makerspace address/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Makerspace Address' })).toBeVisible();
+    await expect(page.getByText(/G03, 20 Exhibition Walk \(Building 94\)/)).toBeVisible();
   });
 
   test('copies the email address to the clipboard', async ({ page, context, browserName }) => {

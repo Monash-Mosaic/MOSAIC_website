@@ -43,13 +43,17 @@ describe('site pages', () => {
     expect(screen.getAllByRole('contentinfo').length).toBeGreaterThan(0);
   });
 
-  it('assembles the contact page around the inquiry form', () => {
+  it('assembles the contact page around the email and makerspace address', () => {
     render(<ContactPage />);
 
-    expect(screen.getByRole('main')).toHaveClass('pt-24');
-    expect(screen.getByRole('img', { name: 'Octopus' })).toHaveAttribute('src', '/Octopus_icon_3.png');
-    expect(screen.getByRole('heading', { name: /love to hear from you/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /shoot us an email/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'mosaic@monash.edu' })).toHaveAttribute(
+      'href',
+      'mailto:mosaic@monash.edu'
+    );
+    expect(screen.getByRole('button', { name: 'copy email' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Makerspace Address' })).toBeInTheDocument();
   });
 
   it('lets a visitor expand one join role at a time', async () => {
