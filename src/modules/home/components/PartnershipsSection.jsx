@@ -5,9 +5,9 @@ import { partners } from '../data';
 import { HiArrowDown } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { ParallaxLayer, ParallaxSection } from '@/components';
 
 export default function PartnershipsSection() {
-  const sectionRef = useRef(null);
   const canvasRef = useRef(null);
   const mouse = useRef({
     x: -9999,
@@ -18,8 +18,11 @@ export default function PartnershipsSection() {
   });
 
   const handleMove = (clientX, clientY) => {
-    if (!sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    // Measure directly against the canvas so ParallaxSection doesn't need a ref
+    // and parallax y-offsets are automatically accounted for!
+    const rect = canvas.getBoundingClientRect();
     const x = clientX - rect.left;
     const y = clientY - rect.top;
 
@@ -40,13 +43,13 @@ export default function PartnershipsSection() {
   };
 
   useEffect(() => {
-    // Only run the particle simulation on laptops and monitors (>= 1024px)
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     let cleanupSimulation = null;
 
     const startSimulation = () => {
       const canvas = canvasRef.current;
-      const section = sectionRef.current;
+      // Grab the parent <section id="partners"> via DOM traversal instead of a ref
+      const section = canvas?.closest('#partners') || canvas?.parentElement;
       if (!canvas || !section) return null;
 
       const ctx = canvas.getContext('2d', { alpha: true });
@@ -285,7 +288,7 @@ export default function PartnershipsSection() {
       };
 
       const render = (now) => {
-        const rect = section.getBoundingClientRect();
+        const rect = canvas.getBoundingClientRect();
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const width = rect.width;
         const height = rect.height;
@@ -385,7 +388,6 @@ export default function PartnershipsSection() {
 
             const releaseDamp = targetResponse === 0.0 ? subRet * 0.88 : subRet;
 
-            // XY Spring & Damping
             p.vx = (p.vx + (targetDispX - p.dispX) * stiffness * subDt * 60.0) * releaseDamp;
             p.vy = (p.vy + (targetDispY - p.dispY) * stiffness * subDt * 60.0) * releaseDamp;
 
@@ -399,7 +401,6 @@ export default function PartnershipsSection() {
             p.vx *= springMix;
             p.vy *= springMix;
 
-            // Z-axis Spring & Damping
             p.zVel += -stiffness * p.zDisp * subDt * 60.0;
             const zTarget = -simulatedMouseZOffset * targetResponse;
             const diff = zTarget - p.zDisp;
@@ -414,7 +415,6 @@ export default function PartnershipsSection() {
             p.zVel *= releaseDamp;
             const springZDisp = p.zDisp + p.zVel * subDt;
 
-            // Smooth Mouse Influence Response
             p.responseVel =
               (p.responseVel + (targetResponse - p.response) * stiffness * subDt * 60.0) *
               releaseDamp;
@@ -536,22 +536,24 @@ export default function PartnershipsSection() {
   }, []);
 
   return (
-    <section
+    <ParallaxSection
       id="partners"
-      ref={sectionRef}
       onMouseMove={(e) => handleMove(e.clientX, e.clientY)}
       onMouseLeave={handleMouseLeave}
       className="relative isolate flex min-h-dvh w-full flex-col justify-between bg-navy snap-start py-10 md:py-14 lg:overflow-hidden"
     >
-      <div className="hidden lg:block pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <motion.canvas
-          ref={canvasRef}
-          className="absolute inset-0 h-full w-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: 'easeOut' }}
-        />
-      </div>
+      {/* Background Particles (Laptops & Monitors Only) */}
+      <ParallaxLayer y={[-300, 300]} className="hidden lg:block pointer-events-none absolute inset-0 z-0">
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <motion.canvas
+            ref={canvasRef}
+            className="absolute inset-0 h-full w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, ease: 'easeOut' }}
+          />
+        </div>
+      </ParallaxLayer>
 
       <div className="relative z-10 flex w-full shrink-0 flex-col px-6 sm:px-12 lg:px-24 pointer-events-none">
         <h2 className="font-mono text-[clamp(2.5rem,3.5vw,7.5rem)] font-semibold leading-tight text-[#FCFCFC] pointer-events-auto">
@@ -563,7 +565,11 @@ export default function PartnershipsSection() {
         </p>
       </div>
 
-      <div className="relative z-10 flex flex-1 w-full items-center justify-center px-4 sm:px-12 lg:px-28 py-8 md:pb-10 md:pt-12 pointer-events-none">
+      {/* Partners */}
+      <ParallaxLayer
+        y={[80, -20]}
+        className="relative z-10 flex flex-1 w-full items-center justify-center px-4 sm:px-12 lg:px-28 py-8 md:pb-10 md:pt-12 pointer-events-none"
+      >
         <div className="flex w-full max-w-[140rem] mx-auto flex-row flex-wrap items-stretch justify-center gap-[clamp(1.25rem,2vw,3rem)] pointer-events-auto">
           {partners.map((partner, index) => {
             const flexWidthClass =
@@ -612,7 +618,7 @@ export default function PartnershipsSection() {
             );
           })}
         </div>
-      </div>
+      </ParallaxLayer>
 
       <div className="relative z-20 flex w-full shrink-0 justify-end px-6 sm:px-12 lg:px-24 pt-2 pb-4 md:pb-6 pointer-events-none">
         <Link
@@ -623,6 +629,6 @@ export default function PartnershipsSection() {
           <HiArrowDown aria-hidden="true" className="w-[1em] h-[1em]" />
         </Link>
       </div>
-    </section>
+    </ParallaxSection>
   );
 }

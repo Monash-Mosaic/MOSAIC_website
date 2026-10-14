@@ -40,4 +40,35 @@ describe('useProjects', () => {
     expect(result.current.error).toBeInstanceOf(Error);
     expect(result.current.error.message).toBe('Apps Script down');
   });
+
+  it('uses a fallback message and an empty list for a malformed payload', async () => {
+    fetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({ success: false, projects: null }),
+    });
+
+    const { result } = renderHook(() => useProjects());
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.error.message).toBe('Failed to load projects');
+    expect(result.current.projects).toEqual([]);
+  });
+
+  it('ignores a request aborted on unmount', async () => {
+    let rejectFetch;
+    fetch.mockImplementation(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectFetch = reject;
+        }),
+    );
+
+    const { unmount } = renderHook(() => useProjects());
+    unmount();
+    const abortError = new Error('aborted');
+    abortError.name = 'AbortError';
+    rejectFetch(abortError);
+
+    await Promise.resolve();
+    expect(fetch).toHaveBeenCalled();
+  });
 });

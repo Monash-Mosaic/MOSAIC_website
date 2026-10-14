@@ -1,6 +1,8 @@
 
 import { Fira_Code, Inter, Space_Grotesk } from "next/font/google";
+import { SmoothScroll } from "@/components";
 
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 
@@ -27,11 +29,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${firaCode.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${firaCode.variable} motion-safe:scroll-smooth`}
+      data-scroll-behavior="smooth"
+    >
       <body
 
         className={`${spaceGrotesk.className} antialiased`}
       >
+        <SmoothScroll />
         {children}
       </body>
     </html>
