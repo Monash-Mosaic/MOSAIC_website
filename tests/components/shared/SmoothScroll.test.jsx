@@ -1,7 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cancelFrame, frame } from 'framer-motion';
 import Lenis from 'lenis';
 import SmoothScroll from '@/components/SmoothScroll';
+import { mockUsePathname } from '@tests/setup/next-mocks';
 import { render } from '@tests/setup/test-utils.jsx';
 
 vi.mock('lenis', () => ({
@@ -15,9 +16,22 @@ vi.mock('lenis', () => ({
 
 describe('SmoothScroll', () => {
   beforeEach(() => {
+    mockUsePathname.mockReturnValue('/projects');
     vi.mocked(Lenis).mockClear();
     vi.mocked(frame.update).mockClear();
     vi.mocked(cancelFrame).mockClear();
+  });
+
+  afterEach(() => {
+    mockUsePathname.mockReturnValue('/');
+  });
+
+  it('leaves Lenis off on the home page so section scrolljacking owns the wheel', () => {
+    mockUsePathname.mockReturnValue('/');
+    render(<SmoothScroll />);
+
+    expect(Lenis).not.toHaveBeenCalled();
+    expect(frame.update).not.toHaveBeenCalled();
   });
 
   it('renders nothing into the page', () => {

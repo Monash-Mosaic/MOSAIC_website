@@ -5,7 +5,6 @@ import { partners } from '../data';
 import { HiArrowDown } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import { ParallaxLayer, ParallaxSection } from '@/components';
 
 export default function PartnershipsSection() {
   const canvasRef = useRef(null);
@@ -84,40 +83,27 @@ export default function PartnershipsSection() {
   }, []);
 
   return (
-    <ParallaxSection
-      as="div"
+    <section
       id="partners"
-      className="
-        relative
-        isolate
-        flex
-        min-h-screen
-        w-full
-        flex-col
-        overflow-hidden
-        bg-navy
-        snap-start
-        py-14
-      "
+      data-scroll-section
+      className="relative isolate flex h-dvh max-h-dvh w-full shrink-0 flex-col overflow-hidden bg-navy py-[clamp(1rem,4vh,3.5rem)]"
     >
-      <ParallaxLayer y={[-300, 300]} className="pointer-events-none absolute inset-0">
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-          <motion.canvas
-            ref={canvasRef}
-            className="absolute inset-0 h-full w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, ease: 'easeOut' }}
-          />
-        </div>
-      </ParallaxLayer>
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <motion.canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: 'easeOut' }}
+        />
+      </div>
 
       {/* Partnerships Text */}
       <div className="relative z-10 flex w-full flex-col px-6 shrink-0 sm:px-12 lg:px-24">
         <h2
           className="
             font-mono
-            text-[clamp(2.5rem,3.5vw,7.5rem)]
+            text-[clamp(2rem,8vh,4.5rem)]
             font-semibold
             leading-tight
             text-[#FCFCFC]
@@ -128,8 +114,7 @@ export default function PartnershipsSection() {
 
         <p
           className="
-            font-inter
-            text-[clamp(0.95rem,1.4vw,2.5rem)]
+            text-[clamp(0.9rem,2.2vh,1.35rem)]
             font-semibold
             leading-6
             text-[#FCFCFC]
@@ -142,34 +127,35 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Partners */}
-      <ParallaxLayer
-        y={[80, -20]}
+      <div
         className="
-          relative 
+          relative
           z-10
           flex
-          flex-1
+          min-h-0
           w-full
+          flex-1
           items-center
           justify-center
+          overflow-hidden
           px-6
+          py-[clamp(0.75rem,2vh,2rem)]
           sm:px-12
           lg:px-28
-          pb-10
-          pt-12
         "
       >
         <div
           className="
             flex
+            h-fit
             w-full
-            max-w-[140rem] 
+            max-w-[140rem]
             mx-auto
             flex-row
             flex-wrap
-            items-stretch
+            items-start
             justify-center
-            gap-[clamp(1.5rem,2vw,3rem)]
+            gap-[clamp(1.25rem,2vw,2.5rem)]
           "
         >
           {partners.map((partner, index) => {
@@ -204,20 +190,17 @@ export default function PartnershipsSection() {
                   animationDuration: `${3.5 + index * 0.4}s`,
                 }}
               >
-                {/* White Logo Container (Height scales with viewport width for 4K) */}
                 <div
                   className="
                     flex
-                    w-fit
-                    flex-1
+                    w-full
                     items-center
                     justify-center
+                    gap-6
                     rounded-[1.25rem]
                     bg-[#FCFCFC]
-                    px-[clamp(1.5rem,3vw,3rem)]
-                    py-6
-                    gap-5
-                    min-h-[clamp(6rem,12vw,20rem)]
+                    px-[clamp(1.25rem,2.5vw,2.5rem)]
+                    py-[clamp(1rem,2vh,1.75rem)]
                   "
                 >
                   {partner.logos.map((logo) => (
@@ -226,14 +209,7 @@ export default function PartnershipsSection() {
                       href={logo.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="
-                        flex
-                        flex-1
-                        h-full
-                        items-center
-                        justify-center
-                        min-w-0
-                      "
+                      className="flex min-w-0 items-center justify-center"
                       aria-label={`Visit ${logo.name}`}
                     >
                       <img
@@ -241,9 +217,8 @@ export default function PartnershipsSection() {
                         alt={logo.name}
                         className="
                           block
-                          h-auto
-                          w-screen
-                          max-h-[clamp(5rem,8rem,20rem)]
+                          h-[clamp(3.25rem,7vh,5.5rem)]
+                          w-auto
                           max-w-full
                           object-contain
                           transition-transform
@@ -255,27 +230,8 @@ export default function PartnershipsSection() {
                   ))}
                 </div>
 
-                {/* Description (Green Bar) */}
-                <div
-                  className="
-                    flex
-                    h-[clamp(3rem,3.3vw,5rem)]
-                    shrink-0
-                    items-center
-                    justify-center
-                    px-4
-                  "
-                >
-                  <span
-                    className="
-                    text-center
-                    font-['Fira_Code']
-                    text-[clamp(0.875rem,1.2vw,1.75rem)]
-                    font-semibold
-                    leading-snug
-                    text-ink
-                  "
-                  >
+                <div className="flex shrink-0 items-center justify-center px-4 py-3">
+                  <span className="text-center text-[clamp(0.8rem,1.4vh,1rem)] font-semibold leading-snug text-ink">
                     {partner.description}
                   </span>
                 </div>
@@ -283,7 +239,7 @@ export default function PartnershipsSection() {
             );
           })}
         </div>
-      </ParallaxLayer>
+      </div>
 
       {/* Scroll to Projects */}
       <div className="relative z-10 flex w-full justify-end px-6 sm:px-12 lg:px-24 mt-auto shrink-0 pb-6">
@@ -294,8 +250,7 @@ export default function PartnershipsSection() {
             items-center
             gap-2
             whitespace-nowrap
-            font-['Fira_Code']
-            text-[clamp(0.8rem,1.2vw,1.75rem)]
+            text-[clamp(0.8rem,1.4vh,1rem)]
             font-semibold
             leading-5.25
             text-[#FCFCFC]
@@ -306,6 +261,6 @@ export default function PartnershipsSection() {
           <HiArrowDown aria-hidden="true" className="w-[1em] h-[1em]" />
         </Link>
       </div>
-    </ParallaxSection>
+    </section>
   );
 }

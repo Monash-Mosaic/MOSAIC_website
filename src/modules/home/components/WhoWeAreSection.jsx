@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { ParallaxLayer, ParallaxSection } from '@/components';
 import { topics } from '@/modules/home/data';
 
 const CONTACT_EMAIL = 'mosaic@monash.edu';
@@ -10,6 +9,14 @@ const sectionStyle = {
   backgroundImage: "url('/who-we-are-texture.svg')",
   backgroundSize: '360px 360px',
   backgroundRepeat: 'repeat',
+};
+
+const panelStyle = {
+  backgroundColor: '#B7FF00',
+  backgroundImage: "url('/who-we-are-texture.svg')",
+  backgroundSize: '360px 360px',
+  backgroundRepeat: 'repeat',
+  backgroundBlendMode: 'multiply',
 };
 
 function withBold(text) {
@@ -45,35 +52,31 @@ export default function WhoWeAreSection() {
   }
 
   return (
-    <ParallaxSection
+    <section
       id="about"
-      className="relative isolate w-full snap-start overflow-hidden bg-white text-[#213359]"
+      data-scroll-section
+      className="relative isolate flex h-dvh max-h-dvh w-full shrink-0 flex-col overflow-hidden bg-white font-[family-name:var(--font-space-grotesk)] text-[#213359]"
     >
-      <ParallaxLayer
-        y={[-160, 160]}
-        aria-hidden="true"
-        className="absolute inset-x-0 -inset-y-24 -z-10"
-        style={sectionStyle}
-      />
-      <div className="w-full px-5 py-12 md:px-12 md:py-16">
-        <div className="mx-auto w-full max-w-[1340px]">
-        <h2 className="font-mono text-4xl leading-none font-bold md:text-5xl">Who we are</h2>
-        <p className="mt-3 text-base font-semibold md:text-lg">
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={sectionStyle} />
+      <div className="flex min-h-0 w-full flex-1 flex-col justify-center px-5 py-[clamp(0.75rem,3vh,2.5rem)] md:px-12">
+        <div className="mx-auto flex w-full max-w-[1340px] flex-col">
+        <h2 className="shrink-0 font-mono text-[clamp(1.75rem,4.5vh,3rem)] leading-none font-bold">Who we are</h2>
+        <p className="mt-2 shrink-0 text-[clamp(0.9rem,1.8vh,1.125rem)] font-semibold">
           Engineering for community resilience and global equity
         </p>
 
-        <ParallaxLayer
-          y={[32, -32]}
-          className="mt-10 flex min-h-[506px] w-full flex-col border border-[#213359] bg-[#D0FF63]/51 shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px]"
+        <div
+          className="mt-[clamp(0.75rem,2vh,1.5rem)] flex w-full flex-col border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)]"
+          style={panelStyle}
         >
           <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
             <p className="whitespace-nowrap">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
             <p className="mt-2">&gt;SELECT_OPTION:</p>
           </div>
 
-          <div className="grid flex-1 md:min-h-0 md:grid-cols-[344px_minmax(0,1fr)]">
+          <div className="grid md:grid-cols-[344px_minmax(0,1fr)]">
           <aside className="flex flex-col border-b border-[#213359]/70 p-4 pt-0 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:pt-0 md:text-base">
-            <ol className="flex flex-col gap-5">
+            <ol className="flex flex-col gap-4">
               {topics.map((topic, index) => {
                 const isActive = activeTopic?.id === topic.id;
 
@@ -99,7 +102,7 @@ export default function WhoWeAreSection() {
               type="button"
               aria-pressed={isContactActive}
               onClick={() => setActiveTopic(null)}
-              className={`mt-8 inline-block self-start px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:mt-auto md:pt-1 ${
+              className={`mt-4 inline-block self-start px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] ${
                 isContactActive
                   ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
                   : 'text-[#213359] hover:bg-[#213359]/10'
@@ -109,11 +112,11 @@ export default function WhoWeAreSection() {
             </button>
           </aside>
 
-          <div className="p-5 md:p-4">
+          <div className="min-h-0 overflow-y-auto p-5 md:p-4">
             {activeTopic ? (
               <div aria-live="polite">
                 <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
-                <p className="mt-5 max-w-4xl text-base leading-relaxed font-semibold whitespace-pre-line md:text-lg">
+                <p className="mt-3 max-w-4xl text-[clamp(0.85rem,1.7vh,1.125rem)] leading-snug font-semibold whitespace-pre-line">
                   {withBold(activeTopic.description)}
                 </p>
               </div>
@@ -160,10 +163,10 @@ export default function WhoWeAreSection() {
             )}
           </div>
           </div>
-        </ParallaxLayer>
+        </div>
         </div>
       </div>
-    </ParallaxSection>
+    </section>
   );
 }
 

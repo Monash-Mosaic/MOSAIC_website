@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 
 const NAV_LINKS = [
@@ -21,7 +21,43 @@ const desktopContactButtonClass = `${contactButtonBase} flex h-[45px] w-[174px] 
 
 export default function Navbar() {
   const pathname = usePathname();
+  const navRef = useRef(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [useMenu, setUseMenu] = useState(false);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return undefined;
+
+    const desktop = window.matchMedia('(min-width: 768px)');
+
+    const measure = () => {
+      const onHome = pathname === '/';
+      const lineVisible = onHome && desktop.matches;
+      if (!lineVisible) {
+        setUseMenu(false);
+        return;
+      }
+
+      const header = nav.parentElement;
+      const paddingRight = header ? parseFloat(getComputedStyle(header).paddingRight) || 0 : 0;
+      const available = window.innerWidth / 2 - paddingRight - 20;
+      const overflows = nav.scrollWidth > available;
+      setUseMenu(overflows);
+      if (!overflows) setMobileOpen(false);
+    };
+
+    measure();
+    const fontsReady = document.fonts?.ready;
+    if (fontsReady) fontsReady.then(measure).catch(() => {});
+    window.addEventListener('resize', measure);
+    desktop.addEventListener('change', measure);
+
+    return () => {
+      window.removeEventListener('resize', measure);
+      desktop.removeEventListener('change', measure);
+    };
+  }, [pathname]);
 
   const linkClass = (href) =>
     `rounded px-1 py-1 md:px-0 hover:underline underline-offset-8 decoration-2 decoration-lime ${focusRing}${pathname === href ? ' underline' : ''}`;
@@ -40,7 +76,15 @@ export default function Navbar() {
           />
         </Link>
 
-        <nav className="mt-[11px] hidden items-center gap-12.5 text-[26px] leading-none md:flex">
+        <nav
+          ref={navRef}
+          aria-hidden={useMenu || undefined}
+          className={
+            useMenu
+              ? 'pointer-events-none invisible absolute flex w-max items-center gap-12.5 text-[26px] leading-none'
+              : 'mt-[11px] hidden items-center gap-12.5 text-[26px] leading-none md:flex'
+          }
+        >
           {NAV_LINKS.map((link) => (
             <Link key={link.href} href={link.href} className={linkClass(link.href)}>
               {link.label}
@@ -52,7 +96,7 @@ export default function Navbar() {
         </nav>
 
         <button
-          className={`text-3xl md:hidden ${focusRing} rounded`}
+          className={`rounded text-3xl ${useMenu ? 'flex' : 'md:hidden'} ${focusRing}`}
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileOpen}
@@ -62,7 +106,9 @@ export default function Navbar() {
       </div>
 
       {mobileOpen && (
-        <nav className="flex flex-col gap-4 bg-white/90 px-6 pt-2 pb-6 text-lg shadow-lg backdrop-blur md:hidden">
+        <nav
+          className={`flex flex-col gap-4 bg-white/90 px-6 pt-2 pb-6 text-lg shadow-lg backdrop-blur ${useMenu ? '' : 'md:hidden'}`}
+        >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
