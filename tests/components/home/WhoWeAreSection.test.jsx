@@ -71,4 +71,10 @@ describe('WhoWeAreSection', () => {
     expect(await screen.findByRole('button', { name: '[ COPY FAILED ]' })).toBeInTheDocument();
     navigator.clipboard.writeText = writeText;
   });
+
+  it('links back to the top of the page', () => {
+    render(<WhoWeAreSection />);
+
+    expect(screen.getByRole('link', { name: /scroll to top/i })).toHaveAttribute('href', '#top');
+  });
 });

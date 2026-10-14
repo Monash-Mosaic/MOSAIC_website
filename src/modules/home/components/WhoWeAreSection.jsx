@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
+import { HiArrowUp } from 'react-icons/hi';
 import { ParallaxLayer, ParallaxSection } from '@/components';
 import { topics } from '@/modules/home/data';
 
@@ -163,6 +165,13 @@ export default function WhoWeAreSection() {
         </ParallaxLayer>
         </div>
       </div>
+
+      <Link
+        href="#top"
+        className="absolute right-5 bottom-4 flex items-center gap-1 rounded font-mono text-sm font-semibold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:right-8 md:text-[15px]"
+      >
+        Scroll to top <HiArrowUp aria-hidden="true" className="size-[1.15em]" />
+      </Link>
     </ParallaxSection>
   );
 }
