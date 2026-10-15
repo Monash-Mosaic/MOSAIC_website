@@ -70,4 +70,26 @@ describe('projects cache IO', () => {
     const saved = JSON.parse(await readFile(path.join(tempDir, '.cache', 'projects.json'), 'utf8'));
     expect(saved).toEqual(payload);
   });
+
+  it('still returns the payload when the cache file cannot be written', async () => {
+    const blocker = path.join(tempDir, 'not-a-directory');
+    await writeFile(blocker, 'x');
+    vi.spyOn(process, 'cwd').mockReturnValue(blocker);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    clearProjectsMemoryCache();
+
+    const payload = await writeProjectsCache([{ id: 'hub' }]);
+    expect(payload.projects).toEqual([{ id: 'hub' }]);
+    await expect(readProjectsCache()).resolves.toEqual(payload);
+  });
+
+  it('stores the cache under /tmp when running on Vercel', async () => {
+    process.env.VERCEL = '1';
+    clearProjectsMemoryCache();
+    const payload = await writeProjectsCache([{ id: 'vercel' }]);
+    const saved = JSON.parse(await readFile('/tmp/.cache/projects.json', 'utf8'));
+    expect(saved.projects).toEqual(payload.projects);
+    delete process.env.VERCEL;
+    clearProjectsMemoryCache();
+  });
 });

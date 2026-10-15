@@ -1,66 +1,76 @@
-'use client';
-
+import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import OctopusDecoration from './OctopusDecoration';
+import { HiArrowDown } from 'react-icons/hi';
+import { heroStats } from '../data';
+
+const dot = 'radial-gradient(circle, #C2CCFB 1.5px, transparent 2.5px)';
+
+const dottedBackground = {
+  backgroundColor: '#FCFCFC',
+  backgroundImage: `${dot}, ${dot}`,
+  backgroundSize: '24px 12px',
+  backgroundPosition: '-10px -4px, 2px 2px',
+};
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen snap-start flex flex-col justify-center items-center text-center px-6">
-      <motion.h1
-        style={{ color: '#BDFF15' }}
-        initial={{ opacity: 0, y: -30, x: -5, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-        transition={{
-          duration: 1.5,
-          delay: 0.2,
-          type: 'spring',
-          damping: 10,
-          stiffness: 40,
-          mass: 0.5,
-        }}
-        className="text-4xl md:text-6xl font-extrabold"
+    <section
+      data-scroll-section
+      className="relative isolate flex h-dvh max-h-dvh w-full shrink-0 flex-col overflow-hidden text-ink"
+    >
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={dottedBackground} />
+
+      <div className="grid min-h-0 w-full flex-1 grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1">
+        <div className="flex min-h-0 flex-col pt-[clamp(4.75rem,14vh,7.5rem)]">
+          <ul className="flex shrink-0 gap-4 px-6 md:gap-6 md:px-16 xl:gap-[34.35px] xl:pr-0 xl:pl-[54px]">
+            {heroStats.map((stat) => (
+              <li
+                key={stat.label}
+                className="flex size-[clamp(4.25rem,14vh,6.5rem)] flex-col items-center justify-center bg-navy font-mono font-semibold text-white"
+              >
+                <span className="text-[clamp(1.75rem,5vh,4.5rem)] leading-none">{stat.value}</span>
+                <span className="text-[clamp(0.7rem,1.6vh,1.15rem)] leading-none">{stat.label}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-auto min-h-0 flex-1 mix-blend-multiply">
+            <Image
+              src="/HeroImage.png"
+              alt="Halftone illustration of people working together"
+              width={668}
+              height={364}
+              preload
+              className="h-full w-full object-contain object-left-bottom"
+            />
+          </div>
+        </div>
+
+        <div className="flex min-h-0 flex-col justify-center overflow-hidden border-[#101010] px-6 py-4 md:border-l-4 md:pr-12 md:pl-[14%] xl:border-l-[5px] xl:pr-16 xl:pl-[12%]">
+          <h1 className="font-mono text-[clamp(1.45rem,4.4vh,3.25rem)] leading-tight font-semibold">
+            Building Production-Ready Software &amp; AI Solutions For{' '}
+            <span className="relative isolate whitespace-nowrap before:absolute before:-right-1.5 before:bottom-0 before:-left-1 before:-z-0 before:h-[0.25em] before:rounded-[10px] before:bg-lime/70">
+              Social Good
+            </span>
+          </h1>
+          <p className="mt-3 max-w-xl text-[clamp(0.95rem,2.1vh,1.25rem)] leading-snug">
+            We partner with global humanitarian organisations, research labs, and industry leaders to
+            build high-impact software.
+          </p>
+          <Link
+            href="/contact"
+            className="mt-[clamp(0.75rem,2vh,1.5rem)] self-start rounded-md bg-lime px-5 py-2 font-mono text-[clamp(1.25rem,3vh,2.125rem)] font-semibold transition-colors duration-150 hover:bg-lime-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+          >
+            Get in touch
+          </Link>
+        </div>
+      </div>
+
+      <Link
+        href="#partners"
+        className="absolute right-6 bottom-4 hidden items-center gap-1 rounded font-mono text-sm font-semibold tracking-widest uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ink md:flex xl:right-[44px]"
       >
-        AI for Social Impact
-      </motion.h1>
-      <motion.div
-        initial={{ opacity: 0, y: -30, x: 5, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-        transition={{
-          duration: 1.5,
-          ease: [0.2, 0.8, 0.4, 1],
-          delay: 0.3,
-          type: 'spring',
-          damping: 10,
-          stiffness: 40,
-          mass: 0.3,
-        }}
-        className="max-w-3xl"
-      >
-        <p className="mt-6 text-base md:text-lg text-gray-200">
-          MOSAIC (Monash Students for AI with Communities) is where cutting-edge technology meets social impact.
-          Join a team that applies data science and human-centred computing to real-world challenges faced by
-          marginalised communities.
-        </p>
-      </motion.div>
-      <Link href="/projects">
-        <motion.button
-          initial={{ opacity: 0, y: 30 }}
-          whileHover={{ scale: 1.1, duration: 0.05 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            type: 'spring',
-            duration: 1,
-            damping: 10,
-            stiffness: 50,
-          }}
-          style={{ background: '#BDFF15' }}
-          className="mt-8 bg-lime-400 text-[#0C1D45] px-6 py-3 rounded-full font-semibold hover:bg-lime-300 transition"
-        >
-          Explore projects
-        </motion.button>
+        Scroll to partnerships <HiArrowDown aria-hidden="true" />
       </Link>
-      <OctopusDecoration />
     </section>
   );
 }

@@ -5,8 +5,12 @@ test.describe('home', () => {
     await page.goto('/');
 
     await expect(page).toHaveTitle(/MOSAIC/);
-    await expect(page.getByRole('heading', { name: 'AI for Social Impact' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Our Vision' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Explore projects' })).toHaveAttribute('href', '/projects');
+    await expect(page.getByRole('heading', { name: /Building Production-Ready Software/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Get in touch' })).toHaveAttribute('href', '/contact');
+    await expect(page.getByRole('heading', { name: 'Partnerships' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Projects' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Who we are' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'About' }).first()).toBeVisible();
+    await expect(page.getByRole('contentinfo')).toBeVisible();
   });
 });
