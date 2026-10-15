@@ -199,8 +199,8 @@ export default function PartnershipsSection() {
                     gap-6
                     rounded-[1.25rem]
                     bg-[#FCFCFC]
-                    px-[clamp(1.25rem,2.5vw,2.5rem)]
-                    py-[clamp(1rem,2vh,1.75rem)]
+                    px-[clamp(1.5rem,2.5vw,2.75rem)]
+                    py-[clamp(1.75rem,4.5vh,3.5rem)]
                   "
                 >
                   {partner.logos.map((logo) => (
@@ -217,7 +217,7 @@ export default function PartnershipsSection() {
                         alt={logo.name}
                         className="
                           block
-                          h-[clamp(3.25rem,7vh,5.5rem)]
+                          h-[clamp(4.75rem,11vh,8rem)]
                           w-auto
                           max-w-full
                           object-contain
@@ -230,8 +230,8 @@ export default function PartnershipsSection() {
                   ))}
                 </div>
 
-                <div className="flex shrink-0 items-center justify-center px-4 py-3">
-                  <span className="text-center text-[clamp(0.8rem,1.4vh,1rem)] font-semibold leading-snug text-ink">
+                <div className="flex min-h-[clamp(3.25rem,6vh,4.75rem)] shrink-0 items-center justify-center px-4">
+                  <span className="text-center text-[clamp(0.9rem,1.7vh,1.15rem)] font-semibold leading-snug text-ink">
                     {partner.description}
                   </span>
                 </div>
