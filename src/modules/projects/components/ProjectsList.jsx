@@ -8,7 +8,7 @@ export default function ProjectsList() {
 
   if (loading) {
     return (
-      <div className="space-y-16 max-w-7xl mx-auto px-10">
+      <div className="mx-auto max-w-7xl space-y-10 px-4 sm:space-y-16 sm:px-6 md:px-10">
         {Array.from({ length: 2 }).map((_, index) => (
           <div key={index} className="h-72 rounded-3xl bg-gray-100 animate-pulse" />
         ))}
@@ -23,7 +23,7 @@ export default function ProjectsList() {
   }
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-10 sm:space-y-16">
       {projects.map((project, index) => (
         <ProjectCard key={project.id} project={project} index={index} />
       ))}

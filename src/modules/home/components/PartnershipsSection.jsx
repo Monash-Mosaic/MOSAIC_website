@@ -17,8 +17,6 @@ export default function PartnershipsSection() {
     const section = canvas.parentElement;
     if (!section) return;
 
-    const PARTICLE_COUNT = 6500;
-
     const pseudoRandom = (seed) => {
       const x = Math.sin(seed * 12.9898) * 43758.5453;
       return x - Math.floor(x);
@@ -41,7 +39,9 @@ export default function PartnershipsSection() {
         3: [],
       };
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const particleCount = rect.width < 768 ? 1600 : 6500;
+
+      for (let i = 0; i < particleCount; i++) {
         const x = pseudoRandom(i * 17.31) * rect.width;
         const y = pseudoRandom(i * 31.73) * rect.height;
         const size = 0.5 + pseudoRandom(i * 7.41) * 1.5;
@@ -86,7 +86,7 @@ export default function PartnershipsSection() {
     <section
       id="partners"
       data-scroll-section
-      className="relative isolate flex h-dvh max-h-dvh w-full shrink-0 flex-col overflow-hidden bg-navy py-[clamp(1rem,4vh,3.5rem)]"
+      className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-navy py-10 md:h-dvh md:max-h-dvh md:overflow-hidden md:py-[clamp(1rem,4vh,3.5rem)]"
     >
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         <motion.canvas
@@ -99,11 +99,12 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Partnerships Text */}
-      <div className="relative z-10 flex w-full flex-col px-6 shrink-0 sm:px-12 lg:px-24">
+      <div className="relative z-10 flex w-full shrink-0 flex-col px-4 sm:px-12 lg:px-24">
         <h2
           className="
             font-mono
-            text-[clamp(2rem,8vh,4.5rem)]
+            text-[clamp(2rem,10.5vw,3.25rem)]
+            md:text-[clamp(2rem,8vh,4.5rem)]
             font-semibold
             leading-tight
             text-[#FCFCFC]
@@ -132,16 +133,17 @@ export default function PartnershipsSection() {
           relative
           z-10
           flex
-          min-h-0
           w-full
-          flex-1
           items-center
           justify-center
-          overflow-hidden
-          px-6
-          py-[clamp(0.75rem,2vh,2rem)]
+          px-4
+          py-6
           sm:px-12
           lg:px-28
+          md:min-h-0
+          md:flex-1
+          md:overflow-hidden
+          md:py-[clamp(0.75rem,2vh,2rem)]
         "
       >
         <div
@@ -196,11 +198,14 @@ export default function PartnershipsSection() {
                     w-full
                     items-center
                     justify-center
-                    gap-6
+                    gap-4
                     rounded-[1.25rem]
                     bg-[#FCFCFC]
-                    px-[clamp(1.5rem,2.5vw,2.75rem)]
-                    py-[clamp(1.75rem,4.5vh,3.5rem)]
+                    px-4
+                    py-6
+                    sm:gap-6
+                    sm:px-[clamp(1.5rem,2.5vw,2.75rem)]
+                    sm:py-[clamp(1.75rem,4.5vh,3.5rem)]
                   "
                 >
                   {partner.logos.map((logo) => (
@@ -209,7 +214,7 @@ export default function PartnershipsSection() {
                       href={logo.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex min-w-0 items-center justify-center"
+                      className="flex min-w-0 flex-1 items-center justify-center"
                       aria-label={`Visit ${logo.name}`}
                     >
                       <img
@@ -217,10 +222,13 @@ export default function PartnershipsSection() {
                         alt={logo.name}
                         className="
                           block
-                          h-[clamp(4.75rem,11vh,8rem)]
-                          w-auto
-                          max-w-full
+                          h-auto
+                          max-h-14
+                          w-full
                           object-contain
+                          sm:h-[clamp(4.75rem,11vh,8rem)]
+                          sm:max-h-none
+                          sm:w-auto
                           transition-transform
                           duration-300
                           group-hover:scale-105
@@ -242,7 +250,7 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Scroll to Projects */}
-      <div className="relative z-10 flex w-full justify-end px-6 sm:px-12 lg:px-24 mt-auto shrink-0 pb-6">
+      <div className="relative z-10 mt-2 flex w-full shrink-0 justify-end px-4 pb-2 sm:px-12 lg:px-24 md:mt-auto md:pb-6">
         <Link
           href="#projects"
           className="

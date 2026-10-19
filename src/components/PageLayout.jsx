@@ -8,7 +8,7 @@ export default function PageLayout({
   as: Tag = 'div',
 }) {
   return (
-    <Tag className={`${className}${offsetHeader ? ' pt-24' : ''}`}>
+    <Tag className={`${className}${offsetHeader ? ' md:pt-24' : ''}`}>
       <Navbar />
       {children}
       <Footer />

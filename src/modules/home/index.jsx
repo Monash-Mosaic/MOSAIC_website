@@ -10,7 +10,7 @@ export default function HomePage() {
     <PageLayout
       as="main"
       offsetHeader={false}
-      className="relative h-dvh w-full overflow-hidden bg-[#E3E3E3] text-white"
+      className="relative w-full bg-[#E3E3E3] text-white md:h-dvh md:overflow-hidden"
     >
       <ScrollJack>
         <Hero />

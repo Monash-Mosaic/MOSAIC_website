@@ -55,10 +55,10 @@ export default function WhoWeAreSection() {
     <section
       id="about"
       data-scroll-section
-      className="relative isolate flex h-dvh max-h-dvh w-full shrink-0 flex-col overflow-hidden bg-white font-[family-name:var(--font-space-grotesk)] text-[#213359]"
+      className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-white font-[family-name:var(--font-space-grotesk)] text-[#213359] md:h-dvh md:max-h-dvh md:overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10" style={sectionStyle} />
-      <div className="flex min-h-0 w-full flex-1 flex-col justify-center px-5 py-[clamp(0.75rem,3vh,2.5rem)] md:px-12">
+      <div className="flex w-full flex-col justify-center px-4 py-8 sm:px-5 md:min-h-0 md:flex-1 md:px-12 md:py-[clamp(0.75rem,3vh,2.5rem)]">
         <div className="mx-auto flex w-full max-w-[1340px] flex-col">
         <h2 className="shrink-0 font-mono text-[clamp(1.75rem,4.5vh,3rem)] leading-none font-bold">Who we are</h2>
         <p className="mt-2 shrink-0 text-[clamp(0.9rem,1.8vh,1.125rem)] font-semibold">
@@ -70,7 +70,7 @@ export default function WhoWeAreSection() {
           style={panelStyle}
         >
           <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
-            <p className="whitespace-nowrap">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
+            <p className="break-words">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
             <p className="mt-2">&gt;SELECT_OPTION:</p>
           </div>
 
@@ -116,7 +116,7 @@ export default function WhoWeAreSection() {
             {activeTopic ? (
               <div aria-live="polite">
                 <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
-                <p className="mt-3 max-w-4xl text-[clamp(0.85rem,1.7vh,1.125rem)] leading-snug font-semibold whitespace-pre-line">
+                <p className="mt-3 max-w-4xl text-sm leading-snug font-semibold break-words whitespace-pre-line sm:text-base md:text-[clamp(0.85rem,1.7vh,1.125rem)]">
                   {withBold(activeTopic.description)}
                 </p>
               </div>
@@ -126,19 +126,19 @@ export default function WhoWeAreSection() {
                   EXECUTE_PARTNERSHIP.EXE [SUCCESS]
                 </p>
                 <div className="mt-7 space-y-1 font-mono text-sm font-semibold md:text-base">
-                  <p className="grid grid-cols-[9rem_minmax(0,1fr)] gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
                     <span>&gt; DIRECT_EMAIL :</span>
                     <a className="break-words underline underline-offset-4" href={`mailto:${CONTACT_EMAIL}`}>
                       {CONTACT_EMAIL}
                     </a>
                   </p>
-                  <p className="grid grid-cols-[9rem_minmax(0,1fr)] gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
                     <span>&gt; MAKERSPACE :</span>
-                    <span>Alan Finkel Building for Technology, Monash Clayton</span>
+                    <span className="break-words">Alan Finkel Building for Technology, Monash Clayton</span>
                   </p>
-                  <p className="grid grid-cols-[9rem_minmax(0,1fr)] gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
                     <span>&gt; RESPONSE_TIME :</span>
-                    <span>&lt; 24 Hours (Direct to Student Directors)</span>
+                    <span className="break-words">&lt; 24 Hours (Direct to Student Directors)</span>
                   </p>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm font-bold md:text-base">

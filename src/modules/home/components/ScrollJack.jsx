@@ -31,12 +31,56 @@ export default function ScrollJack({ children }) {
     if (!root) return undefined;
 
     const html = document.documentElement;
+    const desktop = window.matchMedia('(min-width: 768px)');
+    let teardown = () => {};
+
+    const resetMotion = () => {
+      html.classList.remove('home-scroll');
+      for (const section of sectionsIn(root)) {
+        section.style.transform = '';
+        section.style.transition = '';
+        section.style.zIndex = '';
+        section.style.pointerEvents = '';
+        section.removeAttribute('inert');
+      }
+      const bar = document.querySelector('footer');
+      if (bar) {
+        bar.style.transform = '';
+        bar.style.transition = '';
+        bar.style.zIndex = '';
+        bar.style.pointerEvents = '';
+      }
+    };
+
+    const enable = () => {
     html.classList.add('home-scroll');
 
     let index = 0;
     let locked = false;
     let touchStartY = 0;
+    let touchScrollEl = null;
     let releaseTimer = 0;
+
+    const scrollableFrom = (start) => {
+      let node = start instanceof Element ? start : null;
+      while (node && node !== root) {
+        const overflowY = getComputedStyle(node).overflowY;
+        if (
+          (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') &&
+          node.scrollHeight > node.clientHeight + 1
+        ) {
+          return node;
+        }
+        node = node.parentElement;
+      }
+      return null;
+    };
+
+    const canScroll = (element, delta) => {
+      if (!element || delta === 0) return false;
+      if (delta > 0) return element.scrollTop + element.clientHeight < element.scrollHeight - 2;
+      return element.scrollTop > 2;
+    };
 
     const footer = () => document.querySelector('footer');
 
@@ -159,16 +203,24 @@ export default function ScrollJack({ children }) {
 
     const onTouchStart = (event) => {
       touchStartY = event.touches[0]?.clientY ?? 0;
+      const target = event.target;
+      touchScrollEl = target instanceof Element && target.closest('header') ? null : scrollableFrom(target);
     };
 
     const onTouchMove = (event) => {
+      const y = event.touches[0]?.clientY ?? touchStartY;
+      const delta = touchStartY - y;
+      if (canScroll(touchScrollEl, delta)) return;
       if (event.cancelable) event.preventDefault();
     };
 
     const onTouchEnd = (event) => {
       const endY = event.changedTouches[0]?.clientY ?? touchStartY;
       const delta = touchStartY - endY;
+      const target = event.target;
+      if (target instanceof Element && target.closest('header')) return;
       if (Math.abs(delta) < TOUCH_THRESHOLD) return;
+      if (canScroll(touchScrollEl, delta)) return;
       move(delta > 0 ? 1 : -1);
     };
 
@@ -217,22 +269,8 @@ export default function ScrollJack({ children }) {
     window.addEventListener('hashchange', onHashChange);
 
     return () => {
-      html.classList.remove('home-scroll');
       window.clearTimeout(releaseTimer);
-      for (const section of sectionsIn(root)) {
-        section.style.transform = '';
-        section.style.transition = '';
-        section.style.zIndex = '';
-        section.style.pointerEvents = '';
-        section.removeAttribute('inert');
-      }
-      const bar = footer();
-      if (bar) {
-        bar.style.transform = '';
-        bar.style.transition = '';
-        bar.style.zIndex = '';
-        bar.style.pointerEvents = '';
-      }
+      resetMotion();
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('touchstart', onTouchStart);
@@ -241,10 +279,29 @@ export default function ScrollJack({ children }) {
       window.removeEventListener('click', onClick);
       window.removeEventListener('hashchange', onHashChange);
     };
+    };
+
+    const sync = () => {
+      teardown();
+      teardown = () => {};
+      if (!desktop.matches) {
+        resetMotion();
+        return;
+      }
+      teardown = enable();
+    };
+
+    sync();
+    desktop.addEventListener('change', sync);
+
+    return () => {
+      desktop.removeEventListener('change', sync);
+      teardown();
+    };
   }, []);
 
   return (
-    <div ref={rootRef} className="relative h-dvh w-full overflow-hidden">
+    <div ref={rootRef} className="relative w-full md:h-dvh md:overflow-hidden">
       {children}
     </div>
   );

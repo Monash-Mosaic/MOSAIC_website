@@ -17,7 +17,7 @@ export default function JoinPage() {
 
   return (
     <PageLayout className="min-h-screen bg-white">
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
         <WhyJoin />
         <RecruitmentProcess />
       </main>
@@ -28,9 +28,9 @@ export default function JoinPage() {
         transition={{ duration: 0.6, delay: 0.6 }}
         className="bg-[#213359] py-16 w-full"
       >
-        <div className="px-6">
+        <div className="px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-16">
+            <div className="grid gap-12 md:grid-cols-2 md:gap-16">
               <RoleList
                 title="Project Roles"
                 roles={projectRoles}

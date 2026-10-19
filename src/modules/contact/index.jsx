@@ -10,7 +10,7 @@ export default function ContactPage() {
       as="main"
       className="min-h-screen bg-white text-[#213359] relative flex flex-col items-center"
     >
-      <section className="w-full flex flex-col items-center mt-10 px-4 pb-8">
+      <section className="flex w-full flex-col items-center px-4 pt-6 pb-10 sm:mt-10 sm:pb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -22,7 +22,7 @@ export default function ContactPage() {
           }}
         >
           <img src="/Octopus_icon_3.png" alt="Octopus" className="mx-auto mb-4 w-20 md:w-28" />
-          <h1 className="text-2xl md:text-5xl font-extrabold text-center mb-2" style={{ color: '#213359' }}>
+          <h1 className="mb-2 px-2 text-center text-2xl font-extrabold break-words sm:text-3xl md:text-5xl" style={{ color: '#213359' }}>
             We’d love to hear from you!
           </h1>
         </motion.div>
@@ -36,7 +36,7 @@ export default function ContactPage() {
             damping: 15,
             stiffness: 60,
           }}
-          className="w-full max-w-7xl bg-[#213359] rounded-2xl mt-8 p-8 md:p-12 flex flex-col md:flex-row gap-8 justify-center"
+          className="mt-8 flex w-full max-w-7xl flex-col justify-center gap-8 rounded-2xl bg-[#213359] p-4 sm:p-8 md:flex-row md:p-12"
         >
           <ContactForm />
           <div className="border-b-2 border-blue-500"></div>

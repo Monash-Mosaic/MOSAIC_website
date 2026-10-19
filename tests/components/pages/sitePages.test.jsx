@@ -37,16 +37,16 @@ describe('site pages', () => {
     const main = screen.getByRole('main');
     expect(main).not.toHaveClass('pt-24');
     expect(screen.getByRole('heading', { name: /Building Production-Ready Software/ })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Partnerships' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Projects' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Who we are' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Partnerships', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Projects', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Who we are', hidden: true })).toBeInTheDocument();
     expect(screen.getAllByRole('contentinfo').length).toBeGreaterThan(0);
   });
 
   it('assembles the contact page around the inquiry form', () => {
     render(<ContactPage />);
 
-    expect(screen.getByRole('main')).toHaveClass('pt-24');
+    expect(screen.getByRole('main')).toHaveClass('md:pt-24');
     expect(screen.getByRole('img', { name: 'Octopus' })).toHaveAttribute('src', '/Octopus_icon_3.png');
     expect(screen.getByRole('heading', { name: /love to hear from you/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
