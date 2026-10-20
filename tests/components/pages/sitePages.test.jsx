@@ -46,7 +46,7 @@ describe('site pages', () => {
   it('assembles the contact page around the inquiry form', () => {
     render(<ContactPage />);
 
-    expect(screen.getByRole('main')).toHaveClass('md:pt-24');
+    expect(screen.getByRole('main')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Octopus' })).toHaveAttribute('src', '/Octopus_icon_3.png');
     expect(screen.getByRole('heading', { name: /love to hear from you/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();

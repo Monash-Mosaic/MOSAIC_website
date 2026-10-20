@@ -86,7 +86,7 @@ export default function PartnershipsSection() {
     <section
       id="partners"
       data-scroll-section
-      className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-navy py-10 md:h-dvh md:max-h-dvh md:overflow-hidden md:py-[clamp(1rem,4vh,3.5rem)]"
+      className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-navy pb-10 md:h-dvh md:max-h-dvh md:overflow-hidden md:pb-[clamp(1rem,3vh,2rem)]"
     >
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
         <motion.canvas
@@ -99,7 +99,7 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Partnerships Text */}
-      <div className="relative z-10 flex w-full shrink-0 flex-col px-4 sm:px-12 lg:px-24">
+      <div className="relative z-10 flex w-full shrink-0 flex-col px-4 pt-[var(--site-header)] sm:px-12 lg:px-24">
         <h2
           className="
             font-mono
@@ -251,7 +251,7 @@ export default function PartnershipsSection() {
 
       {/* Scroll to Projects */}
       <div className="relative z-10 mt-2 flex w-full shrink-0 justify-end px-4 pb-2 sm:px-12 lg:px-24 md:mt-auto md:pb-6">
-        <Link
+        <a
           href="#projects"
           className="
             flex
@@ -267,7 +267,7 @@ export default function PartnershipsSection() {
         >
           <span>SCROLL TO PROJECTS</span>
           <HiArrowDown aria-hidden="true" className="w-[1em] h-[1em]" />
-        </Link>
+        </a>
       </div>
     </section>
   );

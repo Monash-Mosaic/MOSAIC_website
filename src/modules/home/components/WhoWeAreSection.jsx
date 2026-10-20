@@ -58,7 +58,7 @@ export default function WhoWeAreSection() {
       className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-white font-[family-name:var(--font-space-grotesk)] text-[#213359] md:h-dvh md:max-h-dvh md:overflow-hidden"
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10" style={sectionStyle} />
-      <div className="flex w-full flex-col justify-center px-4 py-8 sm:px-5 md:min-h-0 md:flex-1 md:px-12 md:py-[clamp(0.75rem,3vh,2.5rem)]">
+      <div className="flex w-full flex-col justify-center px-4 pt-[var(--site-header)] pb-6 sm:px-5 md:min-h-0 md:flex-1 md:overflow-y-auto md:px-12 md:pb-[clamp(0.5rem,1.5vh,1rem)]">
         <div className="mx-auto flex w-full max-w-[1340px] flex-col">
         <h2 className="shrink-0 font-mono text-[clamp(1.75rem,4.5vh,3rem)] leading-none font-bold">Who we are</h2>
         <p className="mt-2 shrink-0 text-[clamp(0.9rem,1.8vh,1.125rem)] font-semibold">

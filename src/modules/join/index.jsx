@@ -17,7 +17,7 @@ export default function JoinPage() {
 
   return (
     <PageLayout className="min-h-screen bg-white">
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+      <main className="mx-auto max-w-7xl px-4 pt-[var(--site-header)] pb-8 sm:px-6 sm:pb-12">
         <WhyJoin />
         <RecruitmentProcess />
       </main>

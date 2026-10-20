@@ -20,8 +20,8 @@ export default function Hero() {
     >
       <div aria-hidden="true" className="absolute inset-0 -z-10" style={dottedBackground} />
 
-      <div className="grid w-full grid-cols-1 md:min-h-0 md:flex-1 md:grid-cols-2 md:grid-rows-1">
-        <div className="flex flex-col pt-6 md:min-h-0 md:pt-[clamp(4.75rem,14vh,7.5rem)]">
+      <div className="grid w-full grid-cols-1 pt-[var(--site-header)] md:min-h-0 md:flex-1 md:grid-cols-2 md:grid-rows-1">
+        <div className="flex flex-col md:min-h-0">
           <ul className="flex shrink-0 flex-wrap gap-3 px-4 sm:gap-4 sm:px-6 md:flex-nowrap md:gap-6 md:px-16 xl:gap-[34.35px] xl:pr-0 xl:pl-[54px]">
             {heroStats.map((stat) => (
               <li
@@ -65,12 +65,12 @@ export default function Hero() {
         </div>
       </div>
 
-      <Link
+      <a
         href="#partners"
-        className="absolute right-6 bottom-4 hidden items-center gap-1 rounded font-mono text-sm font-semibold tracking-widest uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ink md:flex xl:right-[44px]"
+        className="absolute right-6 bottom-4 z-10 hidden items-center gap-1 rounded font-mono text-sm font-semibold tracking-widest uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ink md:flex xl:right-[44px]"
       >
         Scroll to partnerships <HiArrowDown aria-hidden="true" />
-      </Link>
+      </a>
     </section>
   );
 }

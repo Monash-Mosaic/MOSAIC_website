@@ -9,7 +9,6 @@ export default function HomePage() {
   return (
     <PageLayout
       as="main"
-      offsetHeader={false}
       className="relative w-full bg-[#E3E3E3] text-white md:h-dvh md:overflow-hidden"
     >
       <ScrollJack>

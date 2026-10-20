@@ -4,7 +4,7 @@ import Link from 'next/link';
 const PAGE_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/#partners', label: 'Partners' },
-  { href: '/projects', label: 'Projects' },
+  { href: '/#projects', label: 'Projects' },
   { href: '/contact', label: 'Contact Us' },
 ];
 

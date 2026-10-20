@@ -8,7 +8,7 @@ describe('Footer', () => {
     expect(screen.getByRole('link', { name: 'MOSAIC logo' })).toHaveAttribute('href', '/');
     expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/');
     expect(screen.getByRole('link', { name: 'Partners' })).toHaveAttribute('href', '/#partners');
-    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/projects');
+    expect(screen.getByRole('link', { name: 'Projects' })).toHaveAttribute('href', '/#projects');
     expect(screen.getByRole('link', { name: 'Contact Us' })).toHaveAttribute('href', '/contact');
   });
 

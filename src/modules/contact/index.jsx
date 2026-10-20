@@ -10,7 +10,7 @@ export default function ContactPage() {
       as="main"
       className="min-h-screen bg-white text-[#213359] relative flex flex-col items-center"
     >
-      <section className="flex w-full flex-col items-center px-4 pt-6 pb-10 sm:mt-10 sm:pb-8">
+      <section className="flex w-full flex-col items-center px-4 pt-[var(--site-header)] pb-10 sm:pb-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}

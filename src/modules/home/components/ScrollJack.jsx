@@ -1,11 +1,16 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { Observer } from 'gsap/Observer';
+import { useGSAP } from '@gsap/react';
 
+gsap.registerPlugin(useGSAP, Observer);
+
+const DURATION = 0.9;
+const EASE = 'power3.inOut';
+const COVERED_SCALE = 0.94;
 const WHEEL_THRESHOLD = 16;
-const TOUCH_THRESHOLD = 48;
-const DURATION_MS = 780;
-const EASE = 'cubic-bezier(0.76, 0, 0.24, 1)';
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -26,279 +31,212 @@ function sectionIndexForHash(hash, items) {
 export default function ScrollJack({ children }) {
   const rootRef = useRef(null);
 
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root) return undefined;
+  useGSAP(
+    () => {
+      const root = rootRef.current;
+      if (!root) return undefined;
 
-    const html = document.documentElement;
-    const desktop = window.matchMedia('(min-width: 768px)');
-    let teardown = () => {};
+      const html = document.documentElement;
+      const mm = gsap.matchMedia();
 
-    const resetMotion = () => {
-      html.classList.remove('home-scroll');
-      for (const section of sectionsIn(root)) {
-        section.style.transform = '';
-        section.style.transition = '';
-        section.style.zIndex = '';
-        section.style.pointerEvents = '';
-        section.removeAttribute('inert');
-      }
-      const bar = document.querySelector('footer');
-      if (bar) {
-        bar.style.transform = '';
-        bar.style.transition = '';
-        bar.style.zIndex = '';
-        bar.style.pointerEvents = '';
-      }
-    };
+      mm.add('(min-width: 768px)', () => {
+        html.classList.add('home-scroll');
 
-    const enable = () => {
-    html.classList.add('home-scroll');
+        const items = sectionsIn(root);
+        let index = 0;
+        let locked = false;
+        let footerSlot = null;
 
-    let index = 0;
-    let locked = false;
-    let touchStartY = 0;
-    let touchScrollEl = null;
-    let releaseTimer = 0;
+        const scrollableFrom = (start) => {
+          let node = start instanceof Element ? start : null;
+          while (node && node !== root) {
+            const overflowY = getComputedStyle(node).overflowY;
+            if (
+              (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') &&
+              node.scrollHeight > node.clientHeight + 1
+            ) {
+              return node;
+            }
+            node = node.parentElement;
+          }
+          return null;
+        };
 
-    const scrollableFrom = (start) => {
-      let node = start instanceof Element ? start : null;
-      while (node && node !== root) {
-        const overflowY = getComputedStyle(node).overflowY;
-        if (
-          (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') &&
-          node.scrollHeight > node.clientHeight + 1
-        ) {
-          return node;
-        }
-        node = node.parentElement;
-      }
-      return null;
-    };
+        const canScroll = (element, delta) => {
+          if (!element || delta === 0) return false;
+          if (delta > 0) return element.scrollTop + element.clientHeight < element.scrollHeight - 2;
+          return element.scrollTop > 2;
+        };
 
-    const canScroll = (element, delta) => {
-      if (!element || delta === 0) return false;
-      if (delta > 0) return element.scrollTop + element.clientHeight < element.scrollHeight - 2;
-      return element.scrollTop > 2;
-    };
+        const attachFooter = () => {
+          const bar = document.querySelector('footer');
+          const last = items.at(-1);
+          if (!bar || !last || bar.parentElement === last) return;
+          footerSlot = { parent: bar.parentElement, next: bar.nextSibling };
+          last.appendChild(bar);
+        };
 
-    const footer = () => document.querySelector('footer');
+        const detachFooter = () => {
+          const bar = document.querySelector('footer');
+          if (!bar || !footerSlot?.parent) return;
+          footerSlot.parent.insertBefore(bar, footerSlot.next);
+          footerSlot = null;
+        };
 
-    const place = (element, y, z, animate, scale = 1) => {
-      element.style.zIndex = String(z);
-      element.style.transformOrigin = 'center top';
-      element.style.transition = animate ? `transform ${DURATION_MS}ms ${EASE}` : 'none';
-      element.style.transform = `translate3d(0, ${y}, 0) scale(${scale})`;
-    };
+        const stack = (current, animate) => {
+          const motion = animate && !prefersReducedMotion();
+          const duration = motion ? DURATION : 0;
 
-    const paint = (nextIndex, animate) => {
-      const items = sectionsIn(root);
-      if (!items.length) return;
+          items.forEach((section, i) => {
+            const isCurrent = i === current;
+            section.toggleAttribute('inert', !isCurrent);
+            section.style.pointerEvents = isCurrent ? 'auto' : 'none';
 
-      const maxIndex = items.length;
-      const clamped = Math.max(0, Math.min(nextIndex, maxIndex));
-      const previous = index;
-      if (animate && clamped === previous) return;
+            gsap.to(section, {
+              yPercent: i > current ? 100 : 0,
+              scale: i < current ? COVERED_SCALE : 1,
+              zIndex: i + 1,
+              duration,
+              ease: EASE,
+              overwrite: true,
+              transformOrigin: 'center center',
+            });
+          });
 
-      const motion = animate && !prefersReducedMotion();
-      const forward = clamped > previous;
-      const top = Math.min(clamped, items.length - 1);
-      const showingFooter = clamped === items.length;
-      const bar = footer();
+          if (!motion) {
+            locked = false;
+            return;
+          }
 
-      index = clamped;
+          locked = true;
+          gsap.delayedCall(duration, () => {
+            locked = false;
+          });
+        };
 
-      items.forEach((section, i) => {
-        section.toggleAttribute('inert', i !== top);
-        section.style.pointerEvents = i === top ? 'auto' : 'none';
+        const paint = (nextIndex, animate) => {
+          if (!items.length) return;
+          const clamped = Math.max(0, Math.min(nextIndex, items.length - 1));
+          if (animate && clamped === index) return;
 
-        if (!motion) {
-          place(section, i === top ? '0%' : '100%', i === top ? 2 : 1, false);
-          return;
-        }
+          const forward = clamped > index;
+          index = clamped;
+          window.dispatchEvent(
+            new CustomEvent('home-scroll', { detail: { direction: forward && clamped > 0 ? 1 : -1 } }),
+          );
+          stack(clamped, animate);
+        };
 
-        if (forward) {
-          if (i === clamped) place(section, '100%', 20, false);
-          else if (i === previous) place(section, '0%', 10, false);
-          else place(section, '100%', 1, false);
-          return;
-        }
+        const move = (direction) => {
+          if (locked) return;
+          const next = Math.max(0, Math.min(index + direction, items.length - 1));
+          if (next === index) return;
+          locked = true;
+          paint(next, true);
+        };
 
-        if (i === previous && previous < items.length) place(section, '0%', 20, false);
-        else if (i === clamped) place(section, '0%', 10, false, 0.94);
-        else place(section, '100%', 1, false);
+        const tryMove = (self, direction) => {
+          if (locked) {
+            if (self.event?.cancelable) self.event.preventDefault();
+            return;
+          }
+
+          const target = self.event?.target;
+          const inner =
+            target instanceof Element && target.closest('header') ? null : scrollableFrom(target);
+          if (canScroll(inner, direction)) return;
+
+          if (self.event?.cancelable) self.event.preventDefault();
+          move(direction);
+        };
+
+        attachFooter();
+        const initial = sectionIndexForHash(window.location.hash, items);
+        paint(initial >= 0 ? initial : 0, false);
+
+        const observer = Observer.create({
+          type: 'wheel,touch',
+          wheelSpeed: -1,
+          tolerance: WHEEL_THRESHOLD,
+          preventDefault: false,
+          onUp: (self) => tryMove(self, 1),
+          onDown: (self) => tryMove(self, -1),
+        });
+
+        const onKeyDown = (event) => {
+          const tag = event.target?.tagName;
+          const typing =
+            tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || event.target?.isContentEditable;
+          if (typing) return;
+          if (event.key === ' ' && (tag === 'BUTTON' || tag === 'A')) return;
+          if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+          if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
+            event.preventDefault();
+            move(1);
+          } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+            event.preventDefault();
+            move(-1);
+          } else if (event.key === 'Home') {
+            event.preventDefault();
+            if (!locked) paint(0, true);
+          } else if (event.key === 'End') {
+            event.preventDefault();
+            if (!locked) paint(items.length - 1, true);
+          }
+        };
+
+        const onClick = (event) => {
+          if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+            return;
+          }
+
+          const link = event.target.closest?.('a[href]');
+          if (!link) return;
+
+          const url = new URL(link.href, window.location.href);
+          if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.hash) {
+            return;
+          }
+
+          const match = sectionIndexForHash(url.hash, items);
+          if (match < 0) return;
+
+          event.preventDefault();
+          event.stopPropagation();
+          window.history.pushState(null, '', `${url.pathname}${url.search}${url.hash}`);
+          if (!locked) paint(match, true);
+        };
+
+        const onHashChange = () => {
+          const match = sectionIndexForHash(window.location.hash, items);
+          if (match >= 0 && !locked) paint(match, false);
+        };
+
+        window.addEventListener('keydown', onKeyDown);
+        window.addEventListener('click', onClick, true);
+        window.addEventListener('hashchange', onHashChange);
+
+        return () => {
+          observer.kill();
+          gsap.killTweensOf(items);
+          window.removeEventListener('keydown', onKeyDown);
+          window.removeEventListener('click', onClick, true);
+          window.removeEventListener('hashchange', onHashChange);
+          detachFooter();
+          items.forEach((section) => {
+            gsap.set(section, { clearProps: 'transform,zIndex' });
+            section.style.pointerEvents = '';
+            section.removeAttribute('inert');
+          });
+          html.classList.remove('home-scroll');
+        };
       });
 
-      if (bar) {
-        bar.style.pointerEvents = showingFooter ? 'auto' : 'none';
-        if (!motion) place(bar, showingFooter ? '0%' : '100%', 40, false);
-        else if (showingFooter) place(bar, '100%', 40, false);
-        else if (previous === items.length) place(bar, '0%', 40, false);
-        else place(bar, '100%', 40, false);
-      }
-
-      if (!motion) {
-        locked = false;
-        return;
-      }
-
-      locked = true;
-      void root.offsetWidth;
-      if (forward && previous < items.length) place(items[previous], '-4%', 10, true, 0.94);
-      if (forward && clamped < items.length) place(items[clamped], '0%', 20, true);
-      if (!forward && previous < items.length) place(items[previous], '100%', 20, true);
-      if (!forward && clamped < items.length) place(items[clamped], '0%', 10, true, 1);
-      if (bar && showingFooter) place(bar, '0%', 40, true);
-      if (bar && !showingFooter && previous === items.length) place(bar, '100%', 40, true);
-
-      window.clearTimeout(releaseTimer);
-      releaseTimer = window.setTimeout(() => {
-        items.forEach((section, i) => {
-          place(section, i === top ? '0%' : '100%', i === top ? 2 : 1, false);
-          section.style.pointerEvents = i === top ? 'auto' : 'none';
-          section.toggleAttribute('inert', i !== top);
-        });
-        if (bar) {
-          place(bar, showingFooter ? '0%' : '100%', 40, false);
-          bar.style.pointerEvents = showingFooter ? 'auto' : 'none';
-        }
-        locked = false;
-      }, DURATION_MS + 40);
-    };
-
-    const move = (direction) => {
-      if (locked) return;
-      paint(index + direction, true);
-    };
-
-    const onWheel = (event) => {
-      if (Math.abs(event.deltaY) < WHEEL_THRESHOLD) return;
-      event.preventDefault();
-      move(event.deltaY > 0 ? 1 : -1);
-    };
-
-    const onKeyDown = (event) => {
-      const tag = event.target?.tagName;
-      const typing =
-        tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || event.target?.isContentEditable;
-      if (typing) return;
-      if (event.key === ' ' && (tag === 'BUTTON' || tag === 'A')) return;
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-
-      const items = sectionsIn(root);
-      if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
-        event.preventDefault();
-        move(1);
-      } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
-        event.preventDefault();
-        move(-1);
-      } else if (event.key === 'Home') {
-        event.preventDefault();
-        if (!locked) paint(0, true);
-      } else if (event.key === 'End') {
-        event.preventDefault();
-        if (!locked) paint(items.length, true);
-      }
-    };
-
-    const onTouchStart = (event) => {
-      touchStartY = event.touches[0]?.clientY ?? 0;
-      const target = event.target;
-      touchScrollEl = target instanceof Element && target.closest('header') ? null : scrollableFrom(target);
-    };
-
-    const onTouchMove = (event) => {
-      const y = event.touches[0]?.clientY ?? touchStartY;
-      const delta = touchStartY - y;
-      if (canScroll(touchScrollEl, delta)) return;
-      if (event.cancelable) event.preventDefault();
-    };
-
-    const onTouchEnd = (event) => {
-      const endY = event.changedTouches[0]?.clientY ?? touchStartY;
-      const delta = touchStartY - endY;
-      const target = event.target;
-      if (target instanceof Element && target.closest('header')) return;
-      if (Math.abs(delta) < TOUCH_THRESHOLD) return;
-      if (canScroll(touchScrollEl, delta)) return;
-      move(delta > 0 ? 1 : -1);
-    };
-
-    const onClick = (event) => {
-      if (
-        event.defaultPrevented ||
-        event.button !== 0 ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        event.altKey
-      ) {
-        return;
-      }
-
-      const link = event.target.closest?.('a[href]');
-      if (!link) return;
-
-      const url = new URL(link.href, window.location.href);
-      if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.hash) {
-        return;
-      }
-
-      const match = sectionIndexForHash(url.hash, sectionsIn(root));
-      if (match < 0) return;
-
-      event.preventDefault();
-      window.history.pushState(null, '', `${url.pathname}${url.search}${url.hash}`);
-      if (!locked) paint(match, true);
-    };
-
-    const onHashChange = () => {
-      const match = sectionIndexForHash(window.location.hash, sectionsIn(root));
-      if (match >= 0 && !locked) paint(match, false);
-    };
-
-    const initial = sectionIndexForHash(window.location.hash, sectionsIn(root));
-    paint(initial >= 0 ? initial : 0, false);
-
-    window.addEventListener('wheel', onWheel, { passive: false });
-    window.addEventListener('keydown', onKeyDown);
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: false });
-    window.addEventListener('touchend', onTouchEnd);
-    window.addEventListener('click', onClick);
-    window.addEventListener('hashchange', onHashChange);
-
-    return () => {
-      window.clearTimeout(releaseTimer);
-      resetMotion();
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('keydown', onKeyDown);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
-      window.removeEventListener('click', onClick);
-      window.removeEventListener('hashchange', onHashChange);
-    };
-    };
-
-    const sync = () => {
-      teardown();
-      teardown = () => {};
-      if (!desktop.matches) {
-        resetMotion();
-        return;
-      }
-      teardown = enable();
-    };
-
-    sync();
-    desktop.addEventListener('change', sync);
-
-    return () => {
-      desktop.removeEventListener('change', sync);
-      teardown();
-    };
-  }, []);
+      return () => mm.revert();
+    },
+    { scope: rootRef },
+  );
 
   return (
     <div ref={rootRef} className="relative w-full md:h-dvh md:overflow-hidden">
