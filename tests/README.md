@@ -5,10 +5,8 @@ Tests live in this directory and follow the same module split as `src/modules`.
 ```
 tests/
   setup/         shared Vitest setup, Next/Framer mocks, render helpers
-  fixtures/      reusable sample data (import via `@tests/...`)
   unit/          pure logic and hooks, grouped by module
   components/    React components, grouped by module (`shared` for Navbar/Footer)
-  api/           App Router handlers
   e2e/           Playwright journeys per page
 ```
 

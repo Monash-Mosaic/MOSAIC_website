@@ -16,7 +16,7 @@ vi.mock('lenis', () => ({
 
 describe('SmoothScroll', () => {
   beforeEach(() => {
-    mockUsePathname.mockReturnValue('/projects');
+    mockUsePathname.mockReturnValue('/contact');
     vi.mocked(Lenis).mockClear();
     vi.mocked(frame.update).mockClear();
     vi.mocked(cancelFrame).mockClear();

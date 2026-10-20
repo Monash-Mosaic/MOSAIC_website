@@ -12,5 +12,7 @@ test.describe('home', () => {
     await expect(page.getByRole('heading', { name: 'Who we are' })).toBeVisible();
     await page.getByRole('link', { name: 'About' }).first().click();
     await expect(page.getByRole('contentinfo')).toBeVisible();
+    await page.getByRole('link', { name: 'MOSAIC logo' }).first().click();
+    await expect(page.getByRole('heading', { name: /Building Production-Ready Software/ })).toBeVisible();
   });
 });

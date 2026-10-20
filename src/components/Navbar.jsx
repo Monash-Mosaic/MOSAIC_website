@@ -56,7 +56,11 @@ export default function Navbar() {
     >
       <div className="pointer-events-auto mx-auto w-full max-w-6xl">
         <header className="flex items-center justify-between gap-3 rounded-full border border-black/5 bg-white/90 px-3 py-1.5 font-mono font-semibold text-ink shadow-[0_10px_30px_rgba(16,16,16,0.12)] backdrop-blur-md sm:px-4">
-          <Link href="/" className={`block shrink-0 rounded-full ${focusRing}`}>
+          <Link
+            href="/#top"
+            className={`block shrink-0 rounded-full ${focusRing}`}
+            onClick={() => setMobileOpen(false)}
+          >
             <Image
               src="/Primary_Blue_Transparent.png"
               alt="MOSAIC logo"

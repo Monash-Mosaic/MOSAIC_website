@@ -105,4 +105,22 @@ describe('PartnershipsSection', () => {
     render(<PartnershipsSection />);
     expect(screen.getByRole('heading', { name: 'Partnerships' })).toBeInTheDocument();
   });
+
+  it('draws the denser desktop particle field', () => {
+    const ctx = installCanvas();
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      width: 1280,
+      height: 800,
+      top: 0,
+      left: 0,
+      right: 1280,
+      bottom: 800,
+      x: 0,
+      y: 0,
+      toJSON() {},
+    });
+    Object.defineProperty(window, 'devicePixelRatio', { configurable: true, value: 1 });
+    render(<PartnershipsSection />);
+    expect(ctx.arc.mock.calls.length).toBeGreaterThan(3000);
+  });
 });
