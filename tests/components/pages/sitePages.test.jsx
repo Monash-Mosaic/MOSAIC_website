@@ -12,6 +12,8 @@ describe('site pages', () => {
 
     const main = screen.getByRole('main');
     expect(main).not.toHaveClass('pt-24');
+    expect(main).toHaveClass('text-white');
+    expect(screen.getByRole('banner').parentElement.parentElement).toHaveClass('text-ink');
     expect(screen.getByRole('heading', { name: /Building Production-Ready Software/ })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Partnerships', hidden: true })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Projects', hidden: true })).toBeInTheDocument();
@@ -30,5 +32,9 @@ describe('site pages', () => {
     );
     expect(screen.getByRole('button', { name: 'copy email' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Makerspace Address' })).toBeInTheDocument();
+
+    const email = screen.getByRole('link', { name: 'mosaic@monash.edu' });
+    expect(email.parentElement).toHaveClass('@container', 'min-w-0', 'flex-1');
+    expect(email.parentElement.parentElement).toHaveClass('min-w-0');
   });
 });

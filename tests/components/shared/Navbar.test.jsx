@@ -32,4 +32,19 @@ describe('Navbar', () => {
     await user.click(screen.getAllByRole('link', { name: 'Contact Us' })[1]);
     expect(screen.getByRole('button', { name: 'Open menu' })).toBeInTheDocument();
   });
+
+  it('keeps mobile menu items ink-colored even when the page text is white', async () => {
+    const { user } = render(
+      <div className="text-white">
+        <Navbar />
+      </div>,
+    );
+
+    expect(screen.getByRole('banner').parentElement.parentElement).toHaveClass('text-ink');
+
+    await user.click(screen.getByRole('button', { name: 'Open menu' }));
+
+    const mobileAbout = screen.getAllByRole('link', { name: 'About' })[1];
+    expect(mobileAbout.closest('nav')).toHaveClass('text-ink');
+  });
 });

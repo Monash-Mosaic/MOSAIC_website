@@ -17,10 +17,10 @@ export default function EmailCallout() {
   };
 
   return (
-    <div className="lg:-mt-[0.83vw]">
+    <div className="@container w-full min-w-0 flex-1 lg:-mt-[0.83vw]">
       <a
         href={`mailto:${contactEmail}`}
-        className={`block text-[8vw] leading-none whitespace-nowrap lg:text-[6.49vw] lg:leading-[1.54] ${focusRing}`}
+        className={`block max-w-full text-[min(8vw,9.6cqi)] leading-none whitespace-nowrap lg:text-[min(6.49vw,9.6cqi)] lg:leading-[1.54] ${focusRing}`}
       >
         {contactEmail}
       </a>

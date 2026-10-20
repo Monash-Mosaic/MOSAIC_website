@@ -52,7 +52,7 @@ export default function Navbar() {
   return (
     <div
       ref={shellRef}
-      className="pointer-events-none fixed top-3 right-0 left-0 z-[999] px-3 sm:top-4 sm:px-4"
+      className="pointer-events-none fixed top-3 right-0 left-0 z-[999] px-3 text-ink sm:top-4 sm:px-4"
     >
       <div className="pointer-events-auto mx-auto w-full max-w-6xl">
         <header className="flex items-center justify-between gap-3 rounded-full border border-black/5 bg-white/90 px-3 py-1.5 font-mono font-semibold text-ink shadow-[0_10px_30px_rgba(16,16,16,0.12)] backdrop-blur-md sm:px-4">
@@ -95,7 +95,7 @@ export default function Navbar() {
         </header>
 
         {mobileOpen && (
-          <nav className="mt-2 flex flex-col gap-3 rounded-3xl border border-black/5 bg-white/95 px-5 py-4 text-lg shadow-[0_10px_30px_rgba(16,16,16,0.12)] backdrop-blur-md md:hidden">
+          <nav className="mt-2 flex flex-col gap-3 rounded-3xl border border-black/5 bg-white/95 px-5 py-4 text-lg text-ink shadow-[0_10px_30px_rgba(16,16,16,0.12)] backdrop-blur-md md:hidden">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}

@@ -9,7 +9,7 @@ export default function ContactPage() {
   return (
     <PageLayout as="main" className="flex min-h-screen flex-col bg-white text-ink">
       <section className="flex flex-1 flex-col gap-10 px-6 pt-34 lg:gap-[0.49vw] lg:px-[2.92vw] lg:pt-[10.21vw]">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-[2.5vw]">
+        <div className="flex min-w-0 flex-col gap-6 lg:flex-row lg:items-start lg:gap-[2.5vw]">
           <ContactPrompts />
           <EmailCallout />
         </div>

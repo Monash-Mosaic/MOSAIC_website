@@ -15,4 +15,21 @@ test.describe('home', () => {
     await page.getByRole('link', { name: 'MOSAIC logo' }).first().click();
     await expect(page.getByRole('heading', { name: /Building Production-Ready Software/ })).toBeVisible();
   });
+
+  test('shows readable ink-colored items in the mobile menu', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+
+    await page.getByRole('button', { name: 'Open menu' }).click();
+
+    const mobileMenu = page
+      .getByRole('navigation')
+      .filter({ has: page.getByRole('link', { name: 'About' }) })
+      .filter({ visible: true });
+    await expect(mobileMenu.getByRole('link', { name: 'About' })).toBeVisible();
+    await expect(mobileMenu.getByRole('link', { name: 'About' })).toHaveCSS('color', 'rgb(28, 28, 28)');
+    await expect(mobileMenu.getByRole('link', { name: 'Projects' })).toBeVisible();
+    await expect(mobileMenu.getByRole('link', { name: 'Partners' })).toBeVisible();
+    await expect(mobileMenu.getByRole('link', { name: 'Contact Us' })).toBeVisible();
+  });
 });

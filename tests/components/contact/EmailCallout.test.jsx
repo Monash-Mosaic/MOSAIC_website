@@ -21,4 +21,12 @@ describe('EmailCallout', () => {
     expect(writeText).toHaveBeenCalledWith(contactEmail);
     expect(await screen.findByRole('button', { name: 'copied!' })).toBeInTheDocument();
   });
+
+  it('scales the email to the available width instead of overflowing', () => {
+    render(<EmailCallout />);
+
+    const email = screen.getByRole('link', { name: contactEmail });
+    expect(email).toHaveClass('max-w-full', 'text-[min(8vw,9.6cqi)]', 'lg:text-[min(6.49vw,9.6cqi)]');
+    expect(email.parentElement).toHaveClass('@container', 'w-full', 'min-w-0', 'flex-1');
+  });
 });
