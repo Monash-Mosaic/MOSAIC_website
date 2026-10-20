@@ -11,7 +11,7 @@ export const partners = [
       {
         "name": "IFRC",
         "src": "/ifrc.png",
-        "link": "https://solferinoacademy.com/our-team/"
+        "link": "https://solferinoacademy.com"
       }
     ]
   },
