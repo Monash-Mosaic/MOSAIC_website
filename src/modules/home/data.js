@@ -11,7 +11,7 @@ export const partners = [
       {
         "name": "IFRC",
         "src": "/ifrc.png",
-        "link": ""
+        "link": "https://solferinoacademy.com/our-team/"
       }
     ]
   },
@@ -22,12 +22,12 @@ export const partners = [
       {
         "name": "Monash University",
         "src": "/monash.png",
-        "link": ""
+        "link": "https://www.monash.edu/it/hcc/action-lab"
       },
       {
         "name": "ActionLab",
         "src": "/action_lab.png",
-        "link": ""
+        "link": "https://www.monash.edu/it/hcc/action-lab"
       }
     ]
   },
@@ -38,7 +38,7 @@ export const partners = [
       {
         "name": "MCCSA",
         "src": "/mccsa.png",
-        "link": ""
+        "link": "https://mccsa.org.au/"
       }
     ]
   }
