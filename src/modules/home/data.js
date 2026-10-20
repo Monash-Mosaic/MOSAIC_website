@@ -53,7 +53,7 @@ export const projects = {
   ctrlAltPrebunk: {
     title: 'Ctrl + Alt + Prebunk',
     theme: 'dark',
-    image: '/prebunk.png',
+    image: '/ctrl_alt_prebunk.webp',
     href: 'https://ctrl-alt-prebunk.wdr26.org/en',
     lines: [
       { text: 'Client: International Federation of Red Cross' },
@@ -75,7 +75,7 @@ export const projects = {
   worldDisastersReport: {
     title: 'World Disasters Report Playbook',
     theme: 'dark',
-    image: '/wdr.png',
+    image: '/wdr26.webp',
     href: 'https://wdr26.org/',
     lines: [
       { text: 'Client: International Federation of Red Cross' },
@@ -88,7 +88,7 @@ export const projects = {
   disinformer: {
     title: 'Disinformer',
     theme: 'light',
-    image: '/disinformer_primary.png',
+    image: '/Disinformer.webp',
     href: 'https://disinformer.wdr26.org/',
     lines: [
       { text: 'Client: International Federation of Red Cross' },
@@ -99,7 +99,7 @@ export const projects = {
   demystifyingLlms: {
     title: 'Demystifying LLMs',
     theme: 'dark',
-    image: '/LLM_Project.png',
+    image: '/dem_llm.webp',
     href: '',
     lines: [
       { text: 'Internal AI Engineering Project', emphasis: true },

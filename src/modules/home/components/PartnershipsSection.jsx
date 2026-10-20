@@ -5,7 +5,6 @@ import { partners } from '../data';
 import { HiArrowDown } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import { ParallaxLayer, ParallaxSection } from '@/components';
 
 export default function PartnershipsSection() {
   const canvasRef = useRef(null);
@@ -17,8 +16,6 @@ export default function PartnershipsSection() {
     if (!ctx) return;
     const section = canvas.parentElement;
     if (!section) return;
-
-    const PARTICLE_COUNT = 6500;
 
     const pseudoRandom = (seed) => {
       const x = Math.sin(seed * 12.9898) * 43758.5453;
@@ -42,7 +39,9 @@ export default function PartnershipsSection() {
         3: [],
       };
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const particleCount = rect.width < 768 ? 1600 : 6500;
+
+      for (let i = 0; i < particleCount; i++) {
         const x = pseudoRandom(i * 17.31) * rect.width;
         const y = pseudoRandom(i * 31.73) * rect.height;
         const size = 0.5 + pseudoRandom(i * 7.41) * 1.5;
@@ -84,40 +83,28 @@ export default function PartnershipsSection() {
   }, []);
 
   return (
-    <ParallaxSection
-      as="div"
+    <section
       id="partners"
-      className="
-        relative
-        isolate
-        flex
-        min-h-screen
-        w-full
-        flex-col
-        overflow-hidden
-        bg-navy
-        snap-start
-        py-14
-      "
+      data-scroll-section
+      className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-navy pb-10 md:h-dvh md:max-h-dvh md:overflow-hidden md:pb-[clamp(1rem,3vh,2rem)]"
     >
-      <ParallaxLayer y={[-300, 300]} className="pointer-events-none absolute inset-0">
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-          <motion.canvas
-            ref={canvasRef}
-            className="absolute inset-0 h-full w-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, ease: 'easeOut' }}
-          />
-        </div>
-      </ParallaxLayer>
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+        <motion.canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, ease: 'easeOut' }}
+        />
+      </div>
 
       {/* Partnerships Text */}
-      <div className="relative z-10 flex w-full flex-col px-6 shrink-0 sm:px-12 lg:px-24">
+      <div className="relative z-10 flex w-full shrink-0 flex-col px-4 pt-[var(--site-header)] sm:px-12 lg:px-24">
         <h2
           className="
             font-mono
-            text-[clamp(2.5rem,3.5vw,7.5rem)]
+            text-[clamp(2rem,10.5vw,3.25rem)]
+            md:text-[clamp(2rem,8vh,4.5rem)]
             font-semibold
             leading-tight
             text-[#FCFCFC]
@@ -128,8 +115,7 @@ export default function PartnershipsSection() {
 
         <p
           className="
-            font-inter
-            text-[clamp(0.95rem,1.4vw,2.5rem)]
+            text-[clamp(0.9rem,2.2vh,1.35rem)]
             font-semibold
             leading-6
             text-[#FCFCFC]
@@ -142,34 +128,36 @@ export default function PartnershipsSection() {
       </div>
 
       {/* Partners */}
-      <ParallaxLayer
-        y={[80, -20]}
+      <div
         className="
-          relative 
+          relative
           z-10
           flex
-          flex-1
           w-full
           items-center
           justify-center
-          px-6
+          px-4
+          py-6
           sm:px-12
           lg:px-28
-          pb-10
-          pt-12
+          md:min-h-0
+          md:flex-1
+          md:overflow-hidden
+          md:py-[clamp(0.75rem,2vh,2rem)]
         "
       >
         <div
           className="
             flex
+            h-fit
             w-full
-            max-w-[140rem] 
+            max-w-[140rem]
             mx-auto
             flex-row
             flex-wrap
-            items-stretch
+            items-start
             justify-center
-            gap-[clamp(1.5rem,2vw,3rem)]
+            gap-[clamp(1.25rem,2vw,2.5rem)]
           "
         >
           {partners.map((partner, index) => {
@@ -204,20 +192,20 @@ export default function PartnershipsSection() {
                   animationDuration: `${3.5 + index * 0.4}s`,
                 }}
               >
-                {/* White Logo Container (Height scales with viewport width for 4K) */}
                 <div
                   className="
                     flex
-                    w-fit
-                    flex-1
+                    w-full
                     items-center
                     justify-center
+                    gap-4
                     rounded-[1.25rem]
                     bg-[#FCFCFC]
-                    px-[clamp(1.5rem,3vw,3rem)]
+                    px-4
                     py-6
-                    gap-5
-                    min-h-[clamp(6rem,12vw,20rem)]
+                    sm:gap-6
+                    sm:px-[clamp(1.5rem,2.5vw,2.75rem)]
+                    sm:py-[clamp(1.75rem,4.5vh,3.5rem)]
                   "
                 >
                   {partner.logos.map((logo) => (
@@ -226,14 +214,7 @@ export default function PartnershipsSection() {
                       href={logo.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="
-                        flex
-                        flex-1
-                        h-full
-                        items-center
-                        justify-center
-                        min-w-0
-                      "
+                      className="flex min-w-0 flex-1 items-center justify-center"
                       aria-label={`Visit ${logo.name}`}
                     >
                       <img
@@ -242,10 +223,12 @@ export default function PartnershipsSection() {
                         className="
                           block
                           h-auto
-                          w-screen
-                          max-h-[clamp(5rem,8rem,20rem)]
-                          max-w-full
+                          max-h-14
+                          w-full
                           object-contain
+                          sm:h-[clamp(4.75rem,11vh,8rem)]
+                          sm:max-h-none
+                          sm:w-auto
                           transition-transform
                           duration-300
                           group-hover:scale-105
@@ -255,27 +238,8 @@ export default function PartnershipsSection() {
                   ))}
                 </div>
 
-                {/* Description (Green Bar) */}
-                <div
-                  className="
-                    flex
-                    h-[clamp(3rem,3.3vw,5rem)]
-                    shrink-0
-                    items-center
-                    justify-center
-                    px-4
-                  "
-                >
-                  <span
-                    className="
-                    text-center
-                    font-['Fira_Code']
-                    text-[clamp(0.875rem,1.2vw,1.75rem)]
-                    font-semibold
-                    leading-snug
-                    text-ink
-                  "
-                  >
+                <div className="flex min-h-[clamp(3.25rem,6vh,4.75rem)] shrink-0 items-center justify-center px-4">
+                  <span className="text-center text-[clamp(0.9rem,1.7vh,1.15rem)] font-semibold leading-snug text-ink">
                     {partner.description}
                   </span>
                 </div>
@@ -283,19 +247,18 @@ export default function PartnershipsSection() {
             );
           })}
         </div>
-      </ParallaxLayer>
+      </div>
 
       {/* Scroll to Projects */}
-      <div className="relative z-10 flex w-full justify-end px-6 sm:px-12 lg:px-24 mt-auto shrink-0 pb-6">
-        <Link
+      <div className="relative z-10 mt-2 flex w-full shrink-0 justify-end px-4 pb-2 sm:px-12 lg:px-24 md:mt-auto md:pb-6">
+        <a
           href="#projects"
           className="
             flex
             items-center
             gap-2
             whitespace-nowrap
-            font-['Fira_Code']
-            text-[clamp(0.8rem,1.2vw,1.75rem)]
+            text-[clamp(0.8rem,1.4vh,1rem)]
             font-semibold
             leading-5.25
             text-[#FCFCFC]
@@ -304,8 +267,8 @@ export default function PartnershipsSection() {
         >
           <span>SCROLL TO PROJECTS</span>
           <HiArrowDown aria-hidden="true" className="w-[1em] h-[1em]" />
-        </Link>
+        </a>
       </div>
-    </ParallaxSection>
+    </section>
   );
 }

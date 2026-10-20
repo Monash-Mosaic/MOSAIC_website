@@ -10,7 +10,7 @@ test.describe('home', () => {
     await expect(page.getByRole('heading', { name: 'Partnerships' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Projects' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Who we are' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'About' }).first()).toBeVisible();
+    await page.getByRole('link', { name: 'About' }).first().click();
     await expect(page.getByRole('contentinfo')).toBeVisible();
   });
 });

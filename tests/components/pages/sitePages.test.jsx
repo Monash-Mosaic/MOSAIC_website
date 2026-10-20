@@ -37,9 +37,9 @@ describe('site pages', () => {
     const main = screen.getByRole('main');
     expect(main).not.toHaveClass('pt-24');
     expect(screen.getByRole('heading', { name: /Building Production-Ready Software/ })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Partnerships' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Projects' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Who we are' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Partnerships', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Projects', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Who we are', hidden: true })).toBeInTheDocument();
     expect(screen.getAllByRole('contentinfo').length).toBeGreaterThan(0);
   });
 

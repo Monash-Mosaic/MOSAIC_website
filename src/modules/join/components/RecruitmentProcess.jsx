@@ -9,9 +9,9 @@ export default function RecruitmentProcess() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.4 }}
-      className="mb-20"
+      className="mb-12 sm:mb-20"
     >
-      <h2 className="text-5xl font-bold text-[#213359] mb-16">Our Recruitment Process</h2>
+      <h2 className="mb-8 text-3xl font-bold text-[#213359] sm:text-4xl md:mb-16 lg:text-5xl">Our Recruitment Process</h2>
 
       <div className="relative">
         <div className="absolute top-8 left-0 right-0 h-1 bg-[#213359] hidden md:block"></div>

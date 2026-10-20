@@ -41,15 +41,15 @@ export default function ContactForm() {
   };
 
   const inputClass =
-    'w-full p-3 text-xl border-2 rounded-lg text-[#213359] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-lime-400';
+    'w-full min-w-0 rounded-lg border-2 bg-gray-100 p-3 text-base text-[#213359] focus:ring-2 focus:ring-lime-400 focus:outline-none md:text-xl';
 
   return (
-    <form className="flex-1 flex flex-col gap-8 max-w-6xl" onSubmit={handleSubmit}>
-      <div className="flex flex-col md:flex-row gap-26">
-        <div className="md:w-1/3 flex flex-col gap-y-14">
+    <form className="flex max-w-6xl min-w-0 flex-1 flex-col gap-8" onSubmit={handleSubmit}>
+      <div className="flex min-w-0 flex-col gap-8 md:flex-row md:gap-16 lg:gap-26">
+        <div className="flex min-w-0 flex-col gap-y-6 md:w-1/3 md:gap-y-14">
           <div className="flex flex-col gap-y-2">
-            <label className="block text-lime-400 text-2xl font-semibold mb-1">
-              Name <span className="text-base text-lime-400">(Required)</span>
+            <label className="mb-1 block text-xl font-semibold text-lime-400 md:text-2xl">
+              Name <span className="text-sm text-lime-400 md:text-base">(Required)</span>
             </label>
             <input
               name="Name"
@@ -62,8 +62,8 @@ export default function ContactForm() {
             />
           </div>
           <div className="flex flex-col gap-y-2">
-            <label className="block text-lime-400 text-2xl font-semibold mb-1">
-              Email <span className="text-base text-lime-400">(Required)</span>
+            <label className="mb-1 block text-xl font-semibold text-lime-400 md:text-2xl">
+              Email <span className="text-sm text-lime-400 md:text-base">(Required)</span>
             </label>
             <input
               name="Email"
@@ -76,8 +76,8 @@ export default function ContactForm() {
             />
           </div>
           <div className="flex flex-col gap-y-2">
-            <label className="block text-lime-400 text-2xl font-semibold mb-1">
-              Inquiry type <span className="text-base text-lime-400">(Required)</span>
+            <label className="mb-1 block text-xl font-semibold text-lime-400 md:text-2xl">
+              Inquiry type <span className="text-sm text-lime-400 md:text-base">(Required)</span>
             </label>
             <select
               name="InquiryType"
@@ -94,9 +94,9 @@ export default function ContactForm() {
           </div>
         </div>
 
-        <div className="md:w-2/3 flex flex-col gap-y-2">
-          <label className="block text-lime-400 text-2xl font-semibold mb-1">
-            Message <span className="text-base text-lime-400">(Required)</span>
+        <div className="flex min-w-0 flex-col gap-y-2 md:w-2/3">
+          <label className="mb-1 block text-xl font-semibold text-lime-400 md:text-2xl">
+            Message <span className="text-sm text-lime-400 md:text-base">(Required)</span>
           </label>
           <textarea
             name="Message"
@@ -110,11 +110,11 @@ export default function ContactForm() {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex justify-stretch sm:justify-end">
         <button
           type="submit"
           disabled={loading}
-          className="bg-lime-400 text-[#213359] p-4 text-xl px-12 py-4 rounded-full font-semibold hover:bg-lime-300 transition shadow-md mt-4 disabled:opacity-60"
+          className="mt-2 w-full rounded-full bg-lime-400 px-8 py-3 text-lg font-semibold text-[#213359] shadow-md transition hover:bg-lime-300 disabled:opacity-60 sm:mt-4 sm:w-auto sm:px-12 sm:py-4 sm:text-xl"
         >
           {loading ? 'Submitting...' : 'Submit'}
         </button>

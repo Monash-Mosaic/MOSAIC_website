@@ -5,16 +5,16 @@ import { motion } from 'framer-motion';
 export default function RoleList({ title, roles, expandedRole, onToggle }) {
   return (
     <div>
-      <h2 className="text-3xl font-bold text-lime-400 mb-8">{title}</h2>
+      <h2 className="mb-6 text-2xl font-bold break-words text-lime-400 sm:mb-8 sm:text-3xl">{title}</h2>
       <div className="space-y-0">
         {roles.map((role, index) => (
           <div key={role.id}>
             <div
-              className="flex items-center justify-between py-4 cursor-pointer hover:bg-[#1a2a4a] transition-colors duration-200"
+              className="flex cursor-pointer items-center justify-between gap-4 py-4 transition-colors duration-200 hover:bg-[#1a2a4a]"
               onClick={() => onToggle(role.id)}
             >
-              <span className="text-white text-lg">{role.title}</span>
-              <span className="text-lime-400 text-xl font-bold">{expandedRole === role.id ? '-' : '+'}</span>
+              <span className="text-base text-white sm:text-lg">{role.title}</span>
+              <span className="shrink-0 text-xl font-bold text-lime-400">{expandedRole === role.id ? '-' : '+'}</span>
             </div>
             {expandedRole === role.id && (
               <motion.div

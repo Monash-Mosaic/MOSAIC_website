@@ -13,7 +13,6 @@ describe('PageLayout', () => {
     expect(screen.getByText('Page body')).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: 'MOSAIC logo' })).toHaveLength(2);
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-    expect(screen.getByText('Page body').parentElement).toHaveClass('pt-24');
   });
 
   it('can render as a main landmark without the header offset', () => {

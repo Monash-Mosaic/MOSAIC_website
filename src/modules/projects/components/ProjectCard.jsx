@@ -8,7 +8,7 @@ function ProjectContent({ project, index }) {
   return (
     <>
       <div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-2" style={{ color: project.textColor }}>
+        <h2 className="mb-2 text-2xl font-bold break-words sm:text-3xl md:text-4xl" style={{ color: project.textColor }}>
           Project {index + 1}: {project.title}
         </h2>
         {project.subtitle ? (
@@ -21,7 +21,7 @@ function ProjectContent({ project, index }) {
         ) : null}
       </div>
 
-      <p className="text-lg leading-relaxed font-medium" style={{ color: project.textColor, opacity: 0.9 }}>
+      <p className="text-base leading-relaxed font-medium break-words sm:text-lg" style={{ color: project.textColor, opacity: 0.9 }}>
         {project.description}
       </p>
 
@@ -31,7 +31,7 @@ function ProjectContent({ project, index }) {
         href={project.link || undefined}
         target={project.link ? '_blank' : undefined}
         rel={project.link ? 'noopener noreferrer' : undefined}
-        className="inline-block px-8 py-3 rounded-full font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+        className="inline-block max-w-full rounded-full px-6 py-3 text-base font-bold shadow-lg transition-all duration-200 hover:shadow-xl sm:px-8 sm:text-lg"
         style={{
           backgroundColor: project.buttonColor,
           color: project.buttonTextColor,
@@ -46,24 +46,24 @@ function ProjectContent({ project, index }) {
 
 function RightAlignedProject({ project, index }) {
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="relative w-full overflow-x-clip">
       <div
-        className="absolute top-0 right-0 w-1/2 h-full rounded-l-3xl"
+        className="absolute top-0 right-0 hidden h-full w-1/2 rounded-l-3xl md:block"
         style={{ backgroundColor: project.bgColor }}
       />
 
-      <div className="max-w-7xl mx-auto px-10 relative z-10">
-        <div className="py-12 rounded-l-3xl relative" style={{ backgroundColor: project.bgColor }}>
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 justify-end">
-            <div className="flex-1 space-y-6 pl-8 md:pl-65 pr-1 md:pr-1">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 md:px-10">
+        <div className="relative rounded-3xl py-5 md:rounded-l-3xl md:rounded-r-none md:py-12" style={{ backgroundColor: project.bgColor }}>
+          <div className="flex flex-col items-stretch gap-6 px-4 md:flex-row md:items-center md:justify-end md:px-0">
+            <div className="order-2 min-w-0 flex-1 space-y-6 md:order-1 md:pr-4 md:pl-16">
               <ProjectContent project={project} index={index} />
             </div>
-            <div className="flex-shrink-0 pr-6">
+            <div className="order-1 w-full shrink-0 md:order-2 md:w-auto md:pr-6">
               <img
                 src={project.image}
                 alt={`${project.title} project`}
                 referrerPolicy="no-referrer"
-                className="w-80 h-60 md:w-130 md:h-auto rounded-3xl object-cover"
+                className="h-auto w-full rounded-3xl object-cover md:w-[32.5rem]"
               />
             </div>
           </div>
@@ -75,18 +75,18 @@ function RightAlignedProject({ project, index }) {
 
 function LeftAlignedProject({ project, index }) {
   return (
-    <div className="max-w-7xl mx-auto px-11">
-      <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: project.bgColor }}>
-        <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
-          <div className="flex-shrink-0">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-11">
+      <div className="overflow-hidden rounded-3xl" style={{ backgroundColor: project.bgColor }}>
+        <div className="flex flex-col items-stretch gap-6 p-4 md:flex-row md:items-center md:p-0">
+          <div className="w-full shrink-0 md:w-auto">
             <img
               src={project.image}
               alt={`${project.title} project`}
               referrerPolicy="no-referrer"
-              className="w-80 h-60 md:w-[30rem] md:h-auto rounded-3xl object-cover"
+              className="h-auto w-full rounded-3xl object-cover md:w-[30rem]"
             />
           </div>
-          <div className="flex-1 space-y-6 pl-8 md:pl-1 pr-8 md:pr-60">
+          <div className="min-w-0 flex-1 space-y-6 md:py-8 md:pr-16 md:pl-4">
             <ProjectContent project={project} index={index} />
           </div>
         </div>

@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { HiArrowUp } from 'react-icons/hi';
-import { ParallaxLayer, ParallaxSection } from '@/components';
 import { topics } from '@/modules/home/data';
 
 const CONTACT_EMAIL = 'mosaic@monash.edu';
@@ -12,6 +11,14 @@ const sectionStyle = {
   backgroundImage: "url('/who-we-are-texture.svg')",
   backgroundSize: '360px 360px',
   backgroundRepeat: 'repeat',
+};
+
+const panelStyle = {
+  backgroundColor: '#B7FF00',
+  backgroundImage: "url('/who-we-are-texture.svg')",
+  backgroundSize: '360px 360px',
+  backgroundRepeat: 'repeat',
+  backgroundBlendMode: 'multiply',
 };
 
 function withBold(text) {
@@ -47,35 +54,31 @@ export default function WhoWeAreSection() {
   }
 
   return (
-    <ParallaxSection
+    <section
       id="about"
-      className="relative isolate w-full snap-start overflow-hidden bg-white text-[#213359]"
+      data-scroll-section
+      className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip bg-white font-[family-name:var(--font-space-grotesk)] text-[#213359] md:h-dvh md:max-h-dvh md:overflow-hidden"
     >
-      <ParallaxLayer
-        y={[-160, 160]}
-        aria-hidden="true"
-        className="absolute inset-x-0 -inset-y-24 -z-10"
-        style={sectionStyle}
-      />
-      <div className="w-full px-5 py-12 md:px-12 md:py-16">
-        <div className="mx-auto w-full max-w-[1340px]">
-        <h2 className="font-mono text-4xl leading-none font-bold md:text-5xl">Who we are</h2>
-        <p className="mt-3 text-base font-semibold md:text-lg">
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={sectionStyle} />
+      <div className="flex w-full flex-col justify-center px-4 pt-[var(--site-header)] pb-6 sm:px-5 md:min-h-0 md:flex-1 md:overflow-y-auto md:px-12 md:pb-[clamp(0.5rem,1.5vh,1rem)]">
+        <div className="mx-auto flex w-full max-w-[1340px] flex-col">
+        <h2 className="shrink-0 font-mono text-[clamp(1.75rem,4.5vh,3rem)] leading-none font-bold">Who we are</h2>
+        <p className="mt-2 shrink-0 text-[clamp(0.9rem,1.8vh,1.125rem)] font-semibold">
           Engineering for community resilience and global equity
         </p>
 
-        <ParallaxLayer
-          y={[32, -32]}
-          className="mt-10 flex min-h-[506px] w-full flex-col border border-[#213359] bg-[#D0FF63]/51 shadow-[7px_7px_0_rgba(33,51,89,0.18)] md:h-[506px]"
+        <div
+          className="mt-[clamp(0.75rem,2vh,1.5rem)] flex w-full flex-col border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)]"
+          style={panelStyle}
         >
           <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
-            <p className="whitespace-nowrap">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
+            <p className="break-words">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
             <p className="mt-2">&gt;SELECT_OPTION:</p>
           </div>
 
-          <div className="grid flex-1 md:min-h-0 md:grid-cols-[344px_minmax(0,1fr)]">
+          <div className="grid md:grid-cols-[344px_minmax(0,1fr)]">
           <aside className="flex flex-col border-b border-[#213359]/70 p-4 pt-0 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:pt-0 md:text-base">
-            <ol className="flex flex-col gap-5">
+            <ol className="flex flex-col gap-4">
               {topics.map((topic, index) => {
                 const isActive = activeTopic?.id === topic.id;
 
@@ -111,11 +114,11 @@ export default function WhoWeAreSection() {
             </button>
           </aside>
 
-          <div className="p-5 md:p-4">
+          <div className="min-h-0 overflow-y-auto p-5 md:p-4">
             {activeTopic ? (
               <div aria-live="polite">
                 <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
-                <p className="mt-5 max-w-4xl text-base leading-relaxed font-semibold whitespace-pre-line md:text-lg">
+                <p className="mt-3 max-w-4xl text-sm leading-snug font-semibold break-words whitespace-pre-line sm:text-base md:text-[clamp(0.85rem,1.7vh,1.125rem)]">
                   {withBold(activeTopic.description)}
                 </p>
               </div>
@@ -125,19 +128,19 @@ export default function WhoWeAreSection() {
                   EXECUTE_PARTNERSHIP.EXE [SUCCESS]
                 </p>
                 <div className="mt-7 space-y-1 font-mono text-sm font-semibold md:text-base">
-                  <p className="grid grid-cols-[9rem_minmax(0,1fr)] gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
                     <span>&gt; DIRECT_EMAIL :</span>
                     <a className="break-words underline underline-offset-4" href={`mailto:${CONTACT_EMAIL}`}>
                       {CONTACT_EMAIL}
                     </a>
                   </p>
-                  <p className="grid grid-cols-[9rem_minmax(0,1fr)] gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
                     <span>&gt; MAKERSPACE :</span>
-                    <span>Alan Finkel Building for Technology, Monash Clayton</span>
+                    <span className="break-words">Alan Finkel Building for Technology, Monash Clayton</span>
                   </p>
-                  <p className="grid grid-cols-[9rem_minmax(0,1fr)] gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
                     <span>&gt; RESPONSE_TIME :</span>
-                    <span>&lt; 24 Hours (Direct to Student Directors)</span>
+                    <span className="break-words">&lt; 24 Hours (Direct to Student Directors)</span>
                   </p>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm font-bold md:text-base">
@@ -162,17 +165,17 @@ export default function WhoWeAreSection() {
             )}
           </div>
           </div>
-        </ParallaxLayer>
+        </div>
         </div>
       </div>
 
       <Link
         href="#top"
-        className="absolute right-5 bottom-4 flex items-center gap-1 rounded font-mono text-sm font-semibold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:right-8 md:text-[15px]"
+        className="relative z-10 mr-5 mb-4 flex items-center gap-1 self-end rounded font-mono text-sm font-semibold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:mr-8 md:text-[15px]"
       >
         Scroll to top <HiArrowUp aria-hidden="true" className="size-[1.15em]" />
       </Link>
-    </ParallaxSection>
+    </section>
   );
 }
 
