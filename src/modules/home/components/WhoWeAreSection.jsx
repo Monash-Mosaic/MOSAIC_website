@@ -1,6 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
+import { HiArrowUp } from 'react-icons/hi';
 import { topics } from '@/modules/home/data';
 
 const CONTACT_EMAIL = 'mosaic@monash.edu';
@@ -86,7 +88,7 @@ export default function WhoWeAreSection() {
                       type="button"
                       aria-pressed={isActive}
                       onClick={() => setActiveTopic(topic)}
-                      className={`w-full px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] ${
+                      className={`w-full cursor-pointer px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] ${
                         isActive
                           ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
                           : 'text-[#213359] hover:bg-[#213359]/10'
@@ -102,7 +104,7 @@ export default function WhoWeAreSection() {
               type="button"
               aria-pressed={isContactActive}
               onClick={() => setActiveTopic(null)}
-              className={`mt-4 inline-block self-start px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] ${
+              className={`mt-8 inline-block cursor-pointer self-start px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:mt-auto md:pt-1 ${
                 isContactActive
                   ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
                   : 'text-[#213359] hover:bg-[#213359]/10'
@@ -145,7 +147,7 @@ export default function WhoWeAreSection() {
                   <button
                     type="button"
                     onClick={copyEmail}
-                    className="text-left underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
+                    className="cursor-pointer text-left underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
                   >
                     [ {copyStatus || 'CLICK TO COPY EMAIL'} ]
                   </button>
@@ -166,6 +168,13 @@ export default function WhoWeAreSection() {
         </div>
         </div>
       </div>
+
+      <Link
+        href="#top"
+        className="relative z-10 mr-5 mb-4 flex items-center gap-1 self-end rounded font-mono text-sm font-semibold uppercase hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:mr-8 md:text-[15px]"
+      >
+        Scroll to top <HiArrowUp aria-hidden="true" className="size-[1.15em]" />
+      </Link>
     </section>
   );
 }

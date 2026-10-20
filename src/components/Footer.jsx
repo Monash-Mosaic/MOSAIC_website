@@ -21,7 +21,10 @@ const linkClass =
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-navy bg-footer-lime pb-[env(safe-area-inset-bottom)] font-mono text-ink">
+    <footer
+      role="contentinfo"
+      className="w-full border-t border-navy bg-footer-lime pb-[env(safe-area-inset-bottom)] font-mono text-ink"
+    >
       <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center justify-between gap-6 px-4 py-5 sm:px-6 md:flex-row xl:pt-[17px] xl:pr-[33px] xl:pb-[18px] xl:pl-[18px]">
         <Link href="/" className={`block shrink-0 ${linkClass}`}>
           <Image

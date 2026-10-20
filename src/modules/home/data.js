@@ -88,7 +88,7 @@ export const projects = {
   disinformer: {
     title: 'Disinformer',
     theme: 'light',
-    image: '/disinformer.webp',
+    image: '/Disinformer.webp',
     href: 'https://disinformer.wdr26.org/',
     lines: [
       { text: 'Client: International Federation of Red Cross' },

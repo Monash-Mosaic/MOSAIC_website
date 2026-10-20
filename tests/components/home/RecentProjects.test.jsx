@@ -37,14 +37,21 @@ describe('RecentProjects', () => {
       }
     }
 
+    const liveProjects = projectLayout.map((slot) => projects[slot.id]).filter((project) => project.href);
     const visitLinks = screen.getAllByRole('link', { name: 'Visit Project' });
-    expect(visitLinks).toHaveLength(projectLayout.length);
-    for (const link of visitLinks) {
-      expect(link).toHaveAttribute('href', '/projects');
+    expect(visitLinks).toHaveLength(liveProjects.length);
+    for (const project of liveProjects) {
+      const card = screen.getByRole('heading', { name: project.title }).closest('article');
+      expect(card.querySelector('a')).toHaveAttribute('href', project.href);
     }
+    expect(screen.getAllByText('Coming Soon')).toHaveLength(
+      projectLayout.filter((slot) => !projects[slot.id].href).length,
+    );
 
     expect(screen.getByRole('link', { name: /scroll to about/i })).toHaveAttribute('href', '#about');
-    expect(document.querySelector('img')).toHaveAttribute('src', '/ifrc.png');
+    expect(
+      screen.getByRole('heading', { name: projects.ctrlAltPrebunk.title }).closest('article').querySelector('img'),
+    ).toHaveAttribute('src', '/ifrc.png');
     expect(screen.getByText('6 languages, 20k launch day visits')).toHaveClass('text-lime');
     expect(screen.getByText('Internal AI Engineering Project')).toHaveClass('font-bold');
   });

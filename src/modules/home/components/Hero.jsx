@@ -15,6 +15,7 @@ const dottedBackground = {
 export default function Hero() {
   return (
     <section
+      id="top"
       data-scroll-section
       className="relative isolate flex w-full shrink-0 flex-col overflow-x-clip text-ink md:h-dvh md:max-h-dvh md:overflow-hidden"
     >

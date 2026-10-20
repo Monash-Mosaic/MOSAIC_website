@@ -39,7 +39,10 @@ describe('home page data', () => {
     for (const slot of projectLayout) {
       const project = projects[slot.id];
       expect(project.title).toBeTruthy();
-      expect(project.href).toBe('/projects');
+      expect(typeof project.href).toBe('string');
+      if (project.href) {
+        expect(project.href).toMatch(/^https?:\/\//);
+      }
       expect(project.lines.length).toBeGreaterThan(0);
       expect(['dark', 'light']).toContain(project.theme);
       expect(['feature', 'equal']).toContain(slot.place);

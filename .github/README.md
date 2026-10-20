@@ -23,6 +23,7 @@ This repository uses a single orchestration workflow (`ci.yml`) that defines job
 └── workflows/
     ├── ci.yml                         # Orchestrator (entry point)
     ├── deploy-preview.yml             # Preview deploy (separate from CI)
+    ├── deploy-staging.yml             # Staging deploy
     ├── deploy.yml                     # Production deploy
     └── codeql.yml
 ```

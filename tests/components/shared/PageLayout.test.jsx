@@ -17,7 +17,7 @@ describe('PageLayout', () => {
 
   it('can render as a main landmark without the header offset', () => {
     render(
-      <PageLayout as="main" offsetHeader={false} className="bg-white">
+      <PageLayout as="main" className="bg-white">
         <p>Flush body</p>
       </PageLayout>,
     );
