@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -11,11 +11,11 @@
   --font-sans: var(--font-fira-code);
   --font-mono: var(--font-fira-code);
 
-  --color-ink: #1C1C1C;
+  --color-ink: #1c1c1c;
   --color-navy: #213359;
-  --color-lime: #B7FF00;
-  --color-lime-hover: #A6E800;
-  --color-footer-lime: #BDFF15;
+  --color-lime: #b7ff00;
+  --color-lime-hover: #a6e800;
+  --color-footer-lime: #bdff15;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,7 +29,8 @@
   --site-header: 5.75rem;
 }
 
-html, body {
+html,
+body {
   background-color: #213359;
   margin: 0;
   padding: 0;
@@ -45,41 +46,98 @@ html {
 }
 
 @media (min-width: 768px) {
-html.home-scroll,
-html.home-scroll body {
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior-y: none;
-  scrollbar-width: none;
+  html.home-scroll,
+  html.home-scroll body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior-y: none;
+    scrollbar-width: none;
+  }
+
+  html.home-scroll::-webkit-scrollbar,
+  html.home-scroll body::-webkit-scrollbar {
+    display: none;
+  }
+
+  html.home-scroll [data-scroll-stack] {
+    isolation: isolate;
+    perspective: 1200px;
+    background: #10182b;
+  }
+
+  html.home-scroll [data-scroll-section] {
+    --ridge-height: clamp(2.5rem, 8vh, 6.5rem);
+    position: absolute;
+    inset: 0;
+    z-index: var(--section-index, 1);
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-margin-top: 0;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    box-sizing: border-box;
+    transform-origin: 50% 0;
+    backface-visibility: hidden;
+    will-change: transform, clip-path, filter;
+  }
+
+  html.home-scroll [data-scroll-section]::-webkit-scrollbar {
+    display: none;
+  }
+
+  html.home-scroll [data-scroll-section][data-scroll-state='current'] {
+    clip-path: polygon(0 0, 50% 0, 100% 0, 100% 100%, 0 100%);
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: brightness(1) saturate(1) drop-shadow(0 -22px 35px rgba(9, 13, 24, 0.24));
+  }
+
+  html.home-scroll [data-scroll-section][data-scroll-state='past'] {
+    clip-path: polygon(1.5% 0, 50% 1.5%, 98.5% 0, 98.5% 97%, 1.5% 97%);
+    transform: translate3d(0, var(--section-recede-y), var(--section-recede-z))
+      scale(var(--section-scale));
+    filter: brightness(0.76) saturate(0.82) drop-shadow(0 26px 38px rgba(9, 13, 24, 0.28));
+  }
+
+  html.home-scroll [data-scroll-section][data-scroll-state='future'] {
+    clip-path: polygon(0 var(--ridge-height), 50% 0, 100% var(--ridge-height), 100% 100%, 0 100%);
+    transform: translate3d(0, var(--section-future-y), 0) scale(0.99);
+    filter: brightness(1) saturate(1) drop-shadow(0 -24px 40px rgba(9, 13, 24, 0.34));
+  }
+
+  html.home-scroll [data-scroll-stack].is-animating [data-scroll-section] {
+    transition:
+      transform 900ms cubic-bezier(0.76, 0, 0.24, 1),
+      clip-path 900ms cubic-bezier(0.76, 0, 0.24, 1),
+      filter 700ms ease;
+  }
+
+  html.home-scroll [data-scroll-section]:last-of-type {
+    display: flex;
+    flex-direction: column;
+  }
+
+  html.home-scroll [data-scroll-section]:last-of-type > footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 6;
+    width: 100%;
+  }
+
+  html.home-scroll [data-scroll-section]:last-of-type > a[href='#top'] {
+    z-index: 7;
+    margin-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
-html.home-scroll::-webkit-scrollbar,
-html.home-scroll body::-webkit-scrollbar {
-  display: none;
-}
-
-html.home-scroll [data-scroll-section] {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  box-sizing: border-box;
-  box-shadow: 0 -28px 64px rgba(16, 16, 16, 0.22);
-  will-change: transform;
-}
-
-html.home-scroll [data-scroll-section]:last-of-type {
-  display: flex;
-  flex-direction: column;
-}
-
-html.home-scroll [data-scroll-section]:last-of-type > footer {
-  position: relative;
-  flex: none;
-  width: 100%;
-  transform: none;
-}
+@media (prefers-reduced-motion: reduce) {
+  html.home-scroll [data-scroll-section] {
+    transition: none !important;
+  }
 }
 
 body {

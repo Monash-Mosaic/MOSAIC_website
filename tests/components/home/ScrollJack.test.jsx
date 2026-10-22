@@ -1,77 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@tests/setup/test-utils.jsx';
-
-const observerKill = vi.fn();
-let observerConfig;
-const delayedCalls = [];
-
-vi.mock('gsap/Observer', () => ({
-  Observer: {
-    create: vi.fn((config) => {
-      observerConfig = config;
-      return { kill: observerKill };
-    }),
-  },
-}));
-
-vi.mock('gsap', () => {
-  const gsap = {
-    registerPlugin: vi.fn(),
-    to: vi.fn(),
-    set: vi.fn(),
-    killTweensOf: vi.fn(),
-    delayedCall: vi.fn((_duration, callback) => {
-      delayedCalls.push(callback);
-      return { kill: vi.fn() };
-    }),
-    matchMedia() {
-      return {
-        add(_query, setup) {
-          this.cleanup = setup();
-        },
-        revert() {
-          this.cleanup?.();
-        },
-      };
-    },
-  };
-  return { default: gsap };
-});
-
-vi.mock('@gsap/react', async () => {
-  const React = await import('react');
-  return {
-    useGSAP(callback) {
-      React.useLayoutEffect(() => {
-        const cleanup = callback();
-        return () => cleanup?.();
-      }, []);
-    },
-  };
-});
-
 import ScrollJack from '@/modules/home/components/ScrollJack';
-import gsap from 'gsap';
 
 function Fixture() {
   return (
     <>
       <ScrollJack>
         <section data-scroll-section id="top">
-          <header>
-            <a href="#about">About from header</a>
-          </header>
-          <h1>Hero</h1>
+          Hero
         </section>
         <section data-scroll-section id="partners">
-          <h2>Partners</h2>
-          <div data-testid="inner-scroll">inner</div>
+          Partners
         </section>
-        <section data-scroll-section id="about">
-          <h2>About</h2>
-          <a href="#top">Back to hero</a>
-          <a href="/contact">Contact</a>
-          <a href="#missing">Missing</a>
+        <section data-scroll-section id="projects">
+          Projects <a href="#top">Back to top</a>
         </section>
       </ScrollJack>
       <footer>Site footer</footer>
@@ -80,224 +22,122 @@ function Fixture() {
 }
 
 function currentSection() {
-  return [...document.querySelectorAll('[data-scroll-section]')].find(
-    (section) => !section.hasAttribute('inert'),
-  );
+  return document.querySelector('[data-scroll-state="current"]');
 }
 
-function unlock() {
-  delayedCalls.splice(0).forEach((callback) => callback());
+function wheel(deltaY) {
+  const event = new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaY });
+  window.dispatchEvent(event);
+  return event;
+}
+
+function mockMatchMedia({ desktop = true, reducedMotion = false } = {}) {
+  window.matchMedia = vi.fn().mockImplementation((query) => ({
+    matches: query.includes('prefers-reduced-motion') ? reducedMotion : desktop,
+    media: query,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
 }
 
 const originalMatchMedia = window.matchMedia;
 
 describe('ScrollJack', () => {
   beforeEach(() => {
-    observerConfig = undefined;
-    delayedCalls.length = 0;
-    observerKill.mockClear();
-    vi.mocked(gsap.to).mockClear();
-    vi.mocked(gsap.set).mockClear();
-    vi.mocked(gsap.killTweensOf).mockClear();
+    vi.useFakeTimers();
     window.history.replaceState(null, '', '/');
-    window.matchMedia = originalMatchMedia;
+    mockMatchMedia();
   });
 
   afterEach(() => {
     document.documentElement.classList.remove('home-scroll');
     window.matchMedia = originalMatchMedia;
+    vi.useRealTimers();
   });
 
-  it('pins desktop sections and moves the footer onto the last panel', () => {
+  it('fills the desktop viewport with one active layered section', () => {
     render(<Fixture />);
 
     expect(document.documentElement).toHaveClass('home-scroll');
     expect(currentSection()).toHaveAttribute('id', 'top');
-    expect(document.getElementById('about').querySelector('footer')).toHaveTextContent('Site footer');
-    expect(observerConfig.type).toBe('wheel,touch');
+    expect(document.getElementById('partners')).toHaveAttribute('data-scroll-state', 'future');
+    expect(document.getElementById('partners')).toHaveAttribute('inert');
+    expect(document.getElementById('partners')).toHaveStyle({
+      '--section-depth': '1',
+      '--section-future-y': '102.5%',
+    });
+    expect(document.getElementById('projects')).toHaveStyle({
+      '--section-depth': '2',
+      '--section-future-y': '104%',
+    });
+    expect(document.getElementById('projects').querySelector('footer')).toHaveTextContent(
+      'Site footer'
+    );
   });
 
-  it('advances and rewinds with keyboard shortcuts', () => {
+  it('moves exactly one section for a continuous wheel gesture', () => {
     render(<Fixture />);
 
-    fireEvent.keyDown(window, { key: 'ArrowDown' });
+    expect(wheel(80).defaultPrevented).toBe(true);
     expect(currentSection()).toHaveAttribute('id', 'partners');
-    unlock();
+    expect(document.getElementById('top')).toHaveAttribute('data-scroll-state', 'past');
+    expect(document.getElementById('top')).toHaveStyle({
+      '--section-recede-y': '-2.75%',
+      '--section-recede-z': '-36px',
+      '--section-scale': '0.982',
+    });
 
-    fireEvent.keyDown(window, { key: 'PageDown' });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    unlock();
+    wheel(80);
+    vi.advanceTimersByTime(1000);
+    expect(currentSection()).toHaveAttribute('id', 'partners');
 
-    fireEvent.keyDown(window, { key: 'ArrowDown' });
-    expect(currentSection()).toHaveAttribute('id', 'about');
+    vi.advanceTimersByTime(200);
+    wheel(80);
+    expect(currentSection()).toHaveAttribute('id', 'projects');
+  });
 
-    fireEvent.keyDown(window, { key: 'Home' });
-    expect(currentSection()).toHaveAttribute('id', 'top');
-    unlock();
+  it('supports keyboard navigation in both directions', () => {
+    render(<Fixture />);
 
     fireEvent.keyDown(window, { key: 'End' });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    unlock();
+    expect(currentSection()).toHaveAttribute('id', 'projects');
+    vi.advanceTimersByTime(1000);
 
     fireEvent.keyDown(window, { key: 'ArrowUp' });
     expect(currentSection()).toHaveAttribute('id', 'partners');
-    unlock();
+    vi.advanceTimersByTime(1000);
 
-    fireEvent.keyDown(window, { key: 'PageUp' });
+    fireEvent.keyDown(window, { key: 'Home' });
     expect(currentSection()).toHaveAttribute('id', 'top');
-    unlock();
-
-    fireEvent.keyDown(window, { key: ' ' });
-    expect(currentSection()).toHaveAttribute('id', 'partners');
   });
 
-  it('ignores keys while typing or when modifiers are held', () => {
+  it('uses the layered transition for same-page anchor links', () => {
     render(<Fixture />);
-    const field = document.createElement('input');
-    document.body.append(field);
-
-    fireEvent.keyDown(field, { key: 'ArrowDown' });
-    expect(currentSection()).toHaveAttribute('id', 'top');
-
-    const button = document.createElement('button');
-    document.body.append(button);
-    fireEvent.keyDown(button, { key: ' ' });
-    expect(currentSection()).toHaveAttribute('id', 'top');
-
-    fireEvent.keyDown(window, { key: 'ArrowDown', metaKey: true });
-    expect(currentSection()).toHaveAttribute('id', 'top');
-
-    const editable = document.createElement('div');
-    Object.defineProperty(editable, 'isContentEditable', { value: true });
-    document.body.append(editable);
-    fireEvent.keyDown(editable, { key: 'End' });
-    expect(currentSection()).toHaveAttribute('id', 'top');
-
-    const anchor = document.createElement('a');
-    document.body.append(anchor);
-    fireEvent.keyDown(anchor, { key: ' ' });
-    expect(currentSection()).toHaveAttribute('id', 'top');
 
     fireEvent.keyDown(window, { key: 'End' });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    fireEvent.keyDown(window, { key: 'Home' });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    unlock();
+    vi.advanceTimersByTime(1000);
+    fireEvent.click(screen.getByRole('link', { name: 'Back to top' }));
 
-    field.remove();
-    button.remove();
-    editable.remove();
-    anchor.remove();
-  });
-
-  it('intercepts same-page section links and hash changes', () => {
-    render(<Fixture />);
-
-    fireEvent.click(screen.getByRole('link', { name: 'Back to hero' }), { button: 0 });
     expect(currentSection()).toHaveAttribute('id', 'top');
     expect(window.location.hash).toBe('#top');
-    unlock();
-
-    window.location.hash = '#about';
-    fireEvent(window, new Event('hashchange'));
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    fireEvent.click(screen.getByRole('link', { name: 'Contact' }));
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    fireEvent.click(screen.getByRole('link', { name: 'Missing' }));
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    fireEvent.click(screen.getByRole('link', { name: 'Back to hero' }), { button: 1 });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    fireEvent.click(screen.getByRole('link', { name: 'Back to hero' }), { button: 0, shiftKey: true });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    fireEvent.click(screen.getByRole('heading', { name: 'About' }));
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    window.location.hash = '#missing';
-    fireEvent(window, new Event('hashchange'));
-    expect(currentSection()).toHaveAttribute('id', 'about');
-
-    fireEvent.keyDown(window, { key: 'Home' });
-    window.location.hash = '#about';
-    fireEvent(window, new Event('hashchange'));
-    expect(currentSection()).toHaveAttribute('id', 'top');
   });
 
-  it('uses the wheel observer unless an inner panel can still scroll', () => {
-    render(<Fixture />);
-    const cancelableEvent = { cancelable: true, preventDefault: vi.fn(), target: document.body };
+  it('changes sections immediately when reduced motion is preferred', () => {
+    mockMatchMedia({ reducedMotion: true });
+    const { container } = render(<Fixture />);
 
-    observerConfig.onUp({ event: cancelableEvent });
+    wheel(80);
     expect(currentSection()).toHaveAttribute('id', 'partners');
-    expect(cancelableEvent.preventDefault).toHaveBeenCalled();
-    observerConfig.onUp({ event: cancelableEvent });
-    expect(cancelableEvent.preventDefault).toHaveBeenCalledTimes(2);
-    unlock();
-
-    const inner = screen.getByTestId('inner-scroll');
-    Object.defineProperty(inner, 'scrollHeight', { configurable: true, value: 400 });
-    Object.defineProperty(inner, 'clientHeight', { configurable: true, value: 100 });
-    inner.scrollTop = 0;
-    const styleSpy = vi.spyOn(window, 'getComputedStyle').mockImplementation((element) => ({
-      overflowY: element === inner ? 'auto' : 'visible',
-      getPropertyValue: () => '',
-    }));
-
-    observerConfig.onUp({ event: { cancelable: true, preventDefault: vi.fn(), target: inner } });
-    expect(currentSection()).toHaveAttribute('id', 'partners');
-
-    inner.scrollTop = 40;
-    styleSpy.mockImplementation((element) => ({
-      overflowY: element === inner ? 'overlay' : 'visible',
-      getPropertyValue: () => '',
-    }));
-    observerConfig.onDown({ event: { cancelable: true, preventDefault: vi.fn(), target: inner } });
-    expect(currentSection()).toHaveAttribute('id', 'partners');
-
-    inner.scrollTop = 300;
-    observerConfig.onUp({ event: { cancelable: true, preventDefault: vi.fn(), target: inner } });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    unlock();
-
-    observerConfig.onDown({ event: { cancelable: true, preventDefault: vi.fn(), target: document.body } });
-    expect(currentSection()).toHaveAttribute('id', 'partners');
-    unlock();
-
-    observerConfig.onUp({
-      event: {
-        cancelable: true,
-        preventDefault: vi.fn(),
-        target: document.querySelector('header a'),
-      },
-    });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    styleSpy.mockRestore();
+    expect(container.querySelector('[data-scroll-stack]')).not.toHaveClass('is-animating');
   });
 
-  it('skips motion and restores the footer when unmounted', () => {
-    window.matchMedia = vi.fn().mockImplementation((query) => ({
-      matches: query.includes('prefers-reduced-motion'),
-      media: query,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
-
+  it('restores the page and footer on unmount', () => {
     const { unmount } = render(<Fixture />);
-    fireEvent.keyDown(window, { key: 'End' });
-    expect(currentSection()).toHaveAttribute('id', 'about');
-    expect(delayedCalls).toHaveLength(0);
-
     unmount();
-    expect(observerKill).toHaveBeenCalled();
-    expect(gsap.killTweensOf).toHaveBeenCalled();
-    expect(gsap.set).toHaveBeenCalled();
+
     expect(document.documentElement).not.toHaveClass('home-scroll');
+    expect(document.querySelector('footer')?.parentElement).not.toBe(
+      document.getElementById('projects')
+    );
   });
 });

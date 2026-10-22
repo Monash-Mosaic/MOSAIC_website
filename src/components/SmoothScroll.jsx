@@ -9,12 +9,9 @@ export default function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Home scrolljacks one full-screen section per gesture. Lenis easing fights that.
     if (pathname === '/') return undefined;
 
-    const lenis = new Lenis({ autoRaf: false });
-    // Step Lenis on framer-motion's frame loop so parallax layers read the eased
-    // scroll position in the same frame it's applied, instead of one frame behind.
+    const lenis = new Lenis({ autoRaf: false, anchors: true });
     const update = ({ timestamp }) => lenis.raf(timestamp);
     frame.update(update, true);
 

@@ -26,7 +26,7 @@ describe('SmoothScroll', () => {
     mockUsePathname.mockReturnValue('/');
   });
 
-  it('leaves Lenis off on the home page so section scrolljacking owns the wheel', () => {
+  it('leaves Lenis off when the home page owns the scroll gestures', () => {
     mockUsePathname.mockReturnValue('/');
     render(<SmoothScroll />);
 
@@ -43,7 +43,7 @@ describe('SmoothScroll', () => {
   it("drives Lenis from framer-motion's frame loop instead of its own", () => {
     render(<SmoothScroll />);
 
-    expect(Lenis).toHaveBeenCalledExactlyOnceWith({ autoRaf: false });
+    expect(Lenis).toHaveBeenCalledExactlyOnceWith({ autoRaf: false, anchors: true });
     expect(frame.update).toHaveBeenCalledExactlyOnceWith(expect.any(Function), true);
 
     const [update] = vi.mocked(frame.update).mock.calls[0];
