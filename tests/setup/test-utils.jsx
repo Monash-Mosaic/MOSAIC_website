@@ -9,4 +9,4 @@ function renderWithUser(ui, options) {
 }
 
 export * from '@testing-library/react';
-export { userEvent, renderWithUser as render };
+export { renderWithUser as render, userEvent };

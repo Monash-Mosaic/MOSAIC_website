@@ -1,122 +1,121 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
 
 const NAV_LINKS = [
-  { href: '#team', label: 'Our team' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/contact', label: 'Contact us' },
+  { href: '/#about', label: 'About' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#partners', label: 'Partners' },
 ];
 
-export default function Navbar({ color = 'dark' }) {
+const CONTACT_LINK = { href: '/contact', label: 'Contact Us' };
+
+const focusRing = 'focus:outline-none focus-visible:ring-2 focus-visible:ring-ink';
+const contactButtonBase = `bg-lime transition-colors duration-150 hover:bg-lime-hover ${focusRing}`;
+const contactButtonClass = `${contactButtonBase} rounded-full px-4 py-1.5`;
+const desktopContactButtonClass = `${contactButtonBase} flex h-9 shrink-0 items-center justify-center rounded-full px-3 text-[13px] lg:h-10 lg:px-4 lg:text-base xl:h-11 xl:px-5 xl:text-[18px]`;
+
+export default function Navbar() {
   const pathname = usePathname();
-  const [show, setShow] = useState(true);
-  const [scrolled, setScrolled] = useState(false);
+  const shellRef = useRef(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const lastScrollY = useRef(0);
 
-  const isLight = color === 'light';
-  const logoSource =
-    pathname === '/'
-      ? '/Primary_logo.png'
-      : isLight
-        ? '/Primary_Blue_Transparent.png'
-        : '/Primary_logo.png';
-  const headerBg = isLight ? 'bg-white' : 'bg-[#213359]';
-  const navText = isLight ? 'text-[#213359]' : 'text-white';
-  const mobileMenuBg = isLight ? 'bg-white border-b border-gray-200' : 'bg-[#213359]';
-  const joinButtonClass =
-    'border-2 border-[#213359] text-[#213359] bg-white hover:bg-[#213359]/10 hover:text-white hover:border-white';
+  useLayoutEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return undefined;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrolled(currentScrollY > 0);
-      setShow(!(currentScrollY > lastScrollY.current && currentScrollY > 80));
-      lastScrollY.current = currentScrollY;
+    const apply = () => {
+      const header = shell.querySelector('header');
+      if (!header) return;
+      const top = parseFloat(getComputedStyle(shell).top) || 0;
+      const height = Math.ceil(top + header.offsetHeight + 20);
+      document.documentElement.style.setProperty('--site-header', `${height}px`);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    apply();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(apply);
+    observer?.observe(shell);
+    window.addEventListener('resize', apply);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', apply);
+    };
   }, []);
 
-  return (
-    <header
-      className={`w-full sticky top-0 left-0 z-[999] ${headerBg} transition-transform duration-300 ${scrolled || isLight ? 'shadow-md' : ''} ${show ? 'translate-y-0' : '-translate-y-full'}`}
-      tabIndex={-1}
-    >
-      <div className="max-w-7xl mx-auto flex justify-between items-center py-0 px-6" style={{ minHeight: '5.5rem' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', damping: 8, stiffness: 100 }}
-        >
-          <div className="text-2xl mr-6 flex items-center h-full">
-            <Link href="/" tabIndex={0} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 rounded block h-full">
-              <img src={logoSource} alt="MOSAIC logo" className="h-20 max-h-full w-auto cursor-pointer" />
-            </Link>
-          </div>
-        </motion.div>
+  const linkClass = (href) =>
+    `rounded-full px-2 py-1 whitespace-nowrap hover:underline underline-offset-8 decoration-2 decoration-lime ${focusRing}${pathname === href ? ' underline' : ''}`;
 
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: 'spring', damping: 8, stiffness: 50 }}
-          className="hidden md:flex"
-        >
-          <nav className={`flex items-center gap-8 ${navText} text-lg`}>
+  return (
+    <div
+      ref={shellRef}
+      className="pointer-events-none fixed top-3 right-0 left-0 z-[999] px-3 text-ink sm:top-4 sm:px-4"
+    >
+      <div className="pointer-events-auto mx-auto w-full max-w-6xl">
+        <header className="flex items-center justify-between gap-3 rounded-full border border-black/5 bg-white/90 px-3 py-1.5 font-mono font-semibold text-ink shadow-[0_10px_30px_rgba(16,16,16,0.12)] backdrop-blur-md sm:px-4">
+          <Link
+            href="/#top"
+            className={`block shrink-0 rounded-full ${focusRing}`}
+            onClick={() => setMobileOpen(false)}
+          >
+            <Image
+              src="/Primary_Blue_Transparent.png"
+              alt="MOSAIC logo"
+              width={204}
+              height={80}
+              loading="eager"
+              className="h-11 w-auto sm:h-12 md:h-14 md:w-[161px] md:object-cover"
+            />
+          </Link>
+
+          <div className="hidden min-w-0 w-1/2 justify-end md:flex">
+            <nav className="flex max-w-full items-center justify-end gap-2 text-[13px] leading-none lg:gap-4 lg:text-base xl:gap-6 xl:text-[18px]">
+              {NAV_LINKS.map((link) => (
+                <Link key={link.href} href={link.href} className={linkClass(link.href)}>
+                  {link.label}
+                </Link>
+              ))}
+              <Link href={CONTACT_LINK.href} className={desktopContactButtonClass}>
+                {CONTACT_LINK.label}
+              </Link>
+            </nav>
+          </div>
+
+          <button
+            className={`rounded-full p-1 text-3xl md:hidden ${focusRing}`}
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <HiX /> : <HiMenu />}
+          </button>
+        </header>
+
+        {mobileOpen && (
+          <nav className="mt-2 flex flex-col gap-3 rounded-3xl border border-black/5 bg-white/95 px-5 py-4 text-lg text-ink shadow-[0_10px_30px_rgba(16,16,16,0.12)] backdrop-blur-md md:hidden">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`hover:underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 rounded px-2 py-1${pathname === link.href ? ' font-bold' : ''}`}
+                className={`block ${linkClass(link.href)}`}
+                onClick={() => setMobileOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
             <Link
-              href="/join"
-              className={`ml-2 rounded-full px-6 py-2 font-medium transition-colors duration-150 ${joinButtonClass}${pathname === '/join' ? ' font-bold' : ''} focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400`}
-            >
-              Join us
-            </Link>
-          </nav>
-        </motion.div>
-
-        <button
-          className={`md:hidden ${navText} text-3xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 rounded`}
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-        >
-          {mobileOpen ? <HiX /> : <HiMenu />}
-        </button>
-      </div>
-
-      {mobileOpen && (
-        <div className={`md:hidden ${mobileMenuBg} ${navText} px-6 pb-6 pt-2 flex flex-col gap-4 text-lg shadow-lg`}>
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`block hover:underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400 rounded px-2 py-2${pathname === link.href ? ' font-bold' : ''}`}
+              href={CONTACT_LINK.href}
+              className={`self-start ${contactButtonClass}`}
               onClick={() => setMobileOpen(false)}
             >
-              {link.label}
+              {CONTACT_LINK.label}
             </Link>
-          ))}
-          <Link
-            href="/join"
-            className={`block rounded-full px-6 py-2 font-medium transition-colors duration-150 ${joinButtonClass}${pathname === '/join' ? ' font-bold' : ''} focus:outline-none focus-visible:ring-2 focus-visible:ring-lime-400`}
-            onClick={() => setMobileOpen(false)}
-          >
-            Join us
-          </Link>
-        </div>
-      )}
-    </header>
+          </nav>
+        )}
+      </div>
+    </div>
   );
 }

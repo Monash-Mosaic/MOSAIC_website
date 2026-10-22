@@ -29,7 +29,14 @@ export default defineConfig({
         'src/app/**/page.js',
         'src/app/**/layout.js',
         'src/app/globals.css',
+        'src/**/index.js',
       ],
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
     },
   },
 });

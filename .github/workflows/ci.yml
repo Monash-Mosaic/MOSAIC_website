@@ -4,19 +4,19 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths: &ci-paths
-      - 'src/**'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'public/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'vitest.config.*'
-      - 'playwright.config.*'
-      - 'next.config.*'
-      - 'open-next.config.*'
-      - 'wrangler.jsonc'
-      - 'eslint.config.*'
-      - '.github/**'
+      - "src/**"
+      - "tests/**"
+      - "scripts/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vitest.config.*"
+      - "playwright.config.*"
+      - "next.config.*"
+      - "open-next.config.*"
+      - "wrangler.jsonc"
+      - "biome.json"
+      - ".github/**"
   push:
     branches: [main]
     paths: *ci-paths
@@ -46,30 +46,18 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./.github/actions/dependency-review
 
-  osv_scan_pr:
-    if: github.event_name == 'pull_request'
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8
-    with:
-      fail-on-vuln: true
-
-  osv_scan_main:
-    if: github.event_name == 'push'
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.8
-    with:
-      fail-on-vuln: true
-      scan-args: |-
-        --recursive
-        --severity=HIGH
-        --severity=CRITICAL
-        ./
+  npm_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
 
   ci-checks:
     runs-on: ubuntu-latest
@@ -246,22 +234,20 @@ jobs:
   security_gates:
     needs:
       - dependency_review
-      - osv_scan_pr
-      - osv_scan_main
+      - npm_audit
       - ci-checks
       - e2e
     if: >-
       always() &&
       !cancelled() &&
       (needs.dependency_review.result == 'success' || needs.dependency_review.result == 'skipped') &&
-      (needs.osv_scan_pr.result == 'success' || needs.osv_scan_pr.result == 'skipped') &&
-      (needs.osv_scan_main.result == 'success' || needs.osv_scan_main.result == 'skipped') &&
+      needs.npm_audit.result == 'success' &&
       needs.ci-checks.result == 'success' &&
       needs.e2e.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: All security gates passed
-        run: echo "lint, test, build, dependency review, and OSV scan succeeded."
+        run: echo "lint, test, build, dependency review, and npm audit succeeded."
 
   coverage_report:
     needs:

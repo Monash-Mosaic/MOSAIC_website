@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
+import { cleanup } from '@testing-library/react';
 import React from 'react';
 import { afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
 import { mockUsePathname } from './next-mocks';
 
 afterEach(() => {
@@ -43,22 +43,32 @@ vi.mock('next/link', () => ({
 }));
 
 vi.mock('framer-motion', () => {
+  // Cache one component per tag so motion.div keeps the same identity across renders,
+  // like the real library; otherwise every re-render would remount its subtree.
+  const components = new Map();
   const motion = new Proxy(
     {},
     {
       get(_target, tag) {
-        const Component = React.forwardRef(({ children, ...props }, ref) =>
-          React.createElement(tag, { ...stripMotionProps(props), ref }, children),
-        );
-        Component.displayName = `motion.${String(tag)}`;
-        return Component;
+        if (!components.has(tag)) {
+          const Component = React.forwardRef(({ children, ...props }, ref) =>
+            React.createElement(tag, { ...stripMotionProps(props), ref }, children)
+          );
+          Component.displayName = `motion.${String(tag)}`;
+          components.set(tag, Component);
+        }
+        return components.get(tag);
       },
-    },
+    }
   );
 
   return {
     motion,
     AnimatePresence: ({ children }) => children,
+    useScroll: vi.fn(() => ({ scrollYProgress: 0 })),
+    useTransform: vi.fn(() => 0),
+    frame: { update: vi.fn() },
+    cancelFrame: vi.fn(),
   };
 });
 
