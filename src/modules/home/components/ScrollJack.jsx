@@ -2,9 +2,12 @@
 
 import { useLayoutEffect, useRef } from 'react';
 
-const TRANSITION_MS = 900;
+const TRANSITION_MS = 820;
+/** Short lock so a single mouse-wheel notch cannot fire twice. */
+const INPUT_COOLDOWN_MS = 280;
+/** End a wheel/trackpad gesture after this much silence — then the next flick can advance. */
+const WHEEL_GESTURE_END_MS = 120;
 const WHEEL_THRESHOLD = 24;
-const WHEEL_QUIET_MS = 180;
 const TOUCH_THRESHOLD = 48;
 
 function sectionsIn(root) {
@@ -22,6 +25,11 @@ function sectionIndexForHash(hash, sections) {
 function scrollableFrom(start, root) {
   let node = start instanceof Element ? start : null;
   while (node && node !== root) {
+    // Section shells use overflow for layout; only nested panes should own the wheel.
+    if (node.hasAttribute('data-scroll-section')) {
+      node = node.parentElement;
+      continue;
+    }
     const overflowY = getComputedStyle(node).overflowY;
     if (
       (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') &&
@@ -56,14 +64,17 @@ export default function ScrollJack({ children }) {
       const sections = sectionsIn(root);
       let index = 0;
       let animationLocked = false;
-      let wheelReady = true;
+      let inputLocked = false;
+      let gestureConsumed = false;
       let wheelDelta = 0;
-      let wheelQuietTimer = 0;
       let unlockTimer = 0;
+      let inputUnlockTimer = 0;
+      let gestureEndTimer = 0;
       let touchStartY = 0;
       let footerSlot = null;
 
       html.classList.add('home-scroll');
+      root.style.setProperty('--scroll-transition', `${TRANSITION_MS}ms`);
       root.dataset.scrollDirection = 'forward';
 
       const attachFooter = () => {
@@ -118,11 +129,21 @@ export default function ScrollJack({ children }) {
         }, TRANSITION_MS);
       };
 
+      const armInput = () => {
+        inputLocked = true;
+        window.clearTimeout(inputUnlockTimer);
+        inputUnlockTimer = window.setTimeout(() => {
+          inputLocked = false;
+          wheelDelta = 0;
+        }, INPUT_COOLDOWN_MS);
+      };
+
       const move = (direction) => {
-        if (animationLocked) return false;
+        if (inputLocked) return false;
         const nextIndex = Math.max(0, Math.min(index + direction, sections.length - 1));
         if (nextIndex === index) return false;
         render(nextIndex);
+        armInput();
         return true;
       };
 
@@ -139,20 +160,22 @@ export default function ScrollJack({ children }) {
         if (canScroll(inner, direction)) return;
 
         if (event.cancelable) event.preventDefault();
-        window.clearTimeout(wheelQuietTimer);
-        wheelQuietTimer = window.setTimeout(() => {
-          wheelReady = true;
-          wheelDelta = 0;
-        }, WHEEL_QUIET_MS);
 
-        if (!wheelReady || animationLocked) return;
+        // Trackpad inertia is one continuous gesture — only one section per gesture.
+        window.clearTimeout(gestureEndTimer);
+        gestureEndTimer = window.setTimeout(() => {
+          gestureConsumed = false;
+          wheelDelta = 0;
+        }, WHEEL_GESTURE_END_MS);
+
+        if (gestureConsumed || inputLocked) return;
+
         wheelDelta += event.deltaY;
         if (Math.abs(wheelDelta) < WHEEL_THRESHOLD) return;
 
-        wheelReady = false;
-        const didMove = move(wheelDelta > 0 ? 1 : -1);
+        const moveDir = wheelDelta > 0 ? 1 : -1;
         wheelDelta = 0;
-        if (!didMove) wheelReady = true;
+        if (move(moveDir)) gestureConsumed = true;
       };
 
       const onTouchStart = (event) => {
@@ -189,7 +212,9 @@ export default function ScrollJack({ children }) {
           move(keys[event.key]);
         } else if (event.key === 'Home' || event.key === 'End') {
           event.preventDefault();
-          if (!animationLocked) render(event.key === 'Home' ? 0 : sections.length - 1);
+          if (inputLocked) return;
+          render(event.key === 'Home' ? 0 : sections.length - 1);
+          armInput();
         }
       };
 
@@ -235,7 +260,9 @@ export default function ScrollJack({ children }) {
 
       teardown = () => {
         window.clearTimeout(unlockTimer);
-        window.clearTimeout(wheelQuietTimer);
+        window.clearTimeout(inputUnlockTimer);
+        window.clearTimeout(gestureEndTimer);
+        root.style.removeProperty('--scroll-transition');
         window.removeEventListener('wheel', onWheel);
         window.removeEventListener('touchstart', onTouchStart);
         window.removeEventListener('touchmove', onTouchMove);

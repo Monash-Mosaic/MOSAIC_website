@@ -146,11 +146,13 @@ describe('ScrollJack', () => {
       '--section-scale': '0.982',
     });
 
+    // Trackpad inertia in the same gesture must not skip through the stack.
     wheel(80);
-    vi.advanceTimersByTime(1000);
+    wheel(80);
     expect(currentSection()).toHaveAttribute('id', 'partners');
 
-    vi.advanceTimersByTime(200);
+    // A short quiet gap ends the gesture; the next flick advances one section.
+    vi.advanceTimersByTime(280);
     wheel(80);
     expect(currentSection()).toHaveAttribute('id', 'projects');
   });
@@ -165,7 +167,7 @@ describe('ScrollJack', () => {
     window.dispatchEvent(nonCancelable);
     expect(currentSection()).toHaveAttribute('id', 'partners');
 
-    vi.advanceTimersByTime(1200);
+    vi.advanceTimersByTime(280);
     wheel(-80);
     expect(currentSection()).toHaveAttribute('id', 'top');
   });
