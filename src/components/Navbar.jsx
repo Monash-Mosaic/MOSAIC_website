@@ -44,7 +44,7 @@ export default function Navbar() {
       observer?.disconnect();
       window.removeEventListener('resize', apply);
     };
-  }, [mobileOpen]);
+  }, []);
 
   const linkClass = (href) =>
     `rounded-full px-2 py-1 whitespace-nowrap hover:underline underline-offset-8 decoration-2 decoration-lime ${focusRing}${pathname === href ? ' underline' : ''}`;

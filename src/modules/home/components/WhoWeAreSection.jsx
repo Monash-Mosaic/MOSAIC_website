@@ -24,7 +24,7 @@ const panelStyle = {
 function withBold(text) {
   return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
     i % 2 === 1 ? (
-      <strong key={i} className="[-webkit-text-stroke:0.04em_currentColor]">
+      <strong key={`strong:${part}`} className="[-webkit-text-stroke:0.04em_currentColor]">
         {part}
       </strong>
     ) : (

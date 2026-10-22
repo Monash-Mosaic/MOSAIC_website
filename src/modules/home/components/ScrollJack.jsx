@@ -63,7 +63,6 @@ export default function ScrollJack({ children }) {
     const enable = () => {
       const sections = sectionsIn(root);
       let index = 0;
-      let animationLocked = false;
       let inputLocked = false;
       let gestureConsumed = false;
       let wheelDelta = 0;
@@ -117,14 +116,11 @@ export default function ScrollJack({ children }) {
 
         window.clearTimeout(unlockTimer);
         if (!animate || reducedMotion.matches) {
-          animationLocked = false;
           root.classList.remove('is-animating');
           return;
         }
 
-        animationLocked = true;
         unlockTimer = window.setTimeout(() => {
-          animationLocked = false;
           root.classList.remove('is-animating');
         }, TRANSITION_MS);
       };
@@ -248,7 +244,7 @@ export default function ScrollJack({ children }) {
 
       attachFooter();
       const initialIndex = sectionIndexForHash(window.location.hash, sections);
-      render(initialIndex >= 0 ? initialIndex : 0, false);
+      render(Math.max(initialIndex, 0), false);
 
       window.addEventListener('wheel', onWheel, { passive: false });
       window.addEventListener('touchstart', onTouchStart, { passive: true });
