@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
+import { cleanup } from '@testing-library/react';
 import React from 'react';
 import { afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
 import { mockUsePathname } from './next-mocks';
 
 afterEach(() => {
@@ -52,14 +52,14 @@ vi.mock('framer-motion', () => {
       get(_target, tag) {
         if (!components.has(tag)) {
           const Component = React.forwardRef(({ children, ...props }, ref) =>
-            React.createElement(tag, { ...stripMotionProps(props), ref }, children),
+            React.createElement(tag, { ...stripMotionProps(props), ref }, children)
           );
           Component.displayName = `motion.${String(tag)}`;
           components.set(tag, Component);
         }
         return components.get(tag);
       },
-    },
+    }
   );
 
   return {

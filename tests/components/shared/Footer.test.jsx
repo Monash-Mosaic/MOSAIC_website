@@ -1,6 +1,6 @@
+import { render, screen } from '@tests/setup/test-utils.jsx';
 import { describe, expect, it } from 'vitest';
 import Footer from '@/components/Footer';
-import { render, screen } from '@tests/setup/test-utils.jsx';
 
 describe('Footer', () => {
   it('links to the main pages', () => {
@@ -19,7 +19,7 @@ describe('Footer', () => {
     expect(instagram).toHaveAttribute('href', 'https://www.instagram.com/mosaic.monash/');
     expect(linkedin).toHaveAttribute(
       'href',
-      'https://www.linkedin.com/company/mosaic-monash-student-team/posts/?feedView=all',
+      'https://www.linkedin.com/company/mosaic-monash-student-team/posts/?feedView=all'
     );
     expect(instagram).toHaveAttribute('target', '_blank');
     expect(linkedin).toHaveAttribute('target', '_blank');

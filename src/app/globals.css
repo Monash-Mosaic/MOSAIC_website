@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
@@ -88,20 +88,20 @@ html {
     display: none;
   }
 
-  html.home-scroll [data-scroll-section][data-scroll-state='current'] {
+  html.home-scroll [data-scroll-section][data-scroll-state="current"] {
     clip-path: polygon(0 0, 50% 0, 100% 0, 100% 100%, 0 100%);
     transform: translate3d(0, 0, 0) scale(1);
     filter: brightness(1) saturate(1) drop-shadow(0 -22px 35px rgba(9, 13, 24, 0.24));
   }
 
-  html.home-scroll [data-scroll-section][data-scroll-state='past'] {
+  html.home-scroll [data-scroll-section][data-scroll-state="past"] {
     clip-path: polygon(1.5% 0, 50% 1.5%, 98.5% 0, 98.5% 97%, 1.5% 97%);
     transform: translate3d(0, var(--section-recede-y), var(--section-recede-z))
       scale(var(--section-scale));
     filter: brightness(0.76) saturate(0.82) drop-shadow(0 26px 38px rgba(9, 13, 24, 0.28));
   }
 
-  html.home-scroll [data-scroll-section][data-scroll-state='future'] {
+  html.home-scroll [data-scroll-section][data-scroll-state="future"] {
     clip-path: polygon(0 var(--ridge-height), 50% 0, 100% var(--ridge-height), 100% 100%, 0 100%);
     transform: translate3d(0, var(--section-future-y), 0) scale(0.99);
     filter: brightness(1) saturate(1) drop-shadow(0 -24px 40px rgba(9, 13, 24, 0.34));
@@ -128,7 +128,7 @@ html {
     width: 100%;
   }
 
-  html.home-scroll [data-scroll-section]:last-of-type > a[href='#top'] {
+  html.home-scroll [data-scroll-section]:last-of-type > a[href="#top"] {
     z-index: 7;
     margin-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
   }

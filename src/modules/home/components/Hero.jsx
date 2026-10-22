@@ -29,8 +29,12 @@ export default function Hero() {
                 key={stat.label}
                 className="flex size-[clamp(3.5rem,22vw,6.5rem)] flex-col items-center justify-center bg-navy font-mono font-semibold text-white md:size-[clamp(4.25rem,14vh,6.5rem)]"
               >
-                <span className="text-[clamp(1.35rem,6vw,4.5rem)] leading-none md:text-[clamp(1.75rem,5vh,4.5rem)]">{stat.value}</span>
-                <span className="text-[clamp(0.65rem,2.8vw,1.15rem)] leading-none md:text-[clamp(0.7rem,1.6vh,1.15rem)]">{stat.label}</span>
+                <span className="text-[clamp(1.35rem,6vw,4.5rem)] leading-none md:text-[clamp(1.75rem,5vh,4.5rem)]">
+                  {stat.value}
+                </span>
+                <span className="text-[clamp(0.65rem,2.8vw,1.15rem)] leading-none md:text-[clamp(0.7rem,1.6vh,1.15rem)]">
+                  {stat.label}
+                </span>
               </li>
             ))}
           </ul>
@@ -54,8 +58,8 @@ export default function Hero() {
             </span>
           </h1>
           <p className="mt-3 max-w-xl text-[clamp(0.95rem,2.1vh,1.25rem)] leading-snug">
-            We partner with global humanitarian organisations, research labs, and industry leaders to
-            build high-impact software.
+            We partner with global humanitarian organisations, research labs, and industry leaders
+            to build high-impact software.
           </p>
           <Link
             href="/contact"

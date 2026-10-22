@@ -5,44 +5,44 @@ export const heroStats = [
 ];
 export const partners = [
   {
-    "id": "ifrc",
-    "description": "Flagship partner - Digital Projects",
-    "logos": [
+    id: 'ifrc',
+    description: 'Flagship partner - Digital Projects',
+    logos: [
       {
-        "name": "IFRC",
-        "src": "/ifrc.png",
-        "link": "https://solferinoacademy.com"
-      }
-    ]
+        name: 'IFRC',
+        src: '/ifrc.png',
+        link: 'https://solferinoacademy.com',
+      },
+    ],
   },
   {
-    "id": "monash-actionlab",
-    "description": "Monash University Partner",
-    "logos": [
+    id: 'monash-actionlab',
+    description: 'Monash University Partner',
+    logos: [
       {
-        "name": "Monash University",
-        "src": "/monash.png",
-        "link": "https://www.monash.edu/it/hcc/action-lab"
+        name: 'Monash University',
+        src: '/monash.png',
+        link: 'https://www.monash.edu/it/hcc/action-lab',
       },
       {
-        "name": "ActionLab",
-        "src": "/action_lab.png",
-        "link": "https://www.monash.edu/it/hcc/action-lab"
-      }
-    ]
+        name: 'ActionLab',
+        src: '/action_lab.png',
+        link: 'https://www.monash.edu/it/hcc/action-lab',
+      },
+    ],
   },
   {
-    "id": "mccsa",
-    "description": "Upcoming Digital Project Partner",
-    "logos": [
+    id: 'mccsa',
+    description: 'Upcoming Digital Project Partner',
+    logos: [
       {
-        "name": "MCCSA",
-        "src": "/mccsa.png",
-        "link": "https://mccsa.org.au/"
-      }
-    ]
-  }
-]
+        name: 'MCCSA',
+        src: '/mccsa.png',
+        link: 'https://mccsa.org.au/',
+      },
+    ],
+  },
+];
 
 export const projectsIntro = {
   title: 'Projects',
@@ -103,7 +103,9 @@ export const projects = {
     href: '',
     lines: [
       { text: 'Internal AI Engineering Project', emphasis: true },
-      { text: 'Educational tool to demystify LLMs and teach safe, effective prompting, in development' },
+      {
+        text: 'Educational tool to demystify LLMs and teach safe, effective prompting, in development',
+      },
     ],
   },
 };
@@ -118,7 +120,6 @@ export const projectLayout = [
   { id: 'demystifyingLlms', place: 'equal', riseFrom: 180 },
 ];
 
-
 export const topics = [
   {
     id: 'team-overview',
@@ -131,24 +132,28 @@ export const topics = [
     id: 'capabilities',
     label: 'CAPABILITIES',
     heading: 'FULL-STACK & AI SYSTEMS',
-    description: '**Engineering:** End-to-end software delivery - from architecture and UI/UX design to automated testing, deployment, and long-term maintenance. \n\n**Community & Campus:** Event organisers and tech hosts across Monash O-Week, Open Day, and internal technical workshops for the next generation of engineers.',
+    description:
+      '**Engineering:** End-to-end software delivery - from architecture and UI/UX design to automated testing, deployment, and long-term maintenance. \n\n**Community & Campus:** Event organisers and tech hosts across Monash O-Week, Open Day, and internal technical workshops for the next generation of engineers.',
   },
   {
     id: 'talent-pipeline',
     label: 'TALENT_PIPELINE',
     heading: 'ENGINEERING & ACADEMIC TALENT',
-    description: '**Rigorous Selection:** Our team is built through a competitive, multi-stage recruitment process targeting top-tier Monash developers and researchers. \n\n**Specialist Advisory:** Directly guided by Monash Faculty staff, PhD candidates, and AI researchers with real industry leadership backgrounds, giving us instant access to domain expertise when tackling complex architecture.',
+    description:
+      '**Rigorous Selection:** Our team is built through a competitive, multi-stage recruitment process targeting top-tier Monash developers and researchers. \n\n**Specialist Advisory:** Directly guided by Monash Faculty staff, PhD candidates, and AI researchers with real industry leadership backgrounds, giving us instant access to domain expertise when tackling complex architecture.',
   },
   {
     id: 'sponsor-advantage',
     label: 'SPONSOR_ADVANTAGE',
     heading: 'THE PARTNERSHIP VALUE MODEL',
-    description: '**[0% AGENCY MARKUP]** Entire budget goes directly into tech development. \n\n**[100% IP RETENTION]** You retain full, unencumbered ownership of all code and intellectual property. \n\n**[TALENT ACCESS]** Direct, first-look recruitment access to Monash’s top engineering graduates. \n\n**[HIGH-IMPACT CSR]** Directly invest in real-world student innovation while delivering production-grade software for social good.',
+    description:
+      '**[0% AGENCY MARKUP]** Entire budget goes directly into tech development. \n\n**[100% IP RETENTION]** You retain full, unencumbered ownership of all code and intellectual property. \n\n**[TALENT ACCESS]** Direct, first-look recruitment access to Monash’s top engineering graduates. \n\n**[HIGH-IMPACT CSR]** Directly invest in real-world student innovation while delivering production-grade software for social good.',
   },
   {
     id: 'track-record',
     label: 'TRACK_RECORD',
     heading: 'PROVEN DELIVERY',
-    description: 'Production software delivered for global leaders including the **International Federation of Red Cross (IFRC)**, with active initiatives underway alongside Australian non-profits like **MCCSA**.',
+    description:
+      'Production software delivered for global leaders including the **International Federation of Red Cross (IFRC)**, with active initiatives underway alongside Australian non-profits like **MCCSA**.',
   },
 ];

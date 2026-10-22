@@ -10,13 +10,22 @@ vi.mock('@/modules/home/data', async () => {
         ...actual.projects.ctrlAltPrebunk,
         image: '/ifrc.png',
       },
+      worldDisastersReport: {
+        ...actual.projects.worldDisastersReport,
+        href: '',
+        image: '',
+      },
+      demystifyingLlms: {
+        ...actual.projects.demystifyingLlms,
+        image: undefined,
+      },
     },
   };
 });
 
+import { render, screen } from '@tests/setup/test-utils.jsx';
 import RecentProjects from '@/modules/home/components/RecentProjects';
 import { projectLayout, projects, projectsIntro } from '@/modules/home/data';
-import { render, screen } from '@tests/setup/test-utils.jsx';
 
 describe('RecentProjects', () => {
   beforeEach(() => {
@@ -37,7 +46,9 @@ describe('RecentProjects', () => {
       }
     }
 
-    const liveProjects = projectLayout.map((slot) => projects[slot.id]).filter((project) => project.href);
+    const liveProjects = projectLayout
+      .map((slot) => projects[slot.id])
+      .filter((project) => project.href);
     const visitLinks = screen.getAllByRole('link', { name: 'Visit Project' });
     expect(visitLinks).toHaveLength(liveProjects.length);
     for (const project of liveProjects) {
@@ -45,13 +56,31 @@ describe('RecentProjects', () => {
       expect(card.querySelector('a')).toHaveAttribute('href', project.href);
     }
     expect(screen.getAllByText('Coming Soon')).toHaveLength(
-      projectLayout.filter((slot) => !projects[slot.id].href).length,
+      projectLayout.filter((slot) => !projects[slot.id].href).length
     );
 
-    expect(screen.getByRole('link', { name: /scroll to about/i })).toHaveAttribute('href', '#about');
+    expect(screen.getByRole('link', { name: /scroll to about/i })).toHaveAttribute(
+      'href',
+      '#about'
+    );
     expect(
-      screen.getByRole('heading', { name: projects.ctrlAltPrebunk.title }).closest('article').querySelector('img'),
+      screen
+        .getByRole('heading', { name: projects.ctrlAltPrebunk.title })
+        .closest('article')
+        .querySelector('img')
     ).toHaveAttribute('src', '/ifrc.png');
+    expect(
+      screen
+        .getByRole('heading', { name: projects.worldDisastersReport.title })
+        .closest('article')
+        .querySelector('img')
+    ).toBeNull();
+    expect(
+      screen
+        .getByRole('heading', { name: projects.demystifyingLlms.title })
+        .closest('article')
+        .querySelector('img')
+    ).toBeNull();
     expect(screen.getByText('6 languages, 20k launch day visits')).toHaveClass('text-lime');
     expect(screen.getByText('Internal AI Engineering Project')).toHaveClass('font-bold');
   });

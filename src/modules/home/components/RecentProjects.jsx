@@ -10,14 +10,16 @@ const dottedBackground = {
 
 function ProjectCard({ project, featured = false }) {
   const isDark = project.theme === 'dark';
-  const isComingSoon = project.href==='';
+  const isComingSoon = project.href === '';
 
   return (
     <article
       className={`flex h-auto flex-col ${featured ? 'p-4 sm:p-5' : 'p-3 sm:p-4'} md:h-full md:min-h-0 md:overflow-hidden ${featured ? 'md:p-[clamp(0.85rem,2vh,1.75rem)]' : 'md:p-[clamp(0.6rem,1.4vh,1.15rem)]'} ${isDark ? 'bg-navy text-white' : 'bg-white text-ink'}`}
     >
       {project.image ? (
-        <div className={`mb-3 overflow-hidden ${featured ? 'aspect-[16/9]' : 'aspect-[16/10]'} md:aspect-auto md:min-h-0 md:flex-1`}>
+        <div
+          className={`mb-3 overflow-hidden ${featured ? 'aspect-[16/9]' : 'aspect-[16/10]'} md:aspect-auto md:min-h-0 md:flex-1`}
+        >
           <img src={project.image} alt="" className="h-full w-full object-cover" />
         </div>
       ) : null}
@@ -72,8 +74,12 @@ export default function RecentProjects() {
       <div className="grid w-full grid-cols-1 gap-3 pt-[var(--site-header)] md:min-h-0 md:flex-1 md:grid-cols-3 md:grid-rows-1 md:gap-[2px]">
         <div className="grid min-w-0 grid-cols-1 gap-3 md:min-h-0 md:grid-rows-[minmax(0,1fr)_minmax(0,4fr)] md:gap-[2px]">
           <div className="flex flex-col justify-center bg-navy px-4 py-6 text-white sm:px-5 md:h-full md:min-h-0 md:overflow-hidden md:px-6 md:py-0">
-            <h2 className="text-[clamp(1.75rem,4vh,3rem)] leading-none font-bold tracking-tight">{projectsIntro.title}</h2>
-            <p className="mt-2 max-w-xs text-sm leading-snug sm:text-base md:mt-1 md:text-[clamp(0.8rem,1.6vh,1rem)]">{projectsIntro.subtitle}</p>
+            <h2 className="text-[clamp(1.75rem,4vh,3rem)] leading-none font-bold tracking-tight">
+              {projectsIntro.title}
+            </h2>
+            <p className="mt-2 max-w-xs text-sm leading-snug sm:text-base md:mt-1 md:text-[clamp(0.8rem,1.6vh,1rem)]">
+              {projectsIntro.subtitle}
+            </p>
           </div>
           {projectLayout
             .filter((slot) => slot.place === 'feature')

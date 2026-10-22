@@ -4,19 +4,19 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - 'src/**'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'public/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'vitest.config.*'
-      - 'playwright.config.*'
-      - 'next.config.*'
-      - 'open-next.config.*'
-      - 'wrangler.jsonc'
-      - 'eslint.config.*'
-      - '.github/**'
+      - "src/**"
+      - "tests/**"
+      - "scripts/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vitest.config.*"
+      - "playwright.config.*"
+      - "next.config.*"
+      - "open-next.config.*"
+      - "wrangler.jsonc"
+      - "biome.json"
+      - ".github/**"
 
 concurrency:
   group: deploy-${{ github.event.pull_request.number }}

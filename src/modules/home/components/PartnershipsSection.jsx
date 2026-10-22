@@ -1,10 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { partners } from '../data';
-import { HiArrowDown } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
+import { HiArrowDown } from 'react-icons/hi';
+import { partners } from '../data';
 
 export default function PartnershipsSection() {
   const canvasRef = useRef(null);

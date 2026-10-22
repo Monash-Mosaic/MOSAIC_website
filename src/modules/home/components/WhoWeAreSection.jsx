@@ -62,110 +62,123 @@ export default function WhoWeAreSection() {
       <div aria-hidden="true" className="absolute inset-0 -z-10" style={sectionStyle} />
       <div className="flex w-full flex-col justify-center px-4 pt-[var(--site-header)] pb-6 sm:px-5 md:min-h-0 md:flex-1 md:overflow-y-auto md:px-12 md:pb-[clamp(0.5rem,1.5vh,1rem)]">
         <div className="mx-auto flex w-full max-w-[1340px] flex-col">
-        <h2 className="shrink-0 font-mono text-[clamp(1.75rem,4.5vh,3rem)] leading-none font-bold">Who we are</h2>
-        <p className="mt-2 shrink-0 text-[clamp(0.9rem,1.8vh,1.125rem)] font-semibold">
-          Engineering for community resilience and global equity
-        </p>
+          <h2 className="shrink-0 font-mono text-[clamp(1.75rem,4.5vh,3rem)] leading-none font-bold">
+            Who we are
+          </h2>
+          <p className="mt-2 shrink-0 text-[clamp(0.9rem,1.8vh,1.125rem)] font-semibold">
+            Engineering for community resilience and global equity
+          </p>
 
-        <div
-          className="mt-[clamp(0.75rem,2vh,1.5rem)] flex w-full flex-col border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)]"
-          style={panelStyle}
-        >
-          <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
-            <p className="break-words">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
-            <p className="mt-2">&gt;SELECT_OPTION:</p>
-          </div>
+          <div
+            className="mt-[clamp(0.75rem,2vh,1.5rem)] flex w-full flex-col border border-[#213359] shadow-[7px_7px_0_rgba(33,51,89,0.18)]"
+            style={panelStyle}
+          >
+            <div className="p-4 pb-1 font-mono text-sm font-bold md:p-3 md:pb-1 md:text-base">
+              <p className="break-words">&gt;[SYS_LOG // MONASH_FIT_LABS_v2.6]</p>
+              <p className="mt-2">&gt;SELECT_OPTION:</p>
+            </div>
 
-          <div className="grid md:grid-cols-[344px_minmax(0,1fr)]">
-          <aside className="flex flex-col border-b border-[#213359]/70 p-4 pt-0 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:pt-0 md:text-base">
-            <ol className="flex flex-col gap-4">
-              {topics.map((topic, index) => {
-                const isActive = activeTopic?.id === topic.id;
+            <div className="grid md:grid-cols-[344px_minmax(0,1fr)]">
+              <aside className="flex flex-col border-b border-[#213359]/70 p-4 pt-0 font-mono text-sm font-bold md:border-r md:border-b-0 md:p-3 md:pt-0 md:text-base">
+                <ol className="flex flex-col gap-4">
+                  {topics.map((topic, index) => {
+                    const isActive = activeTopic?.id === topic.id;
 
-                return (
-                  <li key={topic.id}>
-                    <button
-                      type="button"
-                      aria-pressed={isActive}
-                      onClick={() => setActiveTopic(topic)}
-                      className={`w-full cursor-pointer px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] ${
-                        isActive
-                          ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
-                          : 'text-[#213359] hover:bg-[#213359]/10'
-                      }`}
-                    >
-                      [{String(index).padStart(2, '0')}] {topic.label}
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-            <button
-              type="button"
-              aria-pressed={isContactActive}
-              onClick={() => setActiveTopic(null)}
-              className={`mt-8 inline-block cursor-pointer self-start px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:mt-auto md:pt-1 ${
-                isContactActive
-                  ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
-                  : 'text-[#213359] hover:bg-[#213359]/10'
-              }`}
-            >
-              &gt;EXECUTE_PARTNERSHIP.EXE<br />[contact us]
-            </button>
-          </aside>
+                    return (
+                      <li key={topic.id}>
+                        <button
+                          type="button"
+                          aria-pressed={isActive}
+                          onClick={() => setActiveTopic(topic)}
+                          className={`w-full cursor-pointer px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] ${
+                            isActive
+                              ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
+                              : 'text-[#213359] hover:bg-[#213359]/10'
+                          }`}
+                        >
+                          [{String(index).padStart(2, '0')}] {topic.label}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+                <button
+                  type="button"
+                  aria-pressed={isContactActive}
+                  onClick={() => setActiveTopic(null)}
+                  className={`mt-8 inline-block cursor-pointer self-start px-2 py-1 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359] md:mt-auto md:pt-1 ${
+                    isContactActive
+                      ? 'bg-[#3F5D00] text-white shadow-[8px_8px_0_#213359]'
+                      : 'text-[#213359] hover:bg-[#213359]/10'
+                  }`}
+                >
+                  &gt;EXECUTE_PARTNERSHIP.EXE
+                  <br />
+                  [contact us]
+                </button>
+              </aside>
 
-          <div className="min-h-0 overflow-y-auto p-5 md:p-4">
-            {activeTopic ? (
-              <div aria-live="polite">
-                <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">{activeTopic.heading}</p>
-                <p className="mt-3 max-w-4xl text-sm leading-snug font-semibold break-words whitespace-pre-line sm:text-base md:text-[clamp(0.85rem,1.7vh,1.125rem)]">
-                  {withBold(activeTopic.description)}
-                </p>
+              <div className="min-h-0 overflow-y-auto p-5 md:p-4">
+                {activeTopic ? (
+                  <div aria-live="polite">
+                    <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">
+                      {activeTopic.heading}
+                    </p>
+                    <p className="mt-3 max-w-4xl text-sm leading-snug font-semibold break-words whitespace-pre-line sm:text-base md:text-[clamp(0.85rem,1.7vh,1.125rem)]">
+                      {withBold(activeTopic.description)}
+                    </p>
+                  </div>
+                ) : (
+                  <div aria-live="polite">
+                    <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">
+                      EXECUTE_PARTNERSHIP.EXE [SUCCESS]
+                    </p>
+                    <div className="mt-7 space-y-1 font-mono text-sm font-semibold md:text-base">
+                      <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                        <span>&gt; DIRECT_EMAIL :</span>
+                        <a
+                          className="break-words underline underline-offset-4"
+                          href={`mailto:${CONTACT_EMAIL}`}
+                        >
+                          {CONTACT_EMAIL}
+                        </a>
+                      </p>
+                      <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                        <span>&gt; MAKERSPACE :</span>
+                        <span className="break-words">
+                          Alan Finkel Building for Technology, Monash Clayton
+                        </span>
+                      </p>
+                      <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
+                        <span>&gt; RESPONSE_TIME :</span>
+                        <span className="break-words">
+                          &lt; 24 Hours (Direct to Student Directors)
+                        </span>
+                      </p>
+                    </div>
+                    <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm font-bold md:text-base">
+                      <button
+                        type="button"
+                        onClick={copyEmail}
+                        className="cursor-pointer text-left underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
+                      >
+                        [ {copyStatus || 'CLICK TO COPY EMAIL'} ]
+                      </button>
+                      <a
+                        href={`mailto:${CONTACT_EMAIL}`}
+                        className="underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
+                      >
+                        [ OPEN MAIL CLIENT ]
+                      </a>
+                    </div>
+                    <p className="sr-only" aria-live="polite">
+                      {copyStatus}
+                    </p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div aria-live="polite">
-                <p className="font-mono text-sm font-bold uppercase tracking-wide md:text-base">
-                  EXECUTE_PARTNERSHIP.EXE [SUCCESS]
-                </p>
-                <div className="mt-7 space-y-1 font-mono text-sm font-semibold md:text-base">
-                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
-                    <span>&gt; DIRECT_EMAIL :</span>
-                    <a className="break-words underline underline-offset-4" href={`mailto:${CONTACT_EMAIL}`}>
-                      {CONTACT_EMAIL}
-                    </a>
-                  </p>
-                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
-                    <span>&gt; MAKERSPACE :</span>
-                    <span className="break-words">Alan Finkel Building for Technology, Monash Clayton</span>
-                  </p>
-                  <p className="flex flex-col gap-1 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-2 md:grid-cols-[12rem_minmax(0,1fr)]">
-                    <span>&gt; RESPONSE_TIME :</span>
-                    <span className="break-words">&lt; 24 Hours (Direct to Student Directors)</span>
-                  </p>
-                </div>
-                <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 font-mono text-sm font-bold md:text-base">
-                  <button
-                    type="button"
-                    onClick={copyEmail}
-                    className="cursor-pointer text-left underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
-                  >
-                    [ {copyStatus || 'CLICK TO COPY EMAIL'} ]
-                  </button>
-                  <a
-                    href={`mailto:${CONTACT_EMAIL}`}
-                    className="underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#213359]"
-                  >
-                    [ OPEN MAIL CLIENT ]
-                  </a>
-                </div>
-                <p className="sr-only" aria-live="polite">
-                  {copyStatus}
-                </p>
-              </div>
-            )}
+            </div>
           </div>
-          </div>
-        </div>
         </div>
       </div>
 
@@ -178,4 +191,3 @@ export default function WhoWeAreSection() {
     </section>
   );
 }
-

@@ -1,7 +1,7 @@
 import { PageLayout } from '@/components';
 import Hero from './components/Hero';
-import RecentProjects from './components/RecentProjects';
 import PartnershipsSection from './components/PartnershipsSection';
+import RecentProjects from './components/RecentProjects';
 import ScrollJack from './components/ScrollJack';
 import WhoWeAreSection from './components/WhoWeAreSection';
 

@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { render, screen } from '@tests/setup/test-utils.jsx';
+import { describe, expect, it, vi } from 'vitest';
 import EmailCallout from '@/modules/contact/components/EmailCallout';
 import { contactEmail } from '@/modules/contact/data';
-import { render, screen } from '@tests/setup/test-utils.jsx';
 
 describe('EmailCallout', () => {
   it('links to the contact email', () => {
@@ -20,13 +20,20 @@ describe('EmailCallout', () => {
 
     expect(writeText).toHaveBeenCalledWith(contactEmail);
     expect(await screen.findByRole('button', { name: 'copied!' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'copy email' }, { timeout: 3000 })
+    ).toBeInTheDocument();
   });
 
   it('scales the email to the available width instead of overflowing', () => {
     render(<EmailCallout />);
 
     const email = screen.getByRole('link', { name: contactEmail });
-    expect(email).toHaveClass('max-w-full', 'text-[min(8vw,9.6cqi)]', 'lg:text-[min(6.49vw,9.6cqi)]');
+    expect(email).toHaveClass(
+      'max-w-full',
+      'text-[min(8vw,9.6cqi)]',
+      'lg:text-[min(6.49vw,9.6cqi)]'
+    );
     expect(email.parentElement).toHaveClass('@container', 'w-full', 'min-w-0', 'flex-1');
   });
 });

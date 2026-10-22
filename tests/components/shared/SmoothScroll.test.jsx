@@ -1,16 +1,16 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cancelFrame, frame } from 'framer-motion';
-import Lenis from 'lenis';
-import SmoothScroll from '@/components/SmoothScroll';
 import { mockUsePathname } from '@tests/setup/next-mocks';
 import { render } from '@tests/setup/test-utils.jsx';
+import { cancelFrame, frame } from 'framer-motion';
+import Lenis from 'lenis';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import SmoothScroll from '@/components/SmoothScroll';
 
 vi.mock('lenis', () => ({
   default: vi.fn(
     class {
       raf = vi.fn();
       destroy = vi.fn();
-    },
+    }
   ),
 }));
 

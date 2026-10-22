@@ -29,6 +29,7 @@ export default defineConfig({
         'src/app/**/page.js',
         'src/app/**/layout.js',
         'src/app/globals.css',
+        'src/**/index.js',
       ],
       thresholds: {
         statements: 90,

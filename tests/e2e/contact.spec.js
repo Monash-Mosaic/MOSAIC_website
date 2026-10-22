@@ -23,8 +23,13 @@ test.describe('contact', () => {
 
       const box = await email.boundingBox();
       expect(box, `email should render at ${width}px`).toBeTruthy();
-      expect(box.x + box.width, `email overflows the viewport at ${width}px`).toBeLessThanOrEqual(width);
-      expect(width - (box.x + box.width), `right margin is too small at ${width}px`).toBeGreaterThanOrEqual(16);
+      expect(box.x + box.width, `email overflows the viewport at ${width}px`).toBeLessThanOrEqual(
+        width
+      );
+      expect(
+        width - (box.x + box.width),
+        `right margin is too small at ${width}px`
+      ).toBeGreaterThanOrEqual(16);
 
       const clipped = await email.evaluate((el) => el.scrollWidth - el.clientWidth);
       expect(clipped, `email text is clipped at ${width}px`).toBeLessThanOrEqual(1);

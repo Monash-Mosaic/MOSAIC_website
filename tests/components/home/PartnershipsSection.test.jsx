@@ -15,9 +15,9 @@ vi.mock('@/modules/home/data', async () => {
   };
 });
 
+import { render, screen } from '@tests/setup/test-utils.jsx';
 import PartnershipsSection from '@/modules/home/components/PartnershipsSection';
 import { partners } from '@/modules/home/data';
-import { render, screen } from '@tests/setup/test-utils.jsx';
 
 function installCanvas() {
   const ctx = {
@@ -57,7 +57,7 @@ function installCanvas() {
         this.callback();
       }
       disconnect = vi.fn();
-    },
+    }
   );
   return ctx;
 }
@@ -80,7 +80,7 @@ describe('PartnershipsSection', () => {
 
     expect(screen.getByRole('heading', { name: 'Partnerships' })).toBeInTheDocument();
     expect(
-      screen.getByText('Building high-stakes software alongside global leaders and research labs.'),
+      screen.getByText('Building high-stakes software alongside global leaders and research labs.')
     ).toBeInTheDocument();
     expect(document.getElementById('partners')).toBeInTheDocument();
 
@@ -93,7 +93,10 @@ describe('PartnershipsSection', () => {
       }
     }
 
-    expect(screen.getByRole('link', { name: /scroll to projects/i })).toHaveAttribute('href', '#projects');
+    expect(screen.getByRole('link', { name: /scroll to projects/i })).toHaveAttribute(
+      'href',
+      '#projects'
+    );
     expect(ctx.arc).toHaveBeenCalled();
     expect(ctx.fill).toHaveBeenCalled();
     unmount();
@@ -122,5 +125,36 @@ describe('PartnershipsSection', () => {
     Object.defineProperty(window, 'devicePixelRatio', { configurable: true, value: 1 });
     render(<PartnershipsSection />);
     expect(ctx.arc.mock.calls.length).toBeGreaterThan(3000);
+  });
+
+  it('falls back to a 1x device pixel ratio when the browser omits it', () => {
+    const ctx = installCanvas();
+    Object.defineProperty(window, 'devicePixelRatio', {
+      configurable: true,
+      get: () => undefined,
+    });
+    render(<PartnershipsSection />);
+    expect(ctx.setTransform).toHaveBeenCalledWith(1, 0, 0, 1, 0, 0);
+  });
+
+  it('skips drawing when the canvas has no parent section', () => {
+    const ctx = installCanvas();
+    const parentDescriptor = Object.getOwnPropertyDescriptor(Node.prototype, 'parentElement');
+    Object.defineProperty(HTMLCanvasElement.prototype, 'parentElement', {
+      configurable: true,
+      get() {
+        return null;
+      },
+    });
+
+    render(<PartnershipsSection />);
+    expect(screen.getByRole('heading', { name: 'Partnerships' })).toBeInTheDocument();
+    expect(ctx.arc).not.toHaveBeenCalled();
+
+    if (parentDescriptor) {
+      Object.defineProperty(Node.prototype, 'parentElement', parentDescriptor);
+    } else {
+      delete HTMLCanvasElement.prototype.parentElement;
+    }
   });
 });

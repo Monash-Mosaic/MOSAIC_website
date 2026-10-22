@@ -48,9 +48,9 @@ describe('home page data', () => {
       expect(['feature', 'equal']).toContain(slot.place);
       expect(slot.riseFrom).toBeGreaterThan(0);
     }
-    expect(projectLayout.filter((slot) => slot.place === 'feature').map((slot) => slot.id)).toEqual([
-      'worldDisastersReport',
-    ]);
+    expect(projectLayout.filter((slot) => slot.place === 'feature').map((slot) => slot.id)).toEqual(
+      ['worldDisastersReport']
+    );
     expect(projectLayout.filter((slot) => slot.place === 'equal').map((slot) => slot.id)).toEqual([
       'ctrlAltPrebunk',
       'aiPolicyAgedCare',
